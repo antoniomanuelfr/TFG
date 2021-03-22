@@ -133,3 +133,6 @@ Resources
 
 # vscode
 .vscode
+
+# Data folder
+data/*
