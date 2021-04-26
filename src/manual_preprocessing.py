@@ -10,13 +10,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
+from pandas.core.arrays.sparse import dtype
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.impute import KNNImputer, SimpleImputer
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score
+from sklearn.preprocessing import OneHotEncoder
+
+ordinal_variables = ['BA10.a', 'BA10.b', 'BA10.c', 'BA10.d', 'BA10.f', 'BA10.g', 'BA10.h']
 
 
 data_path = os.path.join(Path(__file__).parent.parent, "data")
@@ -135,6 +133,34 @@ def print_distribution_class(data: pd.DataFrame):
     return fig, count
 
 
+def one_hot_encoder(x_train, x_test, categorical_cols):
+    """Function to perform a sklearn one hot encoder saving the names of the columns.
+    Args:
+        x_train (DataFrame): train data to encode.
+        x_test (DataFrame): test data to encode.
+        categorical_cols (DataFrame): Columns names to encode
+    Returns:
+        Two DataFrames with the encoded data.
+    """
+    # OneHotEncode for each category separately
+    onhe = OneHotEncoder(sparse=False)
+    for cat_col in categorical_cols:
+        # Encode the data
+        train_enc = onhe.fit_transform(x_train[cat_col].to_numpy().reshape(-1, 1))
+        test_enc = onhe.transform(x_test[cat_col].to_numpy().reshape(-1, 1))
+        df_train_enc = pd.DataFrame(data=train_enc, columns=onhe.get_feature_names(), dtype=np.int).astype(int)
+        df_test_enc = pd.DataFrame(data=test_enc, columns=onhe.get_feature_names(), dtype=np.int).astype(int)
+        # Drop the column to encode
+        x_train.drop(columns=[cat_col], axis=1, inplace=True)
+        x_test.drop(columns=[cat_col], axis=1, inplace=True)
+
+        # Insert the encoded data with the new columns names.
+        x_train = pd.concat([x_train, df_train_enc], axis=1)
+        x_test = pd.concat([x_test,df_test_enc], axis=1)
+
+    return x_train, x_test
+
+
 if __name__ == "__main__":
     dataset = pd.read_csv(os.path.join(data_path, "data.csv"))
     res_dataset = compare_columns(dataset, ['BF1Adaptada', 'BF2Adaptada', 'BF3Adaptada', 'BF4Adaptada'],
@@ -149,10 +175,15 @@ if __name__ == "__main__":
     dataset.drop(columns=columns_to_delete, inplace=True)
     dataset.rename(mapper=rename_dict, inplace=True)
 
-    dataset.replace(to_replace=' ', value=np.nan, inplace=True)
     print(dataset['Género'].unique())
     dataset['Género'].replace(to_replace='Sí', value=np.nan, inplace=True)
     dataset['Género'].replace(to_replace='No', value=np.nan, inplace=True)
+
+    dataset.replace(to_replace=' ', value=np.nan, inplace=True)
+    dataset.replace(to_replace='No contesta', value=np.nan, inplace=True)
+    dataset.replace(to_replace='No', value=0, inplace=True)
+    dataset.replace(to_replace='Sí', value=1, inplace=True)
+
     # Looks for missing values
 
     missing_values_col = get_missing_values(dataset, 0.5)
@@ -173,7 +204,7 @@ if __name__ == "__main__":
     plt.show()
 
     x_train, x_test, y_train, y_test = train_test_split(dataset, predictor_data, random_state=2342)
-    x_train.to_csv(os.path.join(data_path, 'x_train.csv'))
-    x_test.to_csv(os.path.join(data_path, 'x_test.csv'))
-    y_train.to_csv(os.path.join(data_path, 'y_train.csv'))
-    y_test.to_csv(os.path.join(data_path, 'y_test.csv'))
+    x_train.to_csv(os.path.join(data_path, 'x_train.csv'), index=False)
+    x_test.to_csv(os.path.join(data_path, 'x_test.csv'), index=False)
+    y_train.to_csv(os.path.join(data_path, 'y_train.csv'), index=False)
+    y_test.to_csv(os.path.join(data_path, 'y_test.csv'), index=False)
