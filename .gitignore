@@ -136,3 +136,15 @@ Resources
 
 # Data folder
 data/*
+
+# Latex aux files
+*.bib
+*.blg
+*.out
+*.aux
+*.synctex.gz
+*.toc
+*.bbl
+*.pdf
+*.fls
+*.fdb_latexmk

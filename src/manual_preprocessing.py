@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from pandas.core.arrays.sparse import dtype
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
@@ -156,7 +155,7 @@ def one_hot_encoder(x_train, x_test, categorical_cols):
 
         # Insert the encoded data with the new columns names.
         x_train = pd.concat([x_train, df_train_enc], axis=1)
-        x_test = pd.concat([x_test,df_test_enc], axis=1)
+        x_test = pd.concat([x_test, df_test_enc], axis=1)
 
     return x_train, x_test
 

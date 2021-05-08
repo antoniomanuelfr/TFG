@@ -4,14 +4,16 @@
  of this license document, but changing it is not allowed.
 """
 import manual_preprocessing as mp
+import utils
+import numpy as np
 import pandas as pd
 from os.path import join
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.metrics import r2_score, mean_squared_error, mean_poisson_deviance
-
+from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     x_train = pd.read_csv(join(mp.data_path, 'x_train.csv'))
@@ -54,10 +56,9 @@ if __name__ == '__main__':
     print(f"Best score {g_search.best_score_} with {g_search.best_estimator_}")
     best = g_search.best_estimator_
 
-    r2_acum = 0
-    poi_acum = 0
-    mse_acum = 0
-
+    acum_res = np.array([0, 0, 0])
+    print('Validation results')
+    print('r2, mean poisson deviance, mse')
     folder = KFold(n_splits=5, random_state=10, shuffle=True)
     for train_index, test_index in folder.split(x_train_transformed.to_numpy(), y_train_transformed):
         fold_train_x, fold_train_y = x_train_transformed.iloc[train_index], y_train_transformed[train_index]
@@ -65,25 +66,29 @@ if __name__ == '__main__':
 
         best.fit(fold_train_x, fold_train_y)
         y_pred = best.predict(fold_test_x)
-        r2 = r2_score(fold_test_y, y_pred)
-        poi = mean_poisson_deviance(fold_test_y, y_pred)
-        mse = mean_squared_error(fold_test_y, y_pred)
-        r2_acum = r2_acum + r2
-        poi_acum = poi_acum + poi
-        mse_acum = mse_acum + mse
-        print(f"r2 = {r2}, poi = {poi}, mse = {mse}")
+        res = utils.calculate_metrics(fold_test_y, y_pred)
+        acum_res = acum_res + res
+
+        print(','.join(map(str, res)))
+
+    print("Means in validation")
+    acum_res = acum_res / 5
+    print(','.join(map(str, acum_res)))
 
     best.fit(x_train_transformed, y_train_transformed.ravel())
-    print("TRAIN SCORE")
+    print("Train score")
     y_pred = best.predict(x_train_transformed)
-    r2 = r2_score(y_train_transformed, y_pred)
-    poi = mean_poisson_deviance(y_train_transformed, y_pred)
-    mse = mean_squared_error(y_train_transformed, y_pred)
-    print(f"r2 = {r2}, poi = {poi}, mse = {mse}")
+    train_res = utils.calculate_metrics(y_train_transformed, y_pred)
+    print(','.join(map(str, train_res)))
 
-    print("TEST SCORE")
+    print("Test score")
     y_pred = best.predict(x_test_transformed)
-    r2 = r2_score(y_test_transformed, y_pred)
-    poi = mean_poisson_deviance(y_test_transformed, y_pred)
-    mse = mean_squared_error(y_test_transformed, y_pred)
-    print(f"r2 = {r2}, poi = {poi}, mse = {mse}")
+    test_res = utils.calculate_metrics(y_test_transformed, y_pred)
+    print(','.join(map(str, test_res)))
+
+    utils.get_scattered_error_plot(y_test_transformed, y_pred, 'Scattered error plot', 'Observations', 'IEMedia')
+    hist = utils.get_error_hist(y_test_transformed.ravel(), y_pred, 0.5)
+    print(np.unique(hist))
+    plt.show()
+    plt.bar(np.arange(len(hist)), hist)
+    plt.show()

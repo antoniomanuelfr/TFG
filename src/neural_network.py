@@ -5,14 +5,15 @@
 """
 import manual_preprocessing as mp
 import utils
-import pandas as pd
 import numpy as np
+import pandas as pd
 from os.path import join
-from pandas.core.frame import DataFrame
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.model_selection import KFold
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.neural_network import MLPRegressor
 
 
 if __name__ == '__main__':
@@ -22,32 +23,36 @@ if __name__ == '__main__':
     y_test = pd.read_csv(join(mp.data_path, 'y_test.csv'), usecols=['IEMedia'], index_col=False)
     x_cols = x_train.columns
     c_cols, n_cols = mp.get_columns_type(x_train)
-    preprocessor = ColumnTransformer(transformers=[('numerical',  KNNImputer(n_neighbors=2, weights='uniform'), n_cols),
-                                                   ('categorical', SimpleImputer(strategy='most_frequent'), c_cols)])
-    transformed_cols = n_cols + c_cols
+
+    categorical_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='most_frequent')),
+                                              ('encoder', OneHotEncoder())
+                                              ])
+    numeric_transformer = Pipeline([('imputer', KNNImputer(n_neighbors=2, weights='uniform')),
+                                    ('scaler', StandardScaler())])
+    preprocessor = ColumnTransformer(transformers=[('numerical', numeric_transformer, n_cols),
+                                                   ('categorical', categorical_transformer, c_cols)])
 
     y_imputer = SimpleImputer(strategy='median')
     y_train_transformed = y_imputer.fit_transform(y_train)
     y_test_transformed = y_imputer.transform(y_test)
 
     preprocessor.fit(x_train)
-    x_train_transformed = DataFrame(preprocessor.transform(x_train), columns=transformed_cols)
-    x_test_transformed = DataFrame(preprocessor.transform(x_test), columns=transformed_cols)
+    x_train_transformed = preprocessor.transform(x_train)
+    x_test_transformed = preprocessor.transform(x_test)
 
     # OneHotEncode for each category separately
-    x_train_transformed, x_test_transformed = mp.one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
-    clf = RandomForestRegressor(random_state=0)
-    folder = KFold(n_splits=5, random_state=10, shuffle=True)
-
     acum_res = np.array([0, 0, 0])
     print('Validation results')
     print('r2, mean poisson deviance, mse')
-    for train_index, test_index in folder.split(x_train_transformed.to_numpy(), y_train_transformed):
-        fold_train_x, fold_train_y = x_train_transformed.iloc[train_index], y_train_transformed[train_index].ravel()
-        fold_test_x, fold_test_y = x_train_transformed.iloc[test_index], y_train_transformed[test_index].ravel()
+    clf = MLPRegressor(random_state=0, hidden_layer_sizes=(3, 3, 3), max_iter=500)
+    folder = KFold(n_splits=5, random_state=10, shuffle=True)
+    for train_index, test_index in folder.split(x_train_transformed, y_train_transformed):
+        fold_train_x, fold_train_y = x_train_transformed[train_index], y_train_transformed[train_index].ravel()
+        fold_test_x, fold_test_y = x_train_transformed[test_index], y_train_transformed[test_index].ravel()
 
         clf.fit(fold_train_x, fold_train_y)
         y_pred = clf.predict(fold_test_x)
+
         res = utils.calculate_metrics(fold_test_y, y_pred)
         acum_res = acum_res + res
 
