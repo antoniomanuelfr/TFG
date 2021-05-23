@@ -11,11 +11,12 @@ from os.path import join
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV, KFold
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.metrics import r2_score
+from sklearn.tree import DecisionTreeRegressor, plot_tree
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
+    args = utils.argument_parser()
+
     x_train = pd.read_csv(join(mp.data_path, 'x_train.csv'))
     y_train = pd.read_csv(join(mp.data_path, 'y_train.csv'), usecols=['IEMedia'], index_col=False)
     x_test = pd.read_csv(join(mp.data_path, 'x_test.csv'), index_col=False)
@@ -37,16 +38,6 @@ if __name__ == '__main__':
     # OneHotEncode for each category separately
     x_train_transformed, x_test_transformed = mp.one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
 
-    clf = DecisionTreeRegressor(random_state=0).fit(x_train_transformed, y_train_transformed)
-    y_pred = clf.predict(x_test_transformed)
-    y_train_pred = clf.predict(x_train_transformed)
-
-    print(r2_score(y_train_transformed, y_train_pred))
-    print(r2_score(y_test_transformed, y_pred))
-
-    feature_importances = pd.Series(data=clf.feature_importances_, index=x_train_transformed.columns)
-    print(feature_importances.sort_values(ascending=False)[:10])
-
     param_grid = {'max_depth': [2, 4, 8, 9, 10, 16],
                   'max_leaf_nodes': [2, 4, 8, 16, 20, 22]}
 
@@ -66,7 +57,7 @@ if __name__ == '__main__':
 
         best.fit(fold_train_x, fold_train_y)
         y_pred = best.predict(fold_test_x)
-        res = utils.calculate_metrics(fold_test_y, y_pred)
+        res = utils.calculate_regression_metrics(fold_test_y, y_pred)
         acum_res = acum_res + res
 
         print(','.join(map(str, res)))
@@ -78,17 +69,26 @@ if __name__ == '__main__':
     best.fit(x_train_transformed, y_train_transformed.ravel())
     print("Train score")
     y_pred = best.predict(x_train_transformed)
-    train_res = utils.calculate_metrics(y_train_transformed, y_pred)
+    train_res = utils.calculate_regression_metrics(y_train_transformed, y_pred)
     print(','.join(map(str, train_res)))
 
     print("Test score")
     y_pred = best.predict(x_test_transformed)
-    test_res = utils.calculate_metrics(y_test_transformed, y_pred)
+    test_res = utils.calculate_regression_metrics(y_test_transformed, y_pred)
     print(','.join(map(str, test_res)))
 
-    utils.get_scattered_error_plot(y_test_transformed, y_pred, 'Scattered error plot', 'Observations', 'IEMedia')
-    hist = utils.get_error_hist(y_test_transformed.ravel(), y_pred, 0.5)
-    print(np.unique(hist))
-    plt.show()
-    plt.bar(np.arange(len(hist)), hist)
-    plt.show()
+    utils.plot_scattered_error(y_test_transformed, y_pred, 'Scattered error plot for decission tree',
+                               'Observations', 'IEMedia', args.save_figures, 'dtree')
+
+    utils.get_error_hist(y_test_transformed.ravel(), y_pred, 0.5, 'Class', 'Count', 'Error count for decission tree',
+                         args.save_figures, 'dtree')
+
+    plt.figure(figsize=(20, 10))
+    plot_tree(best, feature_names=x_train_transformed.columns, filled=True, fontsize=8)
+    if args.save_figures:
+        plt.savefig(join(args.save_figures, 'decision_tree_plot.png'))
+    else:
+        plt.show()
+
+    feature_importances = pd.Series(data=best.feature_importances_, index=x_train_transformed.columns)
+    print(feature_importances.sort_values(ascending=False)[:10])

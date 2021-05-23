@@ -17,6 +17,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
 if __name__ == '__main__':
+    args = utils.argument_parser()
     x_train = pd.read_csv(join(mp.data_path, 'x_train.csv'), index_col=False)
     y_train = pd.read_csv(join(mp.data_path, 'y_train.csv'), usecols=['IEMedia'], index_col=False)
     x_test = pd.read_csv(join(mp.data_path, 'x_test.csv'), index_col=False)
@@ -52,7 +53,7 @@ if __name__ == '__main__':
         clf.fit(fold_train_x, fold_train_y)
         y_pred = clf.predict(fold_test_x)
 
-        res = utils.calculate_metrics(fold_test_y, y_pred)
+        res = utils.calculate_regression_metrics(fold_test_y, y_pred)
         acum_res = acum_res + res
 
         print(','.join(map(str, res)))
@@ -64,10 +65,16 @@ if __name__ == '__main__':
     clf.fit(x_train_transformed, y_train_transformed.ravel())
     print("Train score")
     y_pred = clf.predict(x_train_transformed)
-    train_res = utils.calculate_metrics(y_train_transformed, y_pred)
+    train_res = utils.calculate_regression_metrics(y_train_transformed, y_pred)
     print(','.join(map(str, train_res)))
 
     print("Test score")
     y_pred = clf.predict(x_test_transformed)
-    test_res = utils.calculate_metrics(y_test_transformed, y_pred)
+    test_res = utils.calculate_regression_metrics(y_test_transformed, y_pred)
     print(','.join(map(str, test_res)))
+
+    utils.plot_scattered_error(y_test_transformed, y_pred, 'Scattered error plot for KNN', 'Observations', 'IEMedia',
+                               args.save_figures, 'knn')
+
+    utils.get_error_hist(y_test_transformed.ravel(), y_pred, 0.5, 'Class', 'Count', 'Error count for KNN',
+                         args.save_figures, 'knn')

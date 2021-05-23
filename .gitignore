@@ -136,7 +136,7 @@ Resources
 
 # Data folder
 data/*
-
+src/imgs/*
 # Latex aux files
 *.bib
 *.blg
