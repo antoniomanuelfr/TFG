@@ -92,3 +92,5 @@ if __name__ == '__main__':
 
     feature_importances = pd.Series(data=best.feature_importances_, index=x_train_transformed.columns)
     print(feature_importances.sort_values(ascending=False)[:10])
+
+    print(utils.tree_to_code(best, x_train_transformed.columns.to_numpy()))

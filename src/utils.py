@@ -9,6 +9,7 @@ import argparse
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error
 from os.path import join, exists
 from os import mkdir
+from sklearn.tree import _tree
 
 
 def argument_parser():
@@ -98,3 +99,41 @@ def get_error_hist(y_true: np.array, y_pred: np.array, threshold: float, xlabel,
         plt.savefig(join(save, f'error_hist_{extra}.png'))
     else:
         plt.show()
+
+
+def tree_to_code(tree, feature_names):
+    """Function to get the decission rules from a SKlearn decission tree.
+    This code has been taken from:
+    https://stackoverflow.com/questions/20224526/how-to-extract-the-decision-rules-from-scikit-learn-decision-tree
+    Args:
+        tree (SKLearn DecissionTree): Decission tree to extract rules.
+        feature_names (numpy array): Array with the names of the features.
+    """
+    tree_ = tree.tree_
+    feature_name = [
+        feature_names[i] if i != _tree.TREE_UNDEFINED else "undefined!"
+        for i in tree_.feature
+    ]
+    feature_names = [f.replace(" ", "_")[:-5] for f in feature_names]
+
+    def expand_branch(node, depth):
+        """Recursive function to expand the tree
+        Args
+            Node (int): Node of the tree.
+            depth (int): Depth of the node
+        """
+        indent = "    " * depth
+        if tree_.feature[node] != _tree.TREE_UNDEFINED:
+            # Expand left branch
+            lines = f"{indent}if {feature_name[node]} <= {np.round(tree_.threshold[node], 2)}:\n"
+            ret = expand_branch(tree_.children_left[node], depth + 1)
+            lines = lines + ret
+            lines = lines + f"{indent}else:  # if {feature_name[node]} > {np.round(tree_.threshold[node], 2)}\n"
+            # Expand right branch
+            ret = expand_branch(tree_.children_right[node], depth + 1)
+            lines = lines + ret
+            return lines
+        else:
+            return f"{indent}return {np.round(float(tree_.value[node]), 2)}\n"
+
+    return expand_branch(0, 0)
