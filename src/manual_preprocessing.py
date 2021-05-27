@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
+import utils
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
@@ -84,19 +85,22 @@ def get_missing_values(data: pd.DataFrame, percentage: float):
     return n_missing_value.index[n_missing_value > percentage]
 
 
-def get_highly_correlated_columns(data: pd.DataFrame, percentage: float):
+def get_highly_correlated_columns(data: pd.DataFrame, perc: float):
     """Looks for highly correlated columns.
        Args:
         data (DataFrame): Dataset.
-        percentage (Float): Minimum percentage to consider that two columns are highly correlated.
+        perc (Float): Minimum percentage to consider that two columns are highly correlated.
        Returns:
         A list with the name of the highly correlated columns.
     """
     correlation_matrix = data.corr().abs()
-    upper = correlation_matrix.where(np.triu(np.ones(correlation_matrix.shape), k=1).astype(bool))
-    to_drop = [column for column in upper.columns if any(upper[column] > percentage)]
-    print(f"{len(to_drop)} features are highly correlated. They will be removed: {to_drop}")
-    return to_drop
+    upper = correlation_matrix.where(np.triu(np.ones(correlation_matrix.shape), k=1).astype(bool)).stack()
+    upper = upper.sort_values(ascending=False)
+
+    to_drop = [upper.index.get_loc(index) for index in upper.index if upper.values[upper.index.get_loc(index)] > perc]
+    print(f"{len(to_drop)} features are highly correlated. They will be removed: \n{upper[to_drop]}")
+
+    return upper.index[to_drop]
 
 
 def get_columns_type(data: pd.DataFrame):
@@ -111,22 +115,25 @@ def get_columns_type(data: pd.DataFrame):
     return categorical_cols, numeric_cols
 
 
-def print_distribution_class(data: pd.DataFrame):
+def print_value_occurrences(data: pd.DataFrame):
     """Get a figure with the distribution class for each column specified in data.
        Args:
         data (DataFrame): Dataset.
        Returns:
         A matplotlib Figure
     """
-    fig, axs = plt.subplots(len(data.columns), 1)
+    fig, axs = plt.subplots(len(data.columns), 1, figsize=(10, 10))
     plot = 0
     for col in data.columns:
-        count = np.unique(data[col], return_counts=True)
+        count = np.unique(data[col].dropna(), return_counts=True)
         axs[plot].bar(count[0], count[1], align='center')
         axs[plot].set_xticks(count[0])
 
+        for index, value in enumerate(count[1]):
+            axs[plot].text(x=index+0.80, y=value+1, s=f"{value}")
+
         axs[plot].set_xticklabels(count[0])
-        axs[plot].set_xlabel(f'Class occurrence for {col}')
+        axs[plot].set_xlabel(f'Value occurrence for {col}')
         axs[plot].set_ylabel('Total')
         plot = plot + 1
     return fig, count
@@ -161,10 +168,12 @@ def one_hot_encoder(x_train, x_test, categorical_cols):
 
 
 if __name__ == "__main__":
+    args = utils.argument_parser()
+
     dataset = pd.read_csv(os.path.join(data_path, "data.csv"))
     res_dataset = compare_columns(dataset, ['BF1Adaptada', 'BF2Adaptada', 'BF3Adaptada', 'BF4Adaptada'],
                                   ['BF1', 'BF2', 'BF3', 'BF4'], 'Año', '19_20', int)
-
+    print(f"Dataset shape {dataset.shape}")
     if res_dataset is not None:
         print(f"Las columnas son iguales, shape actual = {res_dataset.shape}")
         dataset = res_dataset
@@ -194,13 +203,16 @@ if __name__ == "__main__":
     dataset.drop(columns=predictors_name, inplace=True)
 
     corr_cols = get_highly_correlated_columns(dataset, 0.9)
-
-    dataset.drop(columns=corr_cols, inplace=True)
+    for pair in corr_cols:
+        dataset.drop(columns=pair[1], inplace=True)
 
     # Print the class occurrence for the classification predictors.
-    fig, count = print_distribution_class(predictor_data[classification_predictor])
+    fig, count = print_value_occurrences(predictor_data[classification_predictor])
     fig.tight_layout()
-    plt.show()
+    if args.save_figures:
+        plt.savefig(f"{args.save_figures}/value_occurrences.png")
+    else:
+        plt.show()
 
     x_train, x_test, y_train, y_test = train_test_split(dataset, predictor_data, random_state=2342)
     x_train.to_csv(os.path.join(data_path, 'x_train.csv'), index=False)

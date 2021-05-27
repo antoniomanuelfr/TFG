@@ -46,6 +46,7 @@ if __name__ == '__main__':
     g_search.fit(x_train_transformed, y_train_transformed)
     print(f"Best score {g_search.best_score_} with {g_search.best_estimator_}")
     best = g_search.best_estimator_
+    print(f"Best parameters {best.get_params()}")
 
     acum_res = np.array([0, 0, 0])
     print('Validation results')

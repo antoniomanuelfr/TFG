@@ -13,7 +13,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import KFold
 from sklearn.ensemble import RandomForestRegressor
-import matplotlib as plt
 
 if __name__ == '__main__':
     args = utils.argument_parser()

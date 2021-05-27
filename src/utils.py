@@ -85,11 +85,14 @@ def get_error_hist(y_true: np.array, y_pred: np.array, threshold: float, xlabel,
     res = np.zeros(shape=[len(np.unique(np.round(y_true)))])
 
     for true, pred in zip(y_true, y_pred):
-        if abs(true - pred) < threshold:
+        if abs(true - pred) > threshold:
             index = int(round(true))
             if index != 0:
                 index = index - 1
             res[index] = res[index] + 1
+
+    for index, data in enumerate(res):
+        plt.text(x=index+0.75, y=data+1, s=f"{data}")
 
     plt.bar(np.arange(1, len(res) + 1), res)
     plt.xlabel(xlabel)
