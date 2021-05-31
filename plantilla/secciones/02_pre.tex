@@ -18,7 +18,7 @@ Esta información es muy útil, ya que aparte de darnos un poco más de conocimi
 		CF9  &	Normalmente es posible reducir...&	Respuesta: Verdadera/Falsa. \\ \cline{1-3}
 		QF9	& Variable creada a partir de CF9.  & Valor 1 si la respuesta es correcta, 0 si no. \\ \cline{1-3}
 	\end{tabular}
-	\label{columnas_iguales}
+	\label{tab:columnas_iguales}
 	\caption{Comparación de dos características redundantes.}
 \end{table}
 
@@ -30,9 +30,9 @@ La peculiaridad de este conjunto de datos tenemos 7 columnas que van a ser las q
 \linebreak
  \begin{figure}[!htbp]
  	 \centering
-	 \includegraphics[scale=0.75]{value_occurrences.png}
+	 \includegraphics[scale=0.5]{src/value_occurrences.png}
 	\caption{Conteo de valores para las columnas usadas como predictores}
-	\label{ocurrencia_valores}
+	\label{tab:ocurrencia_valores}
 \end{figure}
 \linebreak
 Una vez leída esta documentación y detectados algunos casos de columnas con información redundante, se cargaron los datos y se sacaron una serie de métricas. Estamos ante un conjunto de datos formados por un total de 1672 ejemplos y con 246 características (antes de realizar cualquier tipo de procesamiento), las cuales pueden ser de tipo entero, flotante o categóricas.
@@ -56,13 +56,13 @@ El resultado ha sido: \\
 	\centering
 	\begin{tabular}{|l|l|l|l|}
 		\cline{1-3}
-		Columna 1                           & Columna 2                           & Correlación   \\ \cline{1-3}
-		IF1.6jTiene    	                      &  FI\_Insur                              &  1.000000       \\ \cline{1-3}
-		FinLit total(1-19)                & FinLit normaliz                   & 1.000000        \\ \cline{1-3}
-		ConFin(1\_7)                       & ConFin(1\_8)                        &  0.987110       \\ \cline{1-3}
-		FinBehSinBorrow (1-6)    & FinBeh con borrow(1-7)   &  0.948779       \\ \cline{1-3}
+		Columna 1             & Columna 2              & Correlación  \\ \cline{1-3}
+		IF1.6jTiene    	      &  FI\_Insur             &  1.000000    \\ \cline{1-3}
+		FinLit total(1-19)    & FinLit normaliz        & 1.000000     \\ \cline{1-3}
+		ConFin(1\_7)          & ConFin(1\_8)           &  0.987110    \\ \cline{1-3}
+		FinBehSinBorrow (1-6) & FinBeh con borrow(1-7) &  0.948779    \\ \cline{1-3}
 	\end{tabular}
-	\label{correlacion}
+	\label{tab:correlacion}
 	\caption{Matriz de correlación}
 \end{table}
 \linebreak
@@ -76,6 +76,67 @@ Volviendo a revisar la documentación, tenemos las siguientes descripciones:
 \end{itemize}
 Como vemos, viendo la explicación de las variables, podemos prescindir de ciertas columnas. En este caso se han descartados las características de la columna 2.\\
 \linebreak
-Por último, se ha dividido el dataset en el conjunto de entrenamiento y test.
+Por último, se ha dividido el conjunto de datos en los conjuntos de entrenamiento y test.
 \linebreak
-Cabe destacar que hay una serie de pasos muy importantes en la fase de pre-procesamiento, como normalización, imputación de valores perdidos, codificación de características categóricas, etc que no se han comentado en esta sección. Esto es debido a que hay modelos que funcionan con datos perdidos, en los que no influye que los datos estén normalizados o que funcionen con variables categóricas. Por este motivo, en la siguiente sección donde se explican que algoritmos se han seleccionado, se explicará el procesamiento exclusivo que ha tenido cada algoritmo.
+A continuación, se va a explicar qué algoritmos se han usado para imputación de valores perdidos, codificación de características categóricas y normalización, etc. En cada subsección de \textbf{\ref{sec:algoritmos}-\nameref{sec:algoritmos}}, se especifica que algoritmos han sido aplicados a cada modelo.
+
+\subsubsection{Valores perdidos}
+Un valor perdido es aquel para el que en una variable determinada, no consta en una o más muestras de conjunto de datos. En caso de que se trabaje con un conjunto de datos con valores perdidos, se puede optar por:
+\begin{itemize}
+	\item \textbf{Eliminar} aquellas muestras que contengan valores perdidos.
+	\item \textbf{Imputar} los valores perdidos en función de del resto de muestras.
+\end{itemize}
+
+La opción de eliminar las muestras tiene la ventaja de que no se está introduciendo información artificial al conjunto de datos, manteniendo así las características originales, pero claramente tiene una desventaja, y es que se está eliminando información, pudiendo impactar en el comportamiento de los algoritmos.\\
+\linebreak
+La segunda opción implica el estar modificando el conjunto de datos con muestras \textbf{artificiales}, alterando así las características del conjunto de datos pero sin eliminar información.\\
+Estas muestras artificiales se pueden usar estadísticos como la \textbf{media}, \textbf{moda} de la variable con valores perdidos. El uso de estos estadísticos en esta fase tiene una gran desventaja: Solo se está usando la información de la propia variable, cabiendo la posibilidad que una o más variables del resto del conjunto de datos influyan en la variable que se está tratando. \\
+\linebreak
+Para evitar la desventaja del uso de estadísticos, puede usarse un algoritmo de machine learning para \textbf{predecir} que valor tendría el valor perdido de la variable que se está analizando. \\
+\linebreak
+Para imputar valores perdidos en una primera iteración del proceso, se ha usado el algoritmo KNN. Este algoritmo está explicado con más profundidad en la sección \textbf{\ref{alg:knn}-\nameref{alg:knn}} de este mismo documento, resumiendo, dada una muestra nueva,  este algoritmo calcula la \textbf{diferencia} entre la nueva muestra y \textbf{todas} las muestras del conjunto de datos, seleccionando la variable de salida de las $K$ muestras más cercanas y asignando el valor predicho en función de las variables de salida seleccionadas.
+\subsubsection{Codificación de variables categóricas}
+Existen algoritmos que no aceptan variables categóricas (Redes Neuronales, KNN, SVM, etc) por lo que un paso muy importante antes de usar estos algoritmos, es de adaptar el conjunto de datos para que el algoritmo funcione. \\
+Una opción puede ser eliminar aquellas variables categóricas, pero se podría estar perdiendo información importante. Para usar estos algoritmos sin eliminar información lo más normal es \textbf{codificar} las variables categóricas.\\
+Existen dos opciones para la codificación:
+\begin{enumerate}
+	\item \textbf{Codificación por etiqueta:} Cada valor único de la variable se sustituye por un valor entero.
+	\item\textbf{Codificación \textit{one-hot }:} Se cambia la variable categórica por una serie de variables \textit{dummies}
+\end{enumerate}
+
+La codificación por etiqueta tiene la ventaja que es la más natural para los humanos y podría parecer suficiente, pero tiene una gran desventaja: Los valores enteros tienen una \textbf{relación de orden} entre cada valor. Los algoritmos de machine learning son capaces de entender esta relación de orden y perjudicar la eficacia del modelo.\\
+\linebreak
+La codificación \textit{one-hot}  crea una variable por cada valor único de la variable a codificar. Cada nueva variable se asocia con un valor único y tendrá el valor $1$ cuando el valor para esa muestra sea el asociado, fijando el valor a $0$ para el resto de nuevas variables. Un ejemplo sería el siguiente:\\
+Dada el siguiente conjunto de datos de ejemplo:\\
+\begin{table}[!htbp]
+	\centering
+	\begin{tabular}{|c|c|}
+		\cline{1-2}
+		ID    &	  Vehículo.  \\ \cline{1-2}
+		0	  &   Moto       \\ \cline{1-2}
+		1	  &   Camión     \\ \cline{1-2}
+		2     &   Coche      \\ \cline{1-2}
+		3	  &   Moto       \\ \cline{1-2}
+	\end{tabular}
+	\caption{Conjunto de datos de ejemplo.}
+	\label{tab:conjunto_ejemplo}
+\end{table}
+\linebreak
+Si usamos codificamos la variable \textit{vehículo} usando la etiqueta, estaríamos imponiendo una relación de orden sobre \textit{moto, camión y coche}, pudiendo "confundir" al algoritmo. Si usamos la codificación \textit{one hot}, el conjunto quedaría:
+
+\begin{table}[!htbp]
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\cline{1-4}
+		ID  & Vehículo\_moto & Vehículo\_camión & Vehículo\_coche. \\ \cline{1-4}
+		0	& 1  			 & 0				& 0		           \\ \cline{1-4}
+		1	& 0				 & 1				& 0 			   \\ \cline{1-4}
+		2   & 0 			 & 0 				& 1				   \\ \cline{1-4}
+		3   & 1 			 & 0 				& 0			       \\ \cline{1-4}
+	\end{tabular}
+	\caption{Conjunto de datos de ejemplo tras codificar}
+	\label{tab:conjunto_ejemplo_cod}
+\end{table}
+Como se ve en la tabla \ref{tab:conjunto_ejemplo_cod}, se ha transformado la columna \textit{vehículo} en tres columnas distintas, tomando el valor 1 cuando el valor de la variable sin codificar coincide con la variable asignada para ese valor. \\
+\linebreak
+Este modelo tiene una desventaja clara, y es se van a crear tantas columnas como valores único tenga la variable a codificar, esto puede incrementar significativamente el tamaño del conjunto de datos, pudiendo impactar en el rendimiento de los modelos.
