@@ -117,8 +117,7 @@ Antes de mostrar los resultados, hay que destacar que cuando se entrena un árbo
 \begin{itemize}
 	\item \textbf{Profundidad máxima:} Limita la profundidad (cantidad de preguntas) del árbol. El mejor valor ha sido \textbf{8}
 	\item \textbf{Máximo número de hojas:} Máximo numero de hojas (grupos en el último nivel de una rama). El mejor valor ha sido \textbf{16}
-\end{itemize} 
-\linebreak
+\end{itemize}
 En esta sección se va a exponer los resultados obtenidos usando el algoritmo de \textbf{árboles de decisión}.\\
 La siguiente tabla expone los resultados obtenidos en validación:
 \begin{table}[htbp]
@@ -136,44 +135,143 @@ La siguiente tabla expone los resultados obtenidos en validación:
 	\caption{Árbol de decisión:  Profundidad 8, número máximo de hojas 16}
 	\label{tab:tree_res}
 \end{table}
-La siguiente figura muestra el gráfico de dispersión de errores: 
+La siguiente figura muestra el gráfico de dispersión de errores:
  \begin{figure}[!htbp]
 	\centering
-	\includegraphics[scale=0.6]{src/tree_scattered.png}
+	\includegraphics[scale=0.8]{src/scattered_error_dtree.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:tree_scattered}
 \end{figure}
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
  \begin{figure}[!htbp]
 	\centering
-	\includegraphics[scale=0.6]{src/tree_scattered.png}
+	\includegraphics[scale=0.8]{src/error_hist_dtree.png}
 	\caption{Conteo de errores}
 	\label{fig:tree_error_plot}
 \end{figure}
 \subsubsection{Representación}
 Como se mencionó en la sección \textbf{\ref{alg:dec_tree}-\nameref{alg:dec_tree}}, los árboles de decisión tienen la ventaja de que pueden representarse fácilmente. \\
-En este caso, vamos a usar una representación gráfica del árbol, las reglas que ha obtenido el árbol y las variables más importantes.
-
+En este caso, vamos a usar una representación gráfica del árbol, las reglas que ha obtenido el árbol y las variables más importantes.\\
+\linebreak
+La siguiente figura muestra la representación gráfica del árbol de decisión entrenado:\\
+\linebreak
+ \begin{figure}[!htbp]
+	\centering
+	\includegraphics[scale=0.2]{src/decision_tree_plot.png}
+	\caption{Árbol de decisión}
+	\label{fig:decission_tree1}
+\end{figure}
+\\
+A continuación se muestra en pseudo-código, las reglas que ha inferido el árbol de decisión:\\
+\linebreak
+\begin{figure}[!htbp]
+	\begin{lstlisting}
+def predict(sample):
+    if AE5 <= 4.5:
+        if AcMedia <= 3.1:
+            if AE5 <= 1.5:
+                return 1.28
+            else:  # if AE5 > 1.5
+                return 2.12
+        else:  # if AcMedia > 3.1
+            if SE2 <= 3.5:
+                if BA3.f <= 0.5:
+                    return 3.27
+                else:  # if BA3.f > 0.5
+                    return 4.61
+            else:  # if SE2 > 3.5
+                if Beca <= 0.75:
+                    if Nota <= 6.85:
+                        return 3.46
+                    else:  # if Nota > 6.85
+                        return 4.52
+                else:  # if Beca > 0.75
+                    return 3.32
+    else:  # if AE5 > 4.5
+        if AE5 <= 5.75:
+            if SE2 <= 3.5:
+                if CEF19 <= 3.75:
+                    return 4.71
+                else:  # if CEF19 > 3.75
+                    return 3.79
+            else:  # if SE2 > 3.5
+                return 5.19
+        else:  # if AE5 > 5.75
+            if AcMedia <= 6.55:
+                if SE5 <= 1.5:
+                    return 2.75
+                else:  # if SE5 > 1.5
+                    if NS1 <= 6.75:
+                        return 5.5
+                    else:  # if NS1 > 6.75
+                        if AE7 <= 2.75:
+                            return 4.69
+                        else:  # if AE7 > 2.75
+                            return 6.13
+            else:  # if AcMedia > 6.55
+                if SEMedia <= 3.58:
+                    return 5.68
+                else:  # if SEMedia > 3.58
+                    return 6.6
+	\end{lstlisting}
+\caption{Reglas del árbol de decisión}
+\label{fig:tree_rules}
+\end{figure}
+\pagebreak
 \subsubsection{Conclusiones}
 \subsection{KNN}
 \label{alg:knn}
+El algoritmo  KNN (\textit{K Nearest Neighbors}) es un algoritmo supervisado basado en instancias. Este algoritmo no aprende un modelo si no que almacena todas las muestras de entrenamiento y cuando hay que predecir una nueva ejemplo, el algoritmo usa las muestras almacenadas calculando la distancia a cada muestra y obteniendo los K vecinos más cercanos y usando las etiquetas de los vecinos, asigna una predicción al ejemplo a predecir, generalmente asignando aquella clase con más "votos".\\
+\linebreak
+Para medir la distancia entre dos muestras, KNN puede usar una gran cantidad métricas, las más comunes son:
+\begin{itemize}
+	\item \textbf{Distancia euclidiana:} Definida como $\sqrt{\sum(x_1 - x_2)^2}$
+	\item \textbf{Distancia Manhattan:} Definida como $\sum|x_1 - x_2|$
+	\item  \textbf{Distancia Minkowski:} Definida como $(\sum|x_1 - x_2|^p)^{\frac{1}{p}}$, siendo P un entero positivo
+\end{itemize}
+La implementación del algoritmo KNN de ScikitLearn usa por defecto la distancia \textbf{Minkowski}. Esta tiene la peculiaridad de que cambiando el parámetro $p$ puede usarse la distancia euclidiana ($p=2$) o la distancia Manhattan ($p=1$)
 \subsubsection{Procesado de datos}
+KNN es un algoritmo que depende de la distancia entre dos muestras, esto implica que si una caracteristica del conjunto de datos que se esta usando tiene un rango \textbf{mayor} que otra, esa característica aportará más al cálculo de la distancia, cuando no necesariamente debe de ser así. Por ese motivo, este algoritmo necesita que el conjunto de datos esté \textbf{normalizado} en el momento de entrenar.\\ 
+\linebreak
+Este algoritmo, a parte de necesitar que los datos estén normalizados, no admite valores perdidos y variables categóricas.
 \subsubsection{Resultados}
-En esta sección se va a exponer los resultados obtenidos por 
-\begin{table}[htbp]
-    \begin{tabular}{|l|l|l|l|l}
-    \cline{1-4}
-    Métricas & R2                 & Poisson deviance     & MSE                 \\ \cline{1-4}
-    FOLD 1   & 0.5619206155867529 & 0.29163057554189287  & 1.20899955732625    \\ \cline{1-4}
-    FOLD 2   & 0.5805274242037095 & 0.26381465090929485  & 1.092976892430279   \\ \cline{1-4}
-    FOLD 3   & 0.5684319097570786 & 0.2823138585908296   & 1.1415514829570599  \\ \cline{1-4}
-    FOLD 4   & 0.5381004255769224 &  0.26551281764424606 & 1.1226505533421867  \\ \cline{1-4}
-    FOLD 5   & 0.584762931045677  & 0.2520727178147933   & 1.0659244444444445  \\ \cline{1-4}
-    Media    & 0.5667486612340281 & 0.27106892410021133  & 1.126420586100044   \\ \cline{1-4}
-    Test & & & \\ \cline{1-4}
-   \end{tabular}
+Antes de mostrar los resultados, estos son los parámetros que se han usado al entrenar el algoritmo:
+\begin{itemize}
+	\item \textbf{K:} Número de vecinos: 5
+	\item \textbf{Métrica:} Distancia usada: Minkowski con $P=2$ (distancia euclidiana).
+\end{itemize}
+En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:\\
+\linebreak
+\begin{table}[!htbp]
+	\begin{tabular}{|c|c|c|c|c}
+		\cline{1-4}
+		Métricas & R2                 & Poisson deviance     & MSE                 \\ \cline{1-4}
+		FOLD 1   & 0.5619206155867529 & 0.29163057554189287  & 1.20899955732625    \\ \cline{1-4}
+		FOLD 2   & 0.5805274242037095 & 0.26381465090929485  & 1.092976892430279   \\ \cline{1-4}
+		FOLD 3   & 0.5684319097570786 & 0.2823138585908296   & 1.1415514829570599  \\ \cline{1-4}
+		FOLD 4   & 0.5381004255769224 &  0.26551281764424606 & 1.1226505533421867  \\ \cline{1-4}
+		FOLD 5   & 0.584762931045677  & 0.2520727178147933   & 1.0659244444444445  \\ \cline{1-4}
+		Media    & 0.5667486612340281 & 0.27106892410021133  & 1.126420586100044   \\ \cline{1-4}
+		Test & & & \\ \cline{1-4}
+	\end{tabular}
 	\caption{KNN con 5 vecinos}
+	\label{tab:knn_res}
 \end{table}
+La siguiente figura muestra el gráfico de dispersión de errores:
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[scale=0.8]{src/scattered_error_knn.png}
+	\caption{Gráfico de dispersión de errores}
+	\label{fig:knn_scattered}
+\end{figure}
+Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[scale=0.8]{src/error_hist_knn.png}
+	\caption{Conteo de errores}
+	\label{fig:knn_error_plot}
+\end{figure}
+
 \subsubsection{Conclusiones}
 
 \subsection{Random Forest}
