@@ -49,6 +49,7 @@ def plot_scattered_error(y_true: np.array, y_pred: np.array, title: str, xlabel:
         plt.savefig(join(save, f'scattered_error_{extra}.png'))
     else:
         plt.show()
+    plt.clf()
 
 
 def calculate_regression_metrics(y_true, y_pred):
@@ -102,6 +103,7 @@ def get_error_hist(y_true: np.array, y_pred: np.array, threshold: float, xlabel,
         plt.savefig(join(save, f'error_hist_{extra}.png'))
     else:
         plt.show()
+    plt.clf()
 
 
 def tree_to_code(tree, feature_names):

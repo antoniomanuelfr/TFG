@@ -148,3 +148,6 @@ src/imgs/*
 *.pdf
 *.fls
 *.fdb_latexmk
+
+# Source images in latex
+plantilla/img/src/*

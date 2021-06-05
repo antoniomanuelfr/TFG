@@ -13,7 +13,7 @@ from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import KFold
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 
 
 if __name__ == '__main__':
@@ -29,7 +29,7 @@ if __name__ == '__main__':
                                               ('encoder', OneHotEncoder())
                                               ])
     numeric_transformer = Pipeline([('imputer', KNNImputer(n_neighbors=2, weights='uniform')),
-                                    ('scaler', StandardScaler())])
+                                    ('scaler', MinMaxScaler())])
     preprocessor = ColumnTransformer(transformers=[('numerical', numeric_transformer, n_cols),
                                                    ('categorical', categorical_transformer, c_cols)])
 

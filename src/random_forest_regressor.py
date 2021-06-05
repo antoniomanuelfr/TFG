@@ -73,7 +73,7 @@ if __name__ == '__main__':
                                'Observations', 'IEMedia', args.save_figures, 'random_forest')
 
     utils.get_error_hist(y_test_transformed.ravel(), y_pred, 0.5, 'Class', 'Count', 'Error count for Random Forest',
-                         args.save_figures, 'random forest')
+                         args.save_figures, 'random_forest')
 
     feature_importances = pd.Series(data=clf.feature_importances_, index=x_train_transformed.columns)
     print(feature_importances.sort_values(ascending=False)[:10])
