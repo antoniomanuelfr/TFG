@@ -53,13 +53,12 @@ Para ver el comportamiento de un modelo, se puede definir un conjunto de entrena
 Para solventar estas y algunos otros problemas que que tiene esta metodología, se usa la \textbf{validación cruzada}.\\
 \linebreak
 En vez de usar el conjunto de entrenamiento para entrenar un único modelo, se divide el conjunto de entrenamiento en $k$ partes, entrenando $k$ modelos usando $k-1$ subconjunto y usando el restante como de test. \\
- \begin{figure}[!htbp]
+ \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{grid_search_cross_validation.png}
 	\caption{Ejemplo de validación cruzada con $k=5$}
 	\label{fig:cross-validation}
 \end{figure}
-\linebreak
 Como se aprecia en la figura \ref{fig:cross-validation},  se ha dividido el conjunto de datos en 5 conjuntos (folds), usando en cada iteración 4 para entrenar el modelo y uno para verificar con datos que el modelo no ha visto. Finalmente, se usa el conjunto de test (habiendo entrenado previamente el modelo con todo el conjunto de entrenamiento).
 \subsubsection{Gráficos}
 Además del uso de las métricas mencionadas previamente, se han creado las siguientes gráficas para visualizar los errores que esta haciendo un modelo en concreto. Esto ayuda a la toma de decisiones en fases siguientes.\\
@@ -69,25 +68,22 @@ Las gráficas que se han desarrollado son las siguientes:
 	\item Cantidad de errores por rango. (probablemente sea mejor cambiar este nombre, pero es el nombre que se me ocurrió)
 \end{itemize}
 El gráfico de dispersión de errores consiste en mostrar en la misma gráfica el valor real de las variables objetivo y el valor predicho por nuestro modelo. Esto nos permite ver como de juntos están las predicciones, identificando así en que zonas el algoritmo se está equivocando más frecuentemente.\\
- \begin{figure}[!htbp]
+ \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{scattered.png}
 	\caption{Ejemplo de gráfico de dispersión de errores}
 	\label{fig:scattered_example}
 \end{figure}
-\linebreak
 El segundo gráfico consiste en lo siguiente:
-Los modelos que han sido entrenados están prediciendo valores medios. El proceso seguido para realizar estos gráficos ha sido el de obtener la diferencia entre los valores reales y los valores predichos. Si esa diferencia es mayor que un umbral (generalmente se ha usado 0.5), esa predicción se ha considerado como error. En ese caso, se ha considerado el valor real redondeado y se han contado el número de errores para cada valor redondeado.\\
+Los modelos que han sido entrenados están prediciendo valores medios. El proceso o pseguidara realizar estos gráficos ha sido el de obtener el valor redondeado de la predicción y del valor real. Si la predicción y el dato real son distintos, se ha considerado como error y se han contado el número de errores para cada valor REAL redondeado.\\
 Usando esta gráfica, se puede identificar fácilmente en que rangos los modelos están fallando.\\
 \linebreak
- \begin{figure}[!htbp]
+ \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{error_hist.png}
 	\caption{Ejemplo de gráfico de errores por rango}
 	\label{fig:error_hist_example}
 \end{figure}
-\\
-\pagebreak
 \subsection{Árboles de decisión}
 \label{alg:dec_tree}
 Los árboles de decisión son modelos que predicen la variable objetivo usando reglas del tipo \textit{si variable cumple condición entonces } inferidas a partir de los datos con los que se entrena el algoritmo.\\
@@ -113,6 +109,7 @@ Las modificaciones que se han hecho previamente son: (por orden)
 \end{enumerate}
  Por este motivo, se ha tenido que introducir una fase extra transformando las variables categóricas en numéricas.
 \subsubsection{Resultados}
+\label{sec:res_tree}
 Antes de mostrar los resultados, hay que destacar que cuando se entrena un árbol de decisión sin limitar los parámetros, este va a seguir separando los datos de entrenamiento hasta que no pueda realizar más divisiones. Para encontrar el árbol óptimo, primero se ha entrenado el árbol por defecto y se han obtenido los parámetros. Esos parámetros se han establecido como limite, se han entrenado varios árboles con distintos parámetros (sin superar el límite establecido por el primer modelo) y se ha escogido el que mejores resultados obtenía. Los parámetros que mejor resultados dieron son: \\
 \begin{itemize}
 	\item \textbf{Profundidad máxima:} Limita la profundidad (cantidad de preguntas) del árbol. El mejor valor ha sido \textbf{8}
@@ -123,27 +120,27 @@ La siguiente tabla expone los resultados obtenidos en validación:
 \begin{table}[htbp]
     \begin{tabular}{|c|c|c|c|c}
     \cline{1-4}
-    Métricas         & R2                 & Poisson deviance    & MSE                  \\ \cline{1-4}
-    FOLD 1           & 0.688063748236579  & 0.20228321575339223 & 0.8608731743930507   \\ \cline{1-4}
-    FOLD 2           & 0.7171339618694248 & 0.1786391119233935  & 0.7370351750483967   \\ \cline{1-4}
-    FOLD 3           & 0.6293360749947021 & 0.23894112105692256 & 0.9804523615967746   \\ \cline{1-4}
-    FOLD 4           & 0.6784004356911095 & 0.18740825486005594 & 0.7816502738218226   \\ \cline{1-4}
-    FOLD 5           & 0.6718724746781572 & 0.19150698533751426 & 0.8423119617340564   \\ \cline{1-4}
-    Media Validación & 0.6769613390939946 & 0.1997557377862557  & 0.8404645893188203   \\  \cline{1-4}
-    Test             & 0.6904787624085199 & 0.19585632446621679 & 0.8125421161216909   \\ \cline{1-4}
+    Métricas         & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
+    FOLD 1           & 0.6782494272698003 & 0.21112424463601795 & 0.8859916804359318 \\ \cline{1-4}
+    FOLD 2           & 0.6496782398954029 & 0.2130300317895574  & 0.9127976673635368 \\ \cline{1-4}
+    FOLD 3           & 0.6293645338464592 & 0.23884146978371698 & 0.9801694795206164 \\ \cline{1-4}
+    FOLD 4           & 0.6702423866746838 & 0.1907249816488134  & 0.8000569119539743 \\ \cline{1-4}
+    FOLD 5           & 0.6363529914267994 & 0.2110095911936984  & 0.9328307004307209 \\ \cline{1-4}
+    Media Validación & 0.6527775158226291 & 0.21294606381036085 & 0.9023692879409559 \\ \cline{1-4}
+    Test             & 0.6896481387254361 & 0.19636908196098912 & 0.8145241355958663 \\ \cline{1-4}
     \end{tabular}
 	\caption{Árbol de decisión:  Profundidad 8, número máximo de hojas 16}
 	\label{tab:tree_res}
 \end{table}
-La siguiente figura muestra el gráfico de dispersión de errores:
- \begin{figure}[!htbp]
+La siguiente figura muestra el gráfico de dispersión de errores:\\
+ \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/scattered_error_dtree.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:tree_scattered}
 \end{figure}
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
- \begin{figure}[!htbp]
+ \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/error_hist_dtree.png}
 	\caption{Conteo de errores}
@@ -155,84 +152,159 @@ En este caso, vamos a usar una representación gráfica del árbol, las reglas q
 \linebreak
 La siguiente figura muestra la representación gráfica del árbol de decisión entrenado:\\
 \linebreak
- \begin{figure}[!htbp]
+ \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.2]{src/decision_tree_plot.png}
 	\caption{Árbol de decisión}
 	\label{fig:decission_tree1}
 \end{figure}
-\linebreak
 A continuación se muestra en pseudo-código, las reglas que ha inferido el árbol de decisión:\\
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 	\begin{lstlisting}
 def predict(sample):
-    if AE5 <= 4.5:
-        if AcMedia <= 3.1:
-            if AE5 <= 1.5:
-                return 1.28
-            else:  # if AE5 > 1.5
-                return 2.12
-        else:  # if AcMedia > 3.1
-            if SE2 <= 3.5:
-                if BA3.f <= 0.5:
-                    return 3.27
-                else:  # if BA3.f > 0.5
-                    return 4.61
-            else:  # if SE2 > 3.5
-                if Beca <= 0.75:
-                    if Nota <= 6.85:
-                        return 3.46
-                    else:  # if Nota > 6.85
-                        return 4.52
-                else:  # if Beca > 0.75
-                    return 3.32
-    else:  # if AE5 > 4.5
-        if AE5 <= 5.75:
-            if SE2 <= 3.5:
-                if CEF19 <= 3.75:
-                    return 4.71
-                else:  # if CEF19 > 3.75
-                    return 3.79
-            else:  # if SE2 > 3.5
-                return 5.19
-        else:  # if AE5 > 5.75
-            if AcMedia <= 6.55:
-                if SE5 <= 1.5:
-                    return 2.75
-                else:  # if SE5 > 1.5
-                    if NS1 <= 6.75:
-                        return 5.5
-                    else:  # if NS1 > 6.75
-                        if AE7 <= 2.75:
-                            return 4.69
-                        else:  # if AE7 > 2.75
-                            return 6.13
-            else:  # if AcMedia > 6.55
-                if SEMedia <= 3.58:
-                    return 5.68
-                else:  # if SEMedia > 3.58
-                    return 6.6
+	if AE5 <= 4.5:
+		if AcMedia <= 3.1:
+			if AE5 <= 1.5:
+				return 1.28
+			else:  # if AE5 > 1.5
+				return 2.12
+		else:  # if AcMedia > 3.1
+			if SE2 <= 3.5:
+				if BA3.f <= 0.5:
+					return 3.27
+				else:  # if BA3.f > 0.5
+					return 4.61
+			else:  # if SE2 > 3.5
+				if Beca <= 0.75:
+					if Nota <= 6.85:
+						return 3.46
+					else:  # if Nota > 6.85
+						return 4.52
+				else:  # if Beca > 0.75
+					return 3.32
+	else:  # if AE5 > 4.5
+		if AE5 <= 5.75:
+			if SE2 <= 3.5:
+				if CEF19 <= 3.75:
+					return 4.7
+				else:  # if CEF19 > 3.75
+					return 3.79
+			else:  # if SE2 > 3.5
+				return 5.19
+		else:  # if AE5 > 5.75
+			if AcMedia <= 6.55:
+				if SE5 <= 1.5:
+					return 2.75
+				else:  # if SE5 > 1.5
+					if NS1 <= 6.75:
+						return 5.5
+					else:  # if NS1 > 6.75
+						if AE7 <= 2.75:
+							return 4.69
+						else:  # if AE7 > 2.75
+							return 6.13
+			else:  # if AcMedia > 6.55
+				if SEMedia <= 3.58:
+					return 5.68
+				else:  # if SEMedia > 3.58
+					return 6.6
 	\end{lstlisting}
 \caption{Reglas del árbol de decisión}
 \label{fig:tree_rules}
 \end{figure}
 \pagebreak
 Por ultimo, estas son las 10 variables que el modelo consideró con más relevancia. El valor asociado a cada variable es la \textbf{importancia Gini}:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.25]{src/feature_importance_dtree}
+	\caption{10 variables más importantes segun AD}
+	\label{fig:feature_dtree}
+\end{figure}
+Volviendo a la documentación proporcionada para comprobar el significado de esos valores:
 \begin{itemize}
-    \item \textbf{AE5:}    0.735667
-    \item \textbf{AcMedia:} 0.156046
-    \item \textbf{SE2:}    0.037300
-    \item \textbf{SE5:}    0.014692
-    \item \textbf{NS1:}    0.012393
-    \item \textbf{Beca:}      0.008256
-    \item \textbf{Nota:}      0.008034
-    \item \textbf{BA3.f:}    0.007389
-    \item \textbf{CEF19:}    0.007202
-    \item \textbf{AE7:}    0.006518
+	\item \textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales. Valor $0.735667$
+	\item \textbf{AcMedia:} Variable global de Actitud emprendedora. Valor $0.156046$
+	\item \textbf{SE2:} Estoy preparado para iniciar una empresa viable. Valor $0.037300$
+	\item \textbf{SE5:} Conozco cómo desarrollar un proyecto empresarial. Valor $0.014692$
+	\item \textbf{NS1:} Mi familia aprobaría el que yo decidiese crear una empresa. Valor $0.012393$
+	\item \textbf{Beca:} Tiene beca el encuestado. Valor $0.008256$
+	\item \textbf{Nota:} Nota media del expediente académico hasta la fecha de la encuesta sobre 10 puntos. Valor $0.008034$
+	\item \textbf{BA3.f:} En los últimos 12 meses, ¿has ahorrado personalmente algún dinero de alguna de las siguientes formas, independientemente de si aún dispones del dinero? Han contestado las opciones a, c, d, e, f, g (en casa, en cuenta de ahorro, darlo a la familia, productos de inversión, de otro modo). Valor $0.007389$
+	\item \textbf{CEF19:} Pregunta sobre Conocimientos financieros empresariales. Valor $0.007202$
+	\item \textbf{AE7:} Pregunta 7 sobre Actitudes financieras empresariales. Valor $0.006518$
 \end{itemize}
-\subsubsection{Conclusiones}
+De las columnas \textit{AEx} y \textit{CEFx} no hay información en la documentación, unicamente se menciona que son una serie de preguntas relacionadas con actitudes financieras empresariales y sobre conocimientos financieros empresariales respectivamente.
+\subsection{Random Forest}
+Random Forest es un modelo  combinado de aprendizaje que puede usarse para clasificación y/o regresión. Random Forest consiste en un conjunto de árboles de decisión que operan juntos. Una vez que cada árbol dentro del Random Forest realiza una predicción, se escoge la predicción con más votos. \\ Se ha escogido este modelo ya que como se comprobó en la sección \textbf{\ref{alg:dec_tree}-\nameref{alg:dec_tree}}, los árboles de decisión dieron buenos resultados
+\linebreak
+Para que Random Forest funciona bien, hay que asegurar que los distintos árboles que lo forman tengan una baja \textbf{correlación} entre ellos. Esto quiere decir que los árboles tienen que diferir y proporcionar predicciones distintas, de esta manera, si hay un conjunto de  árboles que da una predicción malas, puede haber otro conjunto que vaya en la dirección correcta. \\
+\linebreak
+Los árboles de decisión son algoritmos que son muy sensibles a los datos con los que se ha entrenado, por lo que cualquier cambio en los datos de entrenamiento puede hacer que cambie una predicción. Random Forest hace uso de esta peculiaridad de los árboles de decisión.
+En el momento de entrenar los distintos árboles, en vez de usar subconjuntos del conjunto de entrenamiento se usan $N$ conjuntos del mismo tamaño que el conjunto de entrenamiento obtenidos usando un \textbf{muestreo con reemplazo}. Una vez que se tienen los distintos conjuntos, se entrena cada conjunto con un árbol. Este proceso se conoce como \textbf{bagging}.\\
+\linebreak
+Una peculiaridad más que tiene Random Forest es la forma con la que los árboles seleccionan la variable que van a usar para dividir el conjunto de datos. Estos no eligen la variable en función de un criterio concreto, si no que eligen la variable usando un conjunto aleatorio de las características.  Esto fuerza a que los árboles sean mas diferentes entre ellos, bajando la correlación entre los árboles que forman el modelo.
+\subsubsection{Procesado de datos}
+Al igual que los árboles de decisión, se ha hecho una imputación de valores perdidos y se ha transformado las variables categóricas a numéricas debido a limitación que hay en la librería usada.
 \pagebreak
+\subsubsection{Resultados}
+Antes de mostrar los resultados, estos son los parámetros que se han usado al entrenar el algoritmo:
+\begin{itemize}
+	\item \textbf{max\_features}:  Número de variables que se van a escoger de manera aleatoria: $\frac{1}{3}$ del número de variables.
+	\item\textbf{n\_estimators}: Número de árboles que forman el Random Forest: $500$
+\end{itemize}
+En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:
+\linebreak
+\begin{table}[H]
+	\begin{tabular}{|c|c|c|c|c}
+		\cline{1-4}
+		Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
+		FOLD 1   & 0.7708928847356455 & 0.15237017056674984 & 0.6308830978308985 \\ \cline{1-4}
+		FOLD 2   & 0.7772277347430195 & 0.13573108530894007 & 0.5804549623727309 \\ \cline{1-4}
+		FOLD 3   & 0.7431623832664664 & 0.16930651392124355 & 0.6792237011952186 \\ \cline{1-4}
+		FOLD 4   & 0.7381456425712313 & 0.14959902935439848 & 0.6353102403718461 \\ \cline{1-4}
+		FOLD 5   & 0.7542039634278926 & 0.14599154555353722 & 0.6305182871111111 \\ \cline{1-4}
+		Media  Validación   & 0.756726521748851  & 0.15059966894097382 & 0.631278057776361\\ \cline{1-4}
+		Test     & 0.7695717561293084 & 0.14941109008374115 & 0.6047631400850609 \\ \cline{1-4}
+	\end{tabular}
+	\caption{Random Forest}
+	\label{tab:res_random_forest}
+\end{table}
+La siguiente figura muestra el gráfico de dispersión de errores:\\
+\linebreak
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{src/scattered_error_random_forest.png}
+	\caption{Gráfico de dispersión de errores}
+	\label{fig:rf_scattered}
+\end{figure}
+Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{src/error_hist_random_forest.png}
+	\caption{Conteo de errores}
+	\label{fig:rf_error_plot}
+\end{figure}
+Para finalizar, esta es la lista de las 10 variables más importantes que ha obtenido Random Forest:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{src/feature_importance_rf}
+	\caption{10 variables más importantes según RF}
+	\label{fig:feature_rf}
+\end{figure}
+Volviendo a la documentación, esta es la explicación para cada variable:
+\begin{itemize}
+	\item\textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales. Valor = $0.246364$
+	\item\textbf{AcMedia:} Variable global de Actitud emprendedora. Valor = $0.220202$
+	\item\textbf{AC2:} Ser emprendedor es una salida profesional atractiva para mí. Valor = $0.072907$
+	\item\textbf{AC4:}Ser emprendedor supondría una gran satisfacción para mí. Valor = $0.065776$
+	\item\textbf{AC3:} Si tuviera la oportunidad y los recursos, me gustaría iniciar una empresa. Valor = $0.041642$
+	\item\textbf{SEMedia:} Variable global de Autoeficacia emprendedora. Valor = $0.022872$
+	\item\textbf{SE2:} Estoy preparado para iniciar una empresa viable. Valor = $0.019630$
+	\item\textbf{AC1:} Ser emprendedor implica más ventajas que desventajas para mí. Valor = $0.019396$
+	\item\textbf{NS1:} Mi familia aprobaría el que yo decidiese crear una empresa. Valor = $0.014467$
+	\item\textbf{Nota:} Nota media del expediente académico hasta la fecha de la encuesta sobre 10 puntos. Valor = $0.012254$
+\end{itemize}
 \subsection{KNN}
 \label{alg:knn}
 El algoritmo  KNN (\textit{K Nearest Neighbors}) es un algoritmo supervisado basado en instancias. Este algoritmo no aprende un modelo si no que almacena todas las muestras de entrenamiento y cuando hay que predecir una nueva ejemplo, el algoritmo usa las muestras almacenadas calculando la distancia a cada muestra y obteniendo los K vecinos más cercanos y usando las etiquetas de los vecinos, asigna una predicción al ejemplo a predecir, generalmente asignando aquella clase con más "votos".\\
@@ -254,114 +326,164 @@ Antes de mostrar los resultados, estos son los parámetros que se han usado al e
 	\item \textbf{K:} Número de vecinos: 5
 	\item \textbf{Métrica:} Distancia usada: Minkowski con $P=2$ (distancia euclidiana).
 \end{itemize}
-En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:\\
+En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:
 \linebreak
-\begin{table}[!htbp]
+\begin{table}[H]
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas         & R2                  & Poisson deviance    & MSE                 \\ \cline{1-4}
-		FOLD 1           & 0.4699559130274741  & 0.3567254943399616  & 1.4628012394864982  \\ \cline{1-4}
-		FOLD 2           & 0.40748820029815946 & 0.3777124064305139  & 1.5438475431606904  \\ \cline{1-4}
-		FOLD 3           & 0.4488130842741638  & 0.36189982653902963 & 1.4579582115980518  \\ \cline{1-4}
-		FOLD 4           & 0.4369686067359718  & 0.3280165927757028  & 1.3684522355024338  \\ \cline{1-4}
-		FOLD 5           & 0.4677481890415697  & 0.3212318293015113  & 1.3663043555555556  \\ \cline{1-4}
-		Media Validación & 0.44619479867546785 & 0.34911722987734384 & 1.439872717060646   \\ \cline{1-4}
-		Test             & 0.5272318168571177  & 0.300847895311677   & 1.241091121743753   \\ \cline{1-4}
+		Métricas         & R2                  & Poisson deviance    & MSE                \\ \cline{1-4}
+		FOLD 1           & 0.46980781375092073 & 0.35618618739401414 & 1.4599690128375387 \\ \cline{1-4}
+		FOLD 2           & 0.40718096517694113 & 0.3782730566980918  & 1.5446480743691902 \\ \cline{1-4}
+		FOLD 3           & 0.4491395219180896  & 0.361546771032096   & 1.4567861885790172 \\ \cline{1-4}
+		FOLD 4           & 0.43451103112616296 & 0.32861492284123445 & 1.3719876051350157 \\ \cline{1-4}
+		FOLD 5           & 0.4671814524645248  & 0.3214310670842308  & 1.366791111111111  \\ \cline{1-4}
+		Media Validación & 0.4455641568873279  & 0.34921040100993345 & 1.4400363984063744 \\ \cline{1-4}
+		Test             & 0.5268679364696298  & 0.30104346676253907 & 1.2417437533227007 \\ \cline{1-4}
 	\end{tabular}
 	\caption{KNN: $K=5$, métrica Minkowski con $P=2$}
 	\label{tab:knn_res}
 \end{table}
-\linebreak
-La siguiente figura muestra el gráfico de dispersión de errores:\\
-\linebreak
-\begin{figure}[!htbp]
+La siguiente figura muestra el gráfico de dispersión de errores:
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/scattered_error_knn.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:knn_scattered}
 \end{figure}
-\linebreak
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
 \linebreak
-\begin{figure}[!htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/error_hist_knn.png}
 	\caption{Conteo de errores}
 	\label{fig:knn_error_plot}
 \end{figure}
+\subsection{SVM}
+\subsubsection{Procesado de datos}
+\subsubsection{Resultados}
+\begin{table}[htbp]
+	\begin{tabular}{|l|l|l|l|l}
+		\cline{1-4}
+		Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
+		FOLD 1   & 0.6711412482304177 & 0.23574927438251783 & 0.9055651886926617 \\ \cline{1-4}
+		FOLD 2   & 0.7181210219087755 & 0.1863434550541163  & 0.7344632934125027 \\ \cline{1-4}
+		FOLD 3   & 0.7279045335870233 & 0.1853587115456679  & 0.7195740722325875 \\ \cline{1-4}
+		FOLD 4   & 0.6908637183124771 & 0.19249599855772873 & 0.750025500263001  \\ \cline{1-4}
+		FOLD 5   & 0.6974243573787764 & 0.19271036635356822 & 0.7761698624912937 \\ \cline{1-4}
+		Media   Validación & 0.701090975883494  & 0.19853156117871978 & 0.7771595834184094 \\ \cline{1-4}
+		Test     & 0.7365874401870561 & 0.17290273218707394 & 0.6913310804890515 \\ \cline{1-4}
+	\end{tabular}
+\caption{SVM: Tolerancia $1^{-3}$, Kernel RBF, $C=1$}
+\label{tab:svm_res}
+\end{table}
+La siguiente figura muestra el gráfico de dispersión de errores:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/scattered_error_svr.png}
+	\caption{Gráfico de dispersión de errores}
+	\label{fig:svr_scattered}
+\end{figure}
+Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
 \linebreak
-\subsubsection{Conclusiones}
-Claramente se ve por los resultados que este algoritmo no funciona bien con nuestro conjunto de datos. La razón más probable por la que KNN obtuvo estos resultados, es que hay relaciones entre las variables que KNN no es capaz de detectar al únicamente comparar la distancia característica por característica. \\
-Debido al bajo desempeño que se ha obtenido al usar este algoritmo, este va a ser descartado de las siguientes fases.
-\pagebreak
-\subsection{Random Forest}
-\subsubsection{Procesado de datos}
-\subsubsection{Resultados}
-\begin{table}[htbp]
-    \begin{tabular}{|l|l|l|l|l}
-    \cline{1-4}
-    Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
-    FOLD 1   & 0.75940609310232   & 0.15828882486456408 & 0.6639845135015493 \\ \cline{1-4}
-    FOLD 2   & 0.7738782297249047 & 0.13507763522421895 & 0.589182425852147  \\ \cline{1-4}
-    FOLD 3   & 0.7165305842468271 & 0.1873177515894791  & 0.7498119977866305 \\ \cline{1-4}
-    FOLD 4   & 0.7223644630818173 & 0.16018586076127198 & 0.6747953590084107 \\ \cline{1-4}
-    FOLD 5   & 0.7560814092017241 & 0.1443990019164558  & 0.6261454186666665 \\ \cline{1-4}
-    Media    & 0.7456521558715187 & 0.157053814871198   & 0.6607839429630807 \\ \cline{1-4}
-    Test & & & \\ \cline{1-4}
-    \end{tabular}
-\end{table}
-\subsubsection{Conclusiones}
-\pagebreak
-
-\subsection{SVR}
-\subsubsection{Procesado de datos}
-\subsubsection{Resultados}
-\begin{table}[htbp]
-    \begin{tabular}{|l|l|l|l|l}
-    \cline{1-4}
-    Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
-    FOLD 1   & 0.6705089864971134 & 0.23644515175767886 & 0.9093203278705152 \\ \cline{1-4}
-    FOLD 2   & 0.7177900290518006 & 0.18644718504172647 & 0.735325727729088  \\ \cline{1-4}
-    FOLD 3   & 0.7287403036079614 & 0.18479685144452426 & 0.71751576560842   \\ \cline{1-4}
-    FOLD 4   & 0.6937593675306533 & 0.19123394666428148 & 0.7443202690259854 \\ \cline{1-4}
-    FOLD 5   & 0.6971714666206172 & 0.19293449761140133 & 0.7773687860219731 \\ \cline{1-4}
-    Media    & 0.7015940306616291 & 0.19837152650392248 & 0.7767701752511963 \\ \cline{1-4}
-    Test & & & \\ \cline{1-4}
-    \end{tabular}
-\end{table}
-\subsubsection{Conclusiones}
-
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/error_hist_svr.png}
+	\caption{Conteo de errores}
+	\label{fig:svr_error_plot}
+\end{figure}
 \subsection{XGBoost}
 \subsubsection{Procesado de datos}
 \subsubsection{Resultados}
 \begin{table}[htbp]
-    \begin{tabular}{|l|l|l|l|l}
-    \cline{1-4}
-    Métricas & R2                 & Poisson deviance     & MSE                \\ \cline{1-4}
-    FOLD 1    & 0.7299372246287128 & 0.18519762643450985 & 0.7453118943533457 \\ \cline{1-4}
-    FOLD 2    & 0.7515986332109441 & 0.14933717549029862 & 0.6472340973260285 \\ \cline{1-4}
-    FOLD 3    & 0.6954597902848908 & 0.20401638482345535 & 0.8055468786504867 \\ \cline{1-4}
-    FOLD 4    & 0.7235483495228161 & 0.1596745486049837  & 0.6719179136898226 \\ \cline{1-4}
-    Media     & 0.7340114799162427 & 0.16116069198736238 & 0.682799505865087  \\ \cline{1-4}
-    Test & & & \\ \cline{1-4}
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|l}
+		\cline{1-4}
+		Métricas & R2                  & Poisson deviance     & MSE               \\ \cline{1-4}
+		FOLD 1    & 0.7241137292463955 & 0.18802645881750482 & 0.7596969868928719 \\ \cline{1-4}
+		FOLD 2    & 0.73006311743932   & 0.16576750258756304 & 0.7033469935273376 \\ \cline{1-4}
+		FOLD 3    & 0.7132825192696681 & 0.19412883243886164 & 0.7582429355006478 \\ \cline{1-4}
+		FOLD 4    & 0.7170586093794943 & 0.1642568049176943  & 0.6864715357473329 \\ \cline{1-4}
+		FOLD 5    & 0.7438919841551608 & 0.15635068934618307 & 0.6569706725866626 \\ \cline{1-4}
+		Media Validación    & 0.7256819918980076 & 0.17370605762156135 & 0.7129458248509706 \\ \cline{1-4}
+		Test      & 0.7393663359389367 & 0.16337067230613062 & 0.6840378177681002 \\ \cline{1-4}
+	\end{tabular}
 \end{table}
-\subsubsection{Conclusiones}
-
+La siguiente figura muestra el gráfico de dispersión de errores:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/scattered_error_xgboost.png}
+	\caption{Gráfico de dispersión de errores}
+	\label{fig:xgboost_scattered}
+\end{figure}
+Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
+\linebreak
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/error_hist_xgboost.png}
+	\caption{Conteo de errores}
+	\label{fig:xgboost_error_plot}
+\end{figure}
 \subsection{Perceptrón multicapa}
 \subsubsection{Procesado de datos}
 \subsubsection{Resultados}
 \begin{table}[htbp]
-    \begin{tabular}{|l|l|l|l|l}
-    \cline{1-4}
-    Métricas & R2                  & Poisson deviance    & MSE                \\ \cline{1-4}
-    FOLD 1   & 0.6917761474938299  & 0.21677510526133273 & 0.8506277960019947 \\ \cline{1-4}
-    FOLD 2   & 0.7169124010860536  & 0.1750378964708858  & 0.737612473376026  \\ \cline{1-4}
-    FOLD 3   & 0.7028464876386707  & 0.19472802619635082 & 0.7860081418694236 \\ \cline{1-4}
-    FOLD 4   & 0.5174482932230278  & 0.29071886047608986 & 1.1728457236749465 \\ \cline{1-4}
-    FOLD 5   & 0.6284203883592703  & 0.2264495874288813  & 0.9538546067249027 \\ \cline{1-4}
-    Media    & 0.6514807435601705  & 0.2207418951667081  & 0.9001897483294587 \\ \cline{1-4}
-    Test & & & \\ \cline{1-4}
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|l}
+		\cline{1-4}
+		Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
+		FOLD 1   & 0.5689090715842633 & 0.2753215514580356  & 1.1870778437060268 \\ \cline{1-4}
+		FOLD 2   & 0.6518962369752597 & 0.23002714199131838 & 0.907018458672338  \\ \cline{1-4}
+		FOLD 3   & 0.6093866983904355 & 0.2552341819198789  & 1.0330021584439208 \\ \cline{1-4}
+		FOLD 4   & 0.4006953228763329 & 0.2792584075076795  & 1.4540311729698103 \\ \cline{1-4}
+		FOLD 5   & 0.5666527194904454 & 0.25103781427191213 & 1.1116264885377276 \\ \cline{1-4}
+		Media Validación    & 0.5595080098633474 & 0.25817581942976486 & 1.1385512244659648 \\ \cline{1-4}
+		Test	 & 0.6250228314117603 & 0.24413475732349202 & 0.9841344365011349 \\ \cline{1-4}
+	\end{tabular}
+	\caption{Perceptrón Multicapa: 2 capas de 100 neuronas, 500 iteraciones}
+	\label{tab:mlp_res}
 \end{table}
-\subsubsection{Conclusiones}
+La siguiente figura muestra el gráfico de dispersión de errores:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/scattered_error_MLP.png}
+	\caption{Gráfico de dispersión de errores}
+	\label{fig:mlp_scattered}
+\end{figure}
+Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
+\linebreak
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/error_hist_MLP.png}
+	\caption{Conteo de errores}
+	\label{fig:mlp_error_plot}
+\end{figure}
+\subsection{Conclusiones}
+Se ha observado que los algoritmos basados en árboles de decisión se han comportado bien, por lo que se ha optado por seguir haciendo uso tanto de árboles de decisión como de Random Forest. Respecto a XGBoost, se ve que se tiene unos resultados ligeramente peores respecto a Random Forest pero con un comportamiento similar (tiene una cantidad considerable de fallos en valores altos de intención emprendedora media). Como XGBoost no esta aportando nada nuevo, por ahora se va a descartar.\\
+\linebreak
+SVR se ha comportado casi al nivel de algoritmos como XGBoost o Random Forest. Por ahora, no se va a descartar su uso, ya que introduciendo el conocimiento que se ha obtenido usando algoritmos como Random Forest o árboles de decisión se podría mejorar el rendimiento.\\
+\linebreak
+Respecto al algoritmo KNN,  se ve por los resultados que este algoritmo no funciona bien con nuestro conjunto de datos. La razón más probable por la que KNN obtuvo estos resultados, es que hay relaciones entre las variables que KNN no es capaz de detectar al únicamente comparar la distancia característica por característica. Debido al bajo desempeño que se ha obtenido al usar este algoritmo, este va a ser descartado de las siguientes fases.\\
+\linebreak
+Respecto al perceptrón multicapa, debido al rendimiento en comparación con otros algoritmos probados y debido al enorme coste de entrenamiento que pueden llegar a tener este algoritmo para que tenga un buen rendimiento, se ha decidido no continuar con este modelo\\
+\linebreak
+Como ya se ha mencionado, los modelos basados en árboles de decisión son capaces de obtener la importancia de las características. A continuación se muestran las gráficas de nuevo para facilitar la comparación:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/feature_importance_dtree}
+	\caption{10 variables más importantes según árboles de decisión}
+	\label{fig:feature_dtree2}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/feature_importance_rf}
+	\caption{10 variables más importantes según RF}
+	\label{fig:feature_rf2}
+\end{figure}
+Como se ve en las figuras, vemos que hay dos variables que \textbf{ambos} algoritmos han dado como más importantes: 
+\begin{itemize}
+	\item\textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales.
+	\item\textbf{AcMedia:} Variable global de Actitud emprendedora.
+\end{itemize}
+Repasando los resultados obtenidos por los algoritmos, se ve claramente que a todos los algoritmos usados les está costando predecir correctamente los valores altos para la intención emprendedora media.
+ \\
+\linebreak
+Por ejemplo, para el algoritmo que mejores resultados ha dado, ha tenido una alta cantidad de fallos para  valores altos (véase figura \ref{fig:rf_error_plot}). Este comportamiento ha sido constante para cada algoritmo usado. Una de las causas de este comportamiento puede ser explicada mediante las gráficas de dispersión de errores (véase figura \ref{fig:rf_scattered} para Random Forest). En esta figura se puede ver como, a medida que se incrementa el valor de intención emprendedora media, los datos son menos dispersos y a los algoritmos les está costando distinguir entre varios valores cercanos. 
+

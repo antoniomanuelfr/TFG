@@ -12,7 +12,7 @@ Para comenzar, se empezó leyendo la documentación aportada con los datos, la c
 
 Esta información es muy útil, ya que aparte de darnos un poco más de conocimiento del objetivo que queremos alcanzar con estos datos, nos da información de algunas características redundantes.
 
-\begin{table}[!htbp]
+\begin{table}[H]
 	\begin{tabular}{|l|l|l|}
 		\cline{1-3}
 		CF9  &	Normalmente es posible reducir...&	Respuesta: Verdadera/Falsa. \\ \cline{1-3}
@@ -21,20 +21,18 @@ Esta información es muy útil, ya que aparte de darnos un poco más de conocimi
 	\label{tab:columnas_iguales}
 	\caption{Comparación de dos características redundantes.}
 \end{table}
-
 Como podemos ver, estas dos columnas contienen información redundante, ya que siendo una respuesta de tipo verdadero o falso, tenemos dos columnas con la misma información. Este caso se repite en varios casos, y en todos ellos se ha optado por dejar unicamente la que tiene los valores numéricos.\\
 \linebreak
 El siguiente paso ha sido el de obtener las columnas que se van a usar como predictores.
 La peculiaridad de este conjunto de datos tenemos 7 columnas que van a ser las que los algoritmos tienen que intentar predecir. De estas 7 columnas tenemos 6 de ellas que son de tipo ordinal, almacenando la opinión (en escala Likert) que ha tenido el entrevistado sobre la pregunta en concreto. La ultima de estas columnas es la media de las 6 columnas.\\
  A continuación se muestra una tabla con la ocurrencia de cada valor para las columnas que vamos a usar:\\
 \linebreak
- \begin{figure}[!htbp]
+ \begin{figure}[H]
  	 \centering
 	 \includegraphics[scale=0.5]{src/value_occurrences.png}
 	\caption{Conteo de valores para las columnas usadas como predictores}
 	\label{tab:ocurrencia_valores}
 \end{figure}
-\linebreak
 Una vez leída esta documentación y detectados algunos casos de columnas con información redundante, se cargaron los datos y se sacaron una serie de métricas. Estamos ante un conjunto de datos formados por un total de 1672 ejemplos y con 246 características (antes de realizar cualquier tipo de procesamiento), las cuales pueden ser de tipo entero, flotante o categóricas.
 \pagebreak
 \subsection{Pre-procesado de datos}
@@ -52,7 +50,7 @@ El siguiente paso, ha sido analizar los valores únicos de cada variable, esto n
 
 El siguiente paso ha sido el de obtener las columnas con una alta correlación. Hemos considerado como alta correlación, aquellas columnas cuya correlación sea mayor que 0.9\\
 El resultado ha sido: \\
-\begin{table}[!htbp]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|l|l|l|l|}
 		\cline{1-3}
@@ -65,7 +63,6 @@ El resultado ha sido: \\
 	\label{tab:correlacion}
 	\caption{Matriz de correlación}
 \end{table}
-\linebreak
 Volviendo a revisar la documentación, tenemos las siguientes descripciones:
 \linebreak
 \begin{itemize}
@@ -108,7 +105,7 @@ La codificación por etiqueta tiene la ventaja que es la más natural para los h
 \linebreak
 La codificación \textit{one-hot}  crea una variable por cada valor único de la variable a codificar. Cada nueva variable se asocia con un valor único y tendrá el valor $1$ cuando el valor para esa muestra sea el asociado, fijando el valor a $0$ para el resto de nuevas variables. Un ejemplo sería el siguiente:\\
 Dada el siguiente conjunto de datos de ejemplo:\\
-\begin{table}[!htbp]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|}
 		\cline{1-2}
@@ -121,10 +118,9 @@ Dada el siguiente conjunto de datos de ejemplo:\\
 	\caption{Conjunto de datos de ejemplo.}
 	\label{tab:conjunto_ejemplo}
 \end{table}
-\linebreak
 Si usamos codificamos la variable \textit{vehículo} usando la etiqueta, estaríamos imponiendo una relación de orden sobre \textit{moto, camión y coche}, pudiendo "confundir" al algoritmo. Si usamos la codificación \textit{one hot}, el conjunto quedaría:
 
-\begin{table}[!htbp]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|}
 		\cline{1-4}
