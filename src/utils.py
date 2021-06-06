@@ -6,6 +6,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
+import pandas as pd
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error
 from os.path import join, exists
 from os import mkdir
@@ -47,9 +48,9 @@ def plot_scattered_error(y_true: np.array, y_pred: np.array, title: str, xlabel:
     plt.legend()
     if save:
         plt.savefig(join(save, f'scattered_error_{extra}.png'))
+        plt.clf()
     else:
         plt.show()
-    plt.clf()
 
 
 def calculate_regression_metrics(y_true, y_pred):
@@ -67,7 +68,7 @@ def calculate_regression_metrics(y_true, y_pred):
     return np.array([r2, poi, mse])
 
 
-def get_error_hist(y_true: np.array, y_pred: np.array, threshold: float, xlabel, ylabel, title, save=None, extra=None):
+def get_error_hist(y_true: np.array, y_pred: np.array, xlabel, ylabel, title, save=None, extra=None):
     """Calculates and plot an error bar plot.
        This plot is calculated by checking if the difference between a predicted and a true value of a sample is bigger
        than a threshold. If it's bigger, the sample is consider as an error and increments the error count of the
@@ -76,7 +77,6 @@ def get_error_hist(y_true: np.array, y_pred: np.array, threshold: float, xlabel,
        Args:
             y_true (Numpy array): Array with the true value of the sample
             y_pred (Numpy array): Array with the predicted value of the sample
-            threshold (float): If the difference between two values is bigger, then it will consider as an error.
             xlabel (str): Label of the X axis.
             ylabel (str): Label of the y axis.
             title (str): Title of the plot.
@@ -86,7 +86,7 @@ def get_error_hist(y_true: np.array, y_pred: np.array, threshold: float, xlabel,
     res = np.zeros(shape=[len(np.unique(np.round(y_true)))])
 
     for true, pred in zip(y_true, y_pred):
-        if abs(true - pred) > threshold:
+        if round(true) != round(pred):
             index = int(round(true))
             if index != 0:
                 index = index - 1
@@ -101,9 +101,9 @@ def get_error_hist(y_true: np.array, y_pred: np.array, threshold: float, xlabel,
     plt.title(title)
     if save:
         plt.savefig(join(save, f'error_hist_{extra}.png'))
+        plt.clf()
     else:
         plt.show()
-    plt.clf()
 
 
 def tree_to_code(tree, feature_names):
@@ -142,3 +142,19 @@ def tree_to_code(tree, feature_names):
             return f"{indent}return {np.round(float(tree_.value[node]), 2)}\n"
 
     return expand_branch(0, 0)
+
+
+def plot_feature_importances(feature_importances: pd.Series, n: int, xlabel, ylabel, title, save=None, extra=None):
+    to_plot = feature_importances.sort_values(ascending=False)[:n]
+    # import pdb; pdb.set_trace()
+    plt.figure(figsize=(10, 8))
+    plt.bar(np.arange(0, len(to_plot)), to_plot.values, width=0.4)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.xticks(np.arange(0, len(to_plot)), to_plot.index)
+    if save:
+        plt.savefig(join(save, f'feature_importance_{extra}.png'))
+        plt.clf()
+    else:
+        plt.show()
