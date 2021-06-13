@@ -3,8 +3,8 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
-import manual_preprocessing as mp
-import utils
+from packages.manual_preprocessing import data_path, get_columns_type, one_hot_encoder
+import packages.utils as utils
 import numpy as np
 import pandas as pd
 from os.path import join
@@ -18,12 +18,12 @@ from sklearn.neural_network import MLPRegressor
 
 if __name__ == '__main__':
     args = utils.argument_parser()
-    x_train = pd.read_csv(join(mp.data_path, 'x_train.csv'), index_col=False)
-    y_train = pd.read_csv(join(mp.data_path, 'y_train.csv'), index_col=False)
-    x_test = pd.read_csv(join(mp.data_path, 'x_test.csv'), index_col=False)
-    y_test = pd.read_csv(join(mp.data_path, 'y_test.csv'), index_col=False)
+    x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
+    y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)
+    x_test = pd.read_csv(join(data_path, 'x_test.csv'), index_col=False)
+    y_test = pd.read_csv(join(data_path, 'y_test.csv'), index_col=False)
     x_cols = x_train.columns
-    c_cols, n_cols = mp.get_columns_type(x_train)
+    c_cols, n_cols = get_columns_type(x_train)
 
     categorical_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='most_frequent')),
                                               ('encoder', OneHotEncoder())
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     print("Means in validation")
     acum_res = acum_res / 5
-    print(','.join(map(str, acum_res)))
+    print(','.join(map(str, np.round(acum_res, 3))))
 
     clf.fit(x_train_transformed, y_train_end.ravel())
     print("Train score")

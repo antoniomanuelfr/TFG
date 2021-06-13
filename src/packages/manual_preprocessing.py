@@ -10,14 +10,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-import utils
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
 ordinal_variables = ['BA10.a', 'BA10.b', 'BA10.c', 'BA10.d', 'BA10.f', 'BA10.g', 'BA10.h']
 
 
-data_path = os.path.join(Path(__file__).parent.parent, "data")
+data_path = os.path.join(Path(__file__).parent.parent.parent, "data")
 image_path = os.path.join(Path(__file__).parent.parent, "img")
 
 # Columns that after manually checking, are going to be removed, as they are redundant or useless
@@ -168,6 +167,7 @@ def one_hot_encoder(x_train, x_test, categorical_cols):
 
 
 if __name__ == "__main__":
+    import utils as utils
     args = utils.argument_parser()
 
     dataset = pd.read_csv(os.path.join(data_path, "data.csv"))

@@ -53,11 +53,12 @@ def plot_scattered_error(y_true: np.array, y_pred: np.array, title: str, xlabel:
         plt.show()
 
 
-def calculate_regression_metrics(y_true, y_pred):
+def calculate_regression_metrics(y_true, y_pred, decimals=3):
     """Calculates the regression metrics.
         Args:
-            y_true (Numpy array): Array with the true value of the sample
-            y_pred (Numpy array): Array with the predicted value of the sample
+            y_true (Numpy array): Array with the true value of the sample.
+            y_pred (Numpy array): Array with the predicted value of the sample.
+            decimals (int): Number of decimals to round.
         Returns:
             A numpy array with the used metrics (r2, poisson deviance and mse).
     """
@@ -65,7 +66,7 @@ def calculate_regression_metrics(y_true, y_pred):
     poi = mean_poisson_deviance(y_true, y_pred)
     mse = mean_squared_error(y_true, y_pred)
 
-    return np.array([r2, poi, mse])
+    return np.array([round(r2, decimals), round(poi, decimals), round(mse, decimals)])
 
 
 def get_error_hist(y_true: np.array, y_pred: np.array, xlabel, ylabel, title, save=None, extra=None):

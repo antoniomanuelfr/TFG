@@ -3,8 +3,8 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
-import manual_preprocessing as mp
-import utils
+from packages.manual_preprocessing import data_path, get_columns_type, one_hot_encoder
+import packages.utils as utils
 import pandas as pd
 import numpy as np
 from os.path import join
@@ -17,12 +17,12 @@ from sklearn.ensemble import RandomForestRegressor
 if __name__ == '__main__':
     args = utils.argument_parser()
 
-    x_train = pd.read_csv(join(mp.data_path, 'x_train.csv'), index_col=False)
-    y_train = pd.read_csv(join(mp.data_path, 'y_train.csv'), index_col=False)
-    x_test = pd.read_csv(join(mp.data_path, 'x_test.csv'), index_col=False)
-    y_test = pd.read_csv(join(mp.data_path, 'y_test.csv'), index_col=False)
+    x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
+    y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)
+    x_test = pd.read_csv(join(data_path, 'x_test.csv'), index_col=False)
+    y_test = pd.read_csv(join(data_path, 'y_test.csv'), index_col=False)
     x_cols = x_train.columns
-    c_cols, n_cols = mp.get_columns_type(x_train)
+    c_cols, n_cols = get_columns_type(x_train)
     preprocessor = ColumnTransformer(transformers=[('numerical',  KNNImputer(n_neighbors=2, weights='uniform'), n_cols),
                                                    ('categorical', SimpleImputer(strategy='most_frequent'), c_cols)])
     transformed_cols = n_cols + c_cols
@@ -38,9 +38,9 @@ if __name__ == '__main__':
     x_test_transformed = DataFrame(preprocessor.transform(x_test), columns=transformed_cols)
 
     # OneHotEncode for each category separately
-    x_train_transformed, x_test_transformed = mp.one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
+    x_train_transformed, x_test_transformed = one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
 
-    param_grid = {'n_estimators': [450, 475, 500],
+    param_grid = {'n_estimators': [20, 30, 40, 50, 60, 70, 80, 90],
                   'max_features': [None, 1/3]}
 
     g_search = GridSearchCV(RandomForestRegressor(random_state=0), param_grid=param_grid, scoring='r2', n_jobs=-1)
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     print("Means in validation")
     acum_res = acum_res / 5
-    print(','.join(map(str, acum_res)))
+    print(','.join(map(str, np.round(acum_res, 3))))
 
     clf.fit(x_train_transformed, y_train_end)
     print("Train score")
