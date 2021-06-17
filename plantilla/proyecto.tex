@@ -48,7 +48,7 @@
 \usepackage[table,xcdraw]{xcolor}
 \hypersetup{
 	colorlinks=true,	% false: boxed links; true: colored links
-	linkcolor=black,	% color of internal links
+	linkcolor=blue,  	% color of internal links
 	urlcolor=cyan		% color of external links
 }
 \renewcommand{\familydefault}{\sfdefault}
@@ -64,51 +64,31 @@
 \renewcommand{\footrulewidth}{0pt} % Remove footer underlines
 \setlength{\headheight}{13.6pt} % Customize the height of the header
 
-
 \definecolor{gray75}{gray}{0.75}
 \newcommand{\hsp}{\hspace{20pt}}
 
 \setcounter{secnumdepth}{4}
 
-
-
-
 \begin{document}
-
-	% Plantilla portada UGR
 	\input{portada/portada}
-
-	% Plantilla prefacio UGR
 	\input{prefacios/prefacio}
-
-	% Índice de contenidos
 	\newpage
-	
 	\tableofcontents
-	
 	\pagebreak
 
-	% Introducción 
 	\input{secciones/01_intro}
 	\pagebreak
-	% Descripción del problema y hasta donde se llega
 
-\pagebreak
 	\input{secciones/02_pre}
 	\pagebreak
-\pagebreak
 
-\pagebreak
-\input{secciones/03_alg}
-\pagebreak
-	% Trabajos futuros
+	\input{secciones/03_alg}
+	\pagebreak
 
-
-	
 	\newpage
 	\nocite{*}
+
 	\bibliography{bibliografia}
 	\bibliographystyle{plain}
-	
-\end{document}
 
+\end{document}

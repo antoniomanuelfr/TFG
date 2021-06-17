@@ -120,14 +120,14 @@ La siguiente tabla expone los resultados obtenidos en validación:
 \begin{table}[htbp]
     \begin{tabular}{|c|c|c|c|c}
     \cline{1-4}
-    Métricas         & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
-    FOLD 1           & 0.6782494272698003 & 0.21112424463601795 & 0.8859916804359318 \\ \cline{1-4}
-    FOLD 2           & 0.6496782398954029 & 0.2130300317895574  & 0.9127976673635368 \\ \cline{1-4}
-    FOLD 3           & 0.6293645338464592 & 0.23884146978371698 & 0.9801694795206164 \\ \cline{1-4}
-    FOLD 4           & 0.6702423866746838 & 0.1907249816488134  & 0.8000569119539743 \\ \cline{1-4}
-    FOLD 5           & 0.6363529914267994 & 0.2110095911936984  & 0.9328307004307209 \\ \cline{1-4}
-    Media Validación & 0.6527775158226291 & 0.21294606381036085 & 0.9023692879409559 \\ \cline{1-4}
-    Test             & 0.6896481387254361 & 0.19636908196098912 & 0.8145241355958663 \\ \cline{1-4}
+    Métricas         & R2    & Poisson deviance & MSE   \\ \cline{1-4}
+    FOLD 1           & 0.678 & 0.211            & 0.886 \\ \cline{1-4}
+    FOLD 2           & 0.65  & 0.213            & 0.913 \\ \cline{1-4}
+    FOLD 3           & 0.629 & 0.239            & 0.98  \\ \cline{1-4}
+    FOLD 4           & 0.679 & 0.187            & 0.779 \\ \cline{1-4}
+    FOLD 5           & 0.636 & 0.211            & 0.933 \\ \cline{1-4}
+    Media Validación & 0.654 & 0.212            & 0.898 \\ \cline{1-4}
+    Test             & 0.69  & 0.196            & 0.815 \\ \cline{1-4}
     \end{tabular}
 	\caption{Árbol de decisión:  Profundidad 8, número máximo de hojas 16}
 	\label{tab:tree_res}
@@ -256,16 +256,17 @@ Antes de mostrar los resultados, estos son los parámetros que se han usado al e
 En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:
 \linebreak
 \begin{table}[H]
+	\centering
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
-		FOLD 1   & 0.7708928847356455 & 0.15237017056674984 & 0.6308830978308985 \\ \cline{1-4}
-		FOLD 2   & 0.7772277347430195 & 0.13573108530894007 & 0.5804549623727309 \\ \cline{1-4}
-		FOLD 3   & 0.7431623832664664 & 0.16930651392124355 & 0.6792237011952186 \\ \cline{1-4}
-		FOLD 4   & 0.7381456425712313 & 0.14959902935439848 & 0.6353102403718461 \\ \cline{1-4}
-		FOLD 5   & 0.7542039634278926 & 0.14599154555353722 & 0.6305182871111111 \\ \cline{1-4}
-		Media  Validación   & 0.756726521748851  & 0.15059966894097382 & 0.631278057776361\\ \cline{1-4}
-		Test     & 0.7695717561293084 & 0.14941109008374115 & 0.6047631400850609 \\ \cline{1-4}
+		Métricas          & R2    & Poisson deviance & MSE   \\ \cline{1-4}
+		FOLD 1            & 0.765 & 0.156            & 0.647 \\ \cline{1-4}
+		FOLD 2            & 0.778 & 0.136            & 0.577 \\ \cline{1-4}
+		FOLD 3            & 0.735 & 0.174            & 0.7   \\ \cline{1-4}
+		FOLD 4            & 0.732 & 0.152            & 0.65  \\ \cline{1-4}
+		FOLD 5            & 0.751 & 0.147            & 0.639 \\ \cline{1-4}
+		Media  Validación & 0.752 & 0.153            & 0.643 \\ \cline{1-4}
+		Test     		  & 0.768  & 0.15            & 0.609 \\ \cline{1-4}
 	\end{tabular}
 	\caption{Random Forest}
 	\label{tab:res_random_forest}
@@ -288,7 +289,7 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 Para finalizar, esta es la lista de las 10 variables más importantes que ha obtenido Random Forest:
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.7]{src/feature_importance_rf}
+	\includegraphics[scale=0.6]{src/feature_importance_rf}
 	\caption{10 variables más importantes según RF}
 	\label{fig:feature_rf}
 \end{figure}
@@ -313,7 +314,7 @@ Para medir la distancia entre dos muestras, KNN puede usar una gran cantidad mé
 \begin{itemize}
 	\item \textbf{Distancia euclidiana:} Definida como $\sqrt{\sum(x_1 - x_2)^2}$
 	\item \textbf{Distancia Manhattan:} Definida como $\sum|x_1 - x_2|$
-	\item  \textbf{Distancia Minkowski:} Definida como $(\sum|x_1 - x_2|^p)^{\frac{1}{p}}$, siendo P un entero positivo
+	\item \textbf{Distancia Minkowski:} Definida como $(\sum|x_1 - x_2|^p)^{\frac{1}{p}}$, siendo P un entero positivo
 \end{itemize}
 La implementación del algoritmo KNN de ScikitLearn usa por defecto la distancia \textbf{Minkowski}. Esta tiene la peculiaridad de que cambiando el parámetro $p$ puede usarse la distancia euclidiana ($p=2$) o la distancia Manhattan ($p=1$)
 \subsubsection{Procesado de datos}
@@ -329,16 +330,17 @@ Antes de mostrar los resultados, estos son los parámetros que se han usado al e
 En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:
 \linebreak
 \begin{table}[H]
+	 \centering
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas         & R2                  & Poisson deviance    & MSE                \\ \cline{1-4}
-		FOLD 1           & 0.46980781375092073 & 0.35618618739401414 & 1.4599690128375387 \\ \cline{1-4}
-		FOLD 2           & 0.40718096517694113 & 0.3782730566980918  & 1.5446480743691902 \\ \cline{1-4}
-		FOLD 3           & 0.4491395219180896  & 0.361546771032096   & 1.4567861885790172 \\ \cline{1-4}
-		FOLD 4           & 0.43451103112616296 & 0.32861492284123445 & 1.3719876051350157 \\ \cline{1-4}
-		FOLD 5           & 0.4671814524645248  & 0.3214310670842308  & 1.366791111111111  \\ \cline{1-4}
-		Media Validación & 0.4455641568873279  & 0.34921040100993345 & 1.4400363984063744 \\ \cline{1-4}
-		Test             & 0.5268679364696298  & 0.30104346676253907 & 1.2417437533227007 \\ \cline{1-4}
+		Métricas         & R2    & Poisson deviance & MSE   \\ \cline{1-4}
+		FOLD 1           & 0.47  & 0.356            & 1.46  \\ \cline{1-4}
+		FOLD 2           & 0.407 & 0.378            & 1.545 \\ \cline{1-4}
+		FOLD 3           & 0.449 & 0.362            & 1.457 \\ \cline{1-4}
+		FOLD 4           & 0.435 & 0.329            & 1.372 \\ \cline{1-4}
+		FOLD 5           & 0.467 & 0.321            & 1.367 \\ \cline{1-4}
+		Media Validación & 0.446 & 0.349            & 1.44  \\ \cline{1-4}
+		Test             & 0.527 & 0.301            & 1.242 \\ \cline{1-4}
 	\end{tabular}
 	\caption{KNN: $K=5$, métrica Minkowski con $P=2$}
 	\label{tab:knn_res}
@@ -361,17 +363,18 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 \subsection{SVM}
 \subsubsection{Procesado de datos}
 \subsubsection{Resultados}
-\begin{table}[htbp]
+\begin{table}[H]
+	  \centering
 	\begin{tabular}{|l|l|l|l|l}
 		\cline{1-4}
-		Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
-		FOLD 1   & 0.6711412482304177 & 0.23574927438251783 & 0.9055651886926617 \\ \cline{1-4}
-		FOLD 2   & 0.7181210219087755 & 0.1863434550541163  & 0.7344632934125027 \\ \cline{1-4}
-		FOLD 3   & 0.7279045335870233 & 0.1853587115456679  & 0.7195740722325875 \\ \cline{1-4}
-		FOLD 4   & 0.6908637183124771 & 0.19249599855772873 & 0.750025500263001  \\ \cline{1-4}
-		FOLD 5   & 0.6974243573787764 & 0.19271036635356822 & 0.7761698624912937 \\ \cline{1-4}
-		Media   Validación & 0.701090975883494  & 0.19853156117871978 & 0.7771595834184094 \\ \cline{1-4}
-		Test     & 0.7365874401870561 & 0.17290273218707394 & 0.6913310804890515 \\ \cline{1-4}
+		Métricas         & R2      & Poisson deviance & MSE   \\ \cline{1-4}
+		FOLD 1   		 & 0.671   & 0.236            & 0.906 \\ \cline {1-4}
+		FOLD 2   		 & 0.718   & 0.186            & 0.734 \\ \cline {1-4}
+		FOLD 3   		 & 0.728   & 0.185            & 0.72  \\ \cline {1-4}
+		FOLD 4   		 & 0.691   & 0.192            & 0.75  \\ \cline {1-4}
+		FOLD 5   		 & 0.697   & 0.193            & 0.776 \\ \cline {1-4}
+		Media Validación & 0.701   & 0.198            & 0.777 \\ \cline {1-4}
+		Test             & 0.737   & 0.173            & 0.691 \\ \cline {1-4}
 	\end{tabular}
 \caption{SVM: Tolerancia $1^{-3}$, Kernel RBF, $C=1$}
 \label{tab:svm_res}
@@ -394,17 +397,18 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 \subsection{XGBoost}
 \subsubsection{Procesado de datos}
 \subsubsection{Resultados}
-\begin{table}[htbp]
+\begin{table}[H]
+	 \centering
 	\begin{tabular}{|l|l|l|l|l}
 		\cline{1-4}
-		Métricas & R2                  & Poisson deviance     & MSE               \\ \cline{1-4}
-		FOLD 1    & 0.7241137292463955 & 0.18802645881750482 & 0.7596969868928719 \\ \cline{1-4}
-		FOLD 2    & 0.73006311743932   & 0.16576750258756304 & 0.7033469935273376 \\ \cline{1-4}
-		FOLD 3    & 0.7132825192696681 & 0.19412883243886164 & 0.7582429355006478 \\ \cline{1-4}
-		FOLD 4    & 0.7170586093794943 & 0.1642568049176943  & 0.6864715357473329 \\ \cline{1-4}
-		FOLD 5    & 0.7438919841551608 & 0.15635068934618307 & 0.6569706725866626 \\ \cline{1-4}
-		Media Validación    & 0.7256819918980076 & 0.17370605762156135 & 0.7129458248509706 \\ \cline{1-4}
-		Test      & 0.7393663359389367 & 0.16337067230613062 & 0.6840378177681002 \\ \cline{1-4}
+		Métricas         &	 R2  & Poisson deviance & MSE   \\ \cline{1-4}
+		FOLD 1           & 0.724 & 0.188            & 0.759 \\ \cline{1-4}
+		FOLD 2           & 0.73  & 0.166            & 0.704 \\ \cline{1-4}
+		FOLD 3           & 0.712 & 0.195            & 0.761 \\ \cline{1-4}
+		FOLD 4           & 0.72  & 0.162            & 0.679 \\ \cline{1-4}
+		FOLD 5           & 0.744 & 0.156            & 0.658 \\ \cline{1-4}
+		Media Validación & 0.726 & 0.173            & 0.712 \\ \cline{1-4}
+		Test             & 0.74  & 0.163            & 0.682 \\ \cline{1-4}
 	\end{tabular}
 \end{table}
 La siguiente figura muestra el gráfico de dispersión de errores:
@@ -428,14 +432,14 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 \begin{table}[htbp]
 	\begin{tabular}{|l|l|l|l|l}
 		\cline{1-4}
-		Métricas & R2                 & Poisson deviance    & MSE                \\ \cline{1-4}
-		FOLD 1   & 0.5689090715842633 & 0.2753215514580356  & 1.1870778437060268 \\ \cline{1-4}
-		FOLD 2   & 0.6518962369752597 & 0.23002714199131838 & 0.907018458672338  \\ \cline{1-4}
-		FOLD 3   & 0.6093866983904355 & 0.2552341819198789  & 1.0330021584439208 \\ \cline{1-4}
-		FOLD 4   & 0.4006953228763329 & 0.2792584075076795  & 1.4540311729698103 \\ \cline{1-4}
-		FOLD 5   & 0.5666527194904454 & 0.25103781427191213 & 1.1116264885377276 \\ \cline{1-4}
-		Media Validación    & 0.5595080098633474 & 0.25817581942976486 & 1.1385512244659648 \\ \cline{1-4}
-		Test	 & 0.6250228314117603 & 0.24413475732349202 & 0.9841344365011349 \\ \cline{1-4}
+		Métricas         & R2    & Poisson deviance & MSE   \\ \cline{1-4}
+		FOLD 1           & 0.569 & 0.275            & 1.187 \\ \cline{1-4}
+		FOLD 2           & 0.652 & 0.23             & 0.907 \\ \cline{1-4}
+		FOLD 3           & 0.609 & 0.255            & 1.033 \\ \cline{1-4}
+		FOLD 4           & 0.401 & 0.279            & 1.454 \\ \cline{1-4}
+		FOLD 5           & 0.567 & 0.251            & 1.112 \\ \cline{1-4}
+		Media Validación & 0.56  & 0.258            & 1.139 \\ \cline{1-4}
+		Test	         & 0.625 & 0.244            & 0.984 \\ \cline{1-4}
 	\end{tabular}
 	\caption{Perceptrón Multicapa: 2 capas de 100 neuronas, 500 iteraciones}
 	\label{tab:mlp_res}
@@ -477,13 +481,12 @@ Como ya se ha mencionado, los modelos basados en árboles de decisión son capac
 	\caption{10 variables más importantes según RF}
 	\label{fig:feature_rf2}
 \end{figure}
-Como se ve en las figuras, vemos que hay dos variables que \textbf{ambos} algoritmos han dado como más importantes: 
+Como se ve en las figuras, vemos que hay dos variables que \textbf{ambos} algoritmos han dado como más importantes:
 \begin{itemize}
 	\item\textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales.
 	\item\textbf{AcMedia:} Variable global de Actitud emprendedora.
-\end{itemize}
+\end{itemize} 
 Repasando los resultados obtenidos por los algoritmos, se ve claramente que a todos los algoritmos usados les está costando predecir correctamente los valores altos para la intención emprendedora media.
  \\
 \linebreak
-Por ejemplo, para el algoritmo que mejores resultados ha dado, ha tenido una alta cantidad de fallos para  valores altos (véase figura \ref{fig:rf_error_plot}). Este comportamiento ha sido constante para cada algoritmo usado. Una de las causas de este comportamiento puede ser explicada mediante las gráficas de dispersión de errores (véase figura \ref{fig:rf_scattered} para Random Forest). En esta figura se puede ver como, a medida que se incrementa el valor de intención emprendedora media, los datos son menos dispersos y a los algoritmos les está costando distinguir entre varios valores cercanos. 
-
+Por ejemplo, para el algoritmo que mejores resultados ha dado, ha tenido una alta cantidad de fallos para  valores altos (véase figura \ref{fig:rf_error_plot}). Este comportamiento ha sido constante para cada algoritmo usado. Una de las causas de este comportamiento puede ser explicada mediante las gráficas de dispersión de errores (véase figura \ref{fig:rf_scattered} para Random Forest). En esta figura se puede ver como, a medida que se incrementa el valor de intención emprendedora media, los datos son menos dispersos y a los algoritmos les está costando distinguir entre varios valores cercanos.
