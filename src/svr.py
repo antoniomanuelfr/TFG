@@ -3,7 +3,7 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
-from packages.manual_preprocessing import data_path, get_columns_type, one_hot_encoder
+from packages.manual_preprocessing import data_path, get_columns_type
 import packages.utils as utils
 import numpy as np
 import pandas as pd
@@ -14,7 +14,6 @@ from sklearn.model_selection import KFold
 from sklearn.svm import SVR
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     args = utils.argument_parser()

@@ -109,7 +109,7 @@ def get_error_hist(y_true: np.array, y_pred: np.array, xlabel, ylabel, title, sa
 
 def tree_to_code(tree, feature_names):
     """Function to get the decission rules from a SKlearn decission tree.
-    This code has been taken from:
+    This code has been adapted from:
     https://stackoverflow.com/questions/20224526/how-to-extract-the-decision-rules-from-scikit-learn-decision-tree
     Args:
         tree (SKLearn DecissionTree): Decission tree to extract rules.
@@ -147,15 +147,40 @@ def tree_to_code(tree, feature_names):
 
 def plot_feature_importances(feature_importances: pd.Series, n: int, xlabel, ylabel, title, save=None, extra=None):
     to_plot = feature_importances.sort_values(ascending=False)[:n]
-    # import pdb; pdb.set_trace()
+
     plt.figure(figsize=(10, 8))
     plt.bar(np.arange(0, len(to_plot)), to_plot.values, width=0.4)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
     plt.xticks(np.arange(0, len(to_plot)), to_plot.index)
+
     if save:
         plt.savefig(join(save, f'feature_importance_{extra}.png'))
         plt.clf()
     else:
         plt.show()
+
+
+def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tuple, threshold: float, predictor):
+    """A simple under-sample for regression.
+    Args:
+        x_data(DataFrame): Train data used for training the model.
+        y_data(DataFrame): Real values for train data.
+        range(tuple): Range from where the under-sampler will remove the data. (min, max)
+        threshold(float): If the difference between a prediction and a real value is bigger, the sample will be removed.
+        predictor: Model to train. The model need the method fit to train it and preddict to make the predictions.
+    Returns:
+        List: indexes of the rows to delete.
+    """
+    rows_to_delete = []
+    predictor.fit(x_data, y_data)
+    for row, _ in x_data.iterrows():
+        if y_data[row] < range[0] or y_data[row] > range[1]:
+            continue
+
+        prediction = predictor.predict(x_data.iloc[[row]])
+        if abs(prediction - y_data[row]) > threshold:
+            rows_to_delete.append(row)
+
+    return rows_to_delete
