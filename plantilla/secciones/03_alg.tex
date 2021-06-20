@@ -123,14 +123,14 @@ La siguiente tabla expone los resultados obtenidos en validación:
 \begin{table}[htbp]
     \begin{tabular}{|c|c|c|c|c}
     \cline{1-4}
-    Métricas & R2                 & Poisson deviance    & MSE                  \\ \cline{1-4}
-    FOLD 1   & 0.688063748236579  & 0.20228321575339223 & 0.8608731743930507   \\ \cline{1-4}
-    FOLD 2   & 0.7171339618694248 & 0.1786391119233935  & 0.7370351750483967   \\ \cline{1-4}
-    FOLD 3   & 0.6293360749947021 & 0.23894112105692256 & 0.9804523615967746   \\ \cline{1-4}
-    FOLD 4   & 0.6784004356911095 & 0.18740825486005594 & 0.7816502738218226   \\ \cline{1-4}
-    FOLD 5   & 0.6718724746781572 & 0.19150698533751426 & 0.8423119617340564   \\ \cline{1-4}
-    Media Validación    & 0.6769613390939946 & 0.1997557377862557  & 0.8404645893188203   \\  \cline{1-4}
-    Test & & & \\ \cline{1-4}
+    Métricas         & R2                 & Poisson deviance    & MSE                  \\ \cline{1-4}
+    FOLD 1           & 0.688063748236579  & 0.20228321575339223 & 0.8608731743930507   \\ \cline{1-4}
+    FOLD 2           & 0.7171339618694248 & 0.1786391119233935  & 0.7370351750483967   \\ \cline{1-4}
+    FOLD 3           & 0.6293360749947021 & 0.23894112105692256 & 0.9804523615967746   \\ \cline{1-4}
+    FOLD 4           & 0.6784004356911095 & 0.18740825486005594 & 0.7816502738218226   \\ \cline{1-4}
+    FOLD 5           & 0.6718724746781572 & 0.19150698533751426 & 0.8423119617340564   \\ \cline{1-4}
+    Media Validación & 0.6769613390939946 & 0.1997557377862557  & 0.8404645893188203   \\  \cline{1-4}
+    Test             & 0.6904787624085199 & 0.19585632446621679 & 0.8125421161216909   \\ \cline{1-4}
     \end{tabular}
 	\caption{Árbol de decisión:  Profundidad 8, número máximo de hojas 16}
 	\label{tab:tree_res}
@@ -161,9 +161,9 @@ La siguiente figura muestra la representación gráfica del árbol de decisión 
 	\caption{Árbol de decisión}
 	\label{fig:decission_tree1}
 \end{figure}
-\\
-A continuación se muestra en pseudo-código, las reglas que ha inferido el árbol de decisión:\\
 \linebreak
+A continuación se muestra en pseudo-código, las reglas que ha inferido el árbol de decisión:\\
+
 \begin{figure}[!htbp]
 	\begin{lstlisting}
 def predict(sample):
@@ -218,7 +218,21 @@ def predict(sample):
 \label{fig:tree_rules}
 \end{figure}
 \pagebreak
+Por ultimo, estas son las 10 variables que el modelo consideró con más relevancia. El valor asociado a cada variable es la \textbf{importancia Gini}:
+\begin{itemize}
+    \item \textbf{AE5:}    0.735667
+    \item \textbf{AcMedia:} 0.156046
+    \item \textbf{SE2:}    0.037300
+    \item \textbf{SE5:}    0.014692
+    \item \textbf{NS1:}    0.012393
+    \item \textbf{Beca:}      0.008256
+    \item \textbf{Nota:}      0.008034
+    \item \textbf{BA3.f:}    0.007389
+    \item \textbf{CEF19:}    0.007202
+    \item \textbf{AE7:}    0.006518
+\end{itemize}
 \subsubsection{Conclusiones}
+\pagebreak
 \subsection{KNN}
 \label{alg:knn}
 El algoritmo  KNN (\textit{K Nearest Neighbors}) es un algoritmo supervisado basado en instancias. Este algoritmo no aprende un modelo si no que almacena todas las muestras de entrenamiento y cuando hay que predecir una nueva ejemplo, el algoritmo usa las muestras almacenadas calculando la distancia a cada muestra y obteniendo los K vecinos más cercanos y usando las etiquetas de los vecinos, asigna una predicción al ejemplo a predecir, generalmente asignando aquella clase con más "votos".\\
@@ -231,7 +245,7 @@ Para medir la distancia entre dos muestras, KNN puede usar una gran cantidad mé
 \end{itemize}
 La implementación del algoritmo KNN de ScikitLearn usa por defecto la distancia \textbf{Minkowski}. Esta tiene la peculiaridad de que cambiando el parámetro $p$ puede usarse la distancia euclidiana ($p=2$) o la distancia Manhattan ($p=1$)
 \subsubsection{Procesado de datos}
-KNN es un algoritmo que depende de la distancia entre dos muestras, esto implica que si una caracteristica del conjunto de datos que se esta usando tiene un rango \textbf{mayor} que otra, esa característica aportará más al cálculo de la distancia, cuando no necesariamente debe de ser así. Por ese motivo, este algoritmo necesita que el conjunto de datos esté \textbf{normalizado} en el momento de entrenar.\\ 
+KNN es un algoritmo que depende de la distancia entre dos muestras, esto implica que si una caracteristica del conjunto de datos que se esta usando tiene un rango \textbf{mayor} que otra, esa característica aportará más al cálculo de la distancia, cuando no necesariamente debe de ser así. Por ese motivo, este algoritmo necesita que el conjunto de datos esté \textbf{normalizado} en el momento de entrenar.\\
 \linebreak
 Este algoritmo, a parte de necesitar que los datos estén normalizados, no admite valores perdidos y variables categóricas.
 \subsubsection{Resultados}
@@ -245,35 +259,41 @@ En la siguiente tabla, se muestra el resultado para obtenidos en validación y e
 \begin{table}[!htbp]
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas & R2                 & Poisson deviance     & MSE                 \\ \cline{1-4}
-		FOLD 1   & 0.5619206155867529 & 0.29163057554189287  & 1.20899955732625    \\ \cline{1-4}
-		FOLD 2   & 0.5805274242037095 & 0.26381465090929485  & 1.092976892430279   \\ \cline{1-4}
-		FOLD 3   & 0.5684319097570786 & 0.2823138585908296   & 1.1415514829570599  \\ \cline{1-4}
-		FOLD 4   & 0.5381004255769224 &  0.26551281764424606 & 1.1226505533421867  \\ \cline{1-4}
-		FOLD 5   & 0.584762931045677  & 0.2520727178147933   & 1.0659244444444445  \\ \cline{1-4}
-		Media    & 0.5667486612340281 & 0.27106892410021133  & 1.126420586100044   \\ \cline{1-4}
-		Test & & & \\ \cline{1-4}
+		Métricas         & R2                  & Poisson deviance    & MSE                 \\ \cline{1-4}
+		FOLD 1           & 0.4699559130274741  & 0.3567254943399616  & 1.4628012394864982  \\ \cline{1-4}
+		FOLD 2           & 0.40748820029815946 & 0.3777124064305139  & 1.5438475431606904  \\ \cline{1-4}
+		FOLD 3           & 0.4488130842741638  & 0.36189982653902963 & 1.4579582115980518  \\ \cline{1-4}
+		FOLD 4           & 0.4369686067359718  & 0.3280165927757028  & 1.3684522355024338  \\ \cline{1-4}
+		FOLD 5           & 0.4677481890415697  & 0.3212318293015113  & 1.3663043555555556  \\ \cline{1-4}
+		Media Validación & 0.44619479867546785 & 0.34911722987734384 & 1.439872717060646   \\ \cline{1-4}
+		Test             & 0.5272318168571177  & 0.300847895311677   & 1.241091121743753   \\ \cline{1-4}
 	\end{tabular}
-	\caption{KNN con 5 vecinos}
+	\caption{KNN: $K=5$, métrica Minkowski con $P=2$}
 	\label{tab:knn_res}
 \end{table}
-La siguiente figura muestra el gráfico de dispersión de errores:
+\linebreak
+La siguiente figura muestra el gráfico de dispersión de errores:\\
+\linebreak
 \begin{figure}[!htbp]
 	\centering
 	\includegraphics[scale=0.8]{src/scattered_error_knn.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:knn_scattered}
 \end{figure}
-Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
+\linebreak
+Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
+\linebreak
 \begin{figure}[!htbp]
 	\centering
 	\includegraphics[scale=0.8]{src/error_hist_knn.png}
 	\caption{Conteo de errores}
 	\label{fig:knn_error_plot}
 \end{figure}
-
+\linebreak
 \subsubsection{Conclusiones}
-
+Claramente se ve por los resultados que este algoritmo no funciona bien con nuestro conjunto de datos. La razón más probable por la que KNN obtuvo estos resultados, es que hay relaciones entre las variables que KNN no es capaz de detectar al únicamente comparar la distancia característica por característica. \\
+Debido al bajo desempeño que se ha obtenido al usar este algoritmo, este va a ser descartado de las siguientes fases.
+\pagebreak
 \subsection{Random Forest}
 \subsubsection{Procesado de datos}
 \subsubsection{Resultados}
