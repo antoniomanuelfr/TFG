@@ -3,25 +3,38 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
+import os
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import pandas as pd
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error
-from os.path import join, exists
-from os import mkdir
+from sklearn.model_selection import KFold
 from sklearn.tree import _tree
+
+results_path = os.path.join(Path(__file__).parent.parent, 'results')
 
 
 def argument_parser():
     """Argument parser to share between all scripts."""
     parser = argparse.ArgumentParser()
+
     parser.add_argument('--save_figures', type=str, action='store', default=None,
                         help='Save figures in the specified folder')
+
+    parser.add_argument('--json_output', action='store_true', default=False,
+                        help='Save script output to a json file')
+
     args = parser.parse_args()
     if args.save_figures:
-        if not exists(args.save_figures):
-            mkdir(args.save_figures)
+        if not os.path.exists(args.save_figures):
+            os.mkdir(args.save_figures)
+
+    if args.json_output:
+        if not os.path.exists(results_path):
+            os.mkdir(results_path)
     return args
 
 
@@ -47,7 +60,7 @@ def plot_scattered_error(y_true: np.array, y_pred: np.array, title: str, xlabel:
     plt.ylabel(ylabel)
     plt.legend()
     if save:
-        plt.savefig(join(save, f'scattered_error_{extra}.png'))
+        plt.savefig(os.path.join(save, f'scattered_error_{extra}.png'))
         plt.clf()
     else:
         plt.show()
@@ -62,11 +75,12 @@ def calculate_regression_metrics(y_true, y_pred, decimals=3):
         Returns:
             A numpy array with the used metrics (r2, poisson deviance and mse).
     """
-    r2 = r2_score(y_true, y_pred)
-    poi = mean_poisson_deviance(y_true, y_pred)
-    mse = mean_squared_error(y_true, y_pred)
-
-    return np.array([round(r2, decimals), round(poi, decimals), round(mse, decimals)])
+    res = {'r2': round(r2_score(y_true, y_pred), decimals),
+           'poisson': round(mean_poisson_deviance(y_true, y_pred), decimals),
+           'mse': round(mean_squared_error(y_true, y_pred), decimals)
+           }
+    print(res)
+    return res
 
 
 def get_error_hist(y_true: np.array, y_pred: np.array, xlabel, ylabel, title, save=None, extra=None):
@@ -101,10 +115,12 @@ def get_error_hist(y_true: np.array, y_pred: np.array, xlabel, ylabel, title, sa
     plt.ylabel(ylabel)
     plt.title(title)
     if save:
-        plt.savefig(join(save, f'error_hist_{extra}.png'))
+        plt.savefig(os.path.join(save, f'error_hist_{extra}.png'))
         plt.clf()
     else:
         plt.show()
+
+    return list(res)
 
 
 def tree_to_code(tree, feature_names):
@@ -156,7 +172,7 @@ def plot_feature_importances(feature_importances: pd.Series, n: int, xlabel, yla
     plt.xticks(np.arange(0, len(to_plot)), to_plot.index)
 
     if save:
-        plt.savefig(join(save, f'feature_importance_{extra}.png'))
+        plt.savefig(os.path.join(save, f'feature_importance_{extra}.png'))
         plt.clf()
     else:
         plt.show()
@@ -183,4 +199,44 @@ def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tupl
         if abs(prediction - y_data[row]) > threshold:
             rows_to_delete.append(row)
 
-    return rows_to_delete
+    return x_data.drop(index=rows_to_delete), np.delete(y_data, rows_to_delete)
+
+
+def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, seed=10, shuffle=True, decimals=3):
+    cnt = 0
+    results = {}
+    acum_res = {'r2': 0,
+                'poisson': 0,
+                'mse': 0
+                }
+
+    folder = KFold(n_splits=splits, random_state=seed, shuffle=shuffle)
+
+    print('Cross validation results')
+    print('r2, mean poisson deviance, mse')
+
+    for train_index, test_index in folder.split(x_train, y_train):
+        fold_train_x, fold_train_y = x_train[train_index], y_train[train_index]
+        fold_test_x, fold_test_y = x_train[test_index], y_train[test_index]
+
+        model.fit(fold_train_x, fold_train_y)
+        y_pred = model.predict(fold_test_x)
+
+        res = calculate_regression_metrics(fold_test_y, y_pred)
+
+        results[f'fold_{cnt}'] = res
+        acum_res['r2'] = acum_res['r2'] + res['r2']
+        acum_res['poisson'] = acum_res['poisson'] + res['poisson']
+        acum_res['mse'] = acum_res['mse'] + res['mse']
+
+        cnt += 1
+
+    print("Means in validation")
+    acum_res['r2'] = round(acum_res['r2'] / splits, decimals)
+    acum_res['poisson'] = round(acum_res['poisson'] / splits, decimals)
+    acum_res['mse'] = round(acum_res['mse'] / splits, decimals)
+    print(acum_res)
+
+    results['validation_mean'] = acum_res
+
+    return results

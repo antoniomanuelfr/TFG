@@ -151,3 +151,6 @@ src/imgs/*
 
 # Source images in latex
 plantilla/img/src/*
+
+# Results folder
+*/results/*

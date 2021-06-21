@@ -25,8 +25,8 @@ if __name__ == '__main__':
     y_test = pd.read_csv(join(data_path, 'y_test.csv'), index_col=False)
     x_cols = x_train.columns
     c_cols, n_cols = get_columns_type(x_train)
-
     type_dict = {}
+    results = {}
 
     for col in n_cols:
         type_dict[col] = x_train[col].dtype
@@ -61,40 +61,27 @@ if __name__ == '__main__':
     g_search.fit(x_final_train, y_train_end)
     print(f"Best score {g_search.best_score_} with {g_search.best_estimator_}")
     clf = g_search.best_estimator_
-    clf = xgb.XGBRegressor(n_estimators=50, random_state=0)
     print(f"Best parameters {clf.get_params()}")
-    folder = KFold(n_splits=5, random_state=10, shuffle=True)
+    results['cross_validation'] = utils.cross_validation(x_final_train.to_numpy(), y_train_end, clf)
 
-    for train_index, test_index in folder.split(x_final_train.to_numpy(), y_train_end):
-        fold_train_x, fold_train_y = x_final_train.iloc[train_index], y_train_end[train_index].ravel()
-        fold_test_x, fold_test_y = x_final_train.iloc[test_index], y_train_end[test_index].ravel()
-
-        clf.fit(fold_train_x, fold_train_y)
-        y_pred = clf.predict(fold_test_x)
-
-        res = utils.calculate_regression_metrics(fold_test_y, y_pred)
-        acum_res = acum_res + res
-
-        print(','.join(map(str, res)))
-
-    print("Means in validation")
-    acum_res = acum_res / 5
-    print(','.join(map(str, np.round(acum_res, 3))))
     clf.fit(x_final_train, y_train_end)
 
     print("Train score")
     y_pred = clf.predict(x_final_train)
-    train_res = utils.calculate_regression_metrics(y_train_end, y_pred)
-    print(','.join(map(str, train_res)))
+    results['train'] = utils.calculate_regression_metrics(y_train_end, y_pred)
 
     print("Test score")
     y_pred = clf.predict(x_final_test)
-    test_res = utils.calculate_regression_metrics(y_test_end, y_pred)
-    print(','.join(map(str, test_res)))
+    results['test'] = utils.calculate_regression_metrics(y_test_end, y_pred)
 
     utils.plot_scattered_error(y_test_end, y_pred, 'Scattered error plot for XGBoost', 'Observations', 'IEMedia',
                                args.save_figures, 'xgboost')
 
-    utils.get_error_hist(y_test_end.ravel(), y_pred, 'Class', 'Count', 'Error count for XGBoost',
-                         args.save_figures, 'xgboost')
+    results['hist'] = utils.get_error_hist(y_test_end.ravel(), y_pred, 'Class', 'Count', 'Error count for XGBoost',
+                                           args.save_figures, 'xgboost')
     print(clf.get_params())
+
+    if args.json_output:
+        import json
+    with open(join(utils.results_path, 'xgboost_1.json'), mode='w') as fd:
+        json.dump(results, fd)

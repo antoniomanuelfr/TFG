@@ -3,15 +3,13 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
-from packages.manual_preprocessing import data_path, get_columns_type, one_hot_encoder
+from packages.manual_preprocessing import data_path, get_columns_type
 import packages.utils as utils
-import numpy as np
 import pandas as pd
 from os.path import join
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.model_selection import KFold
 from sklearn.pipeline import Pipeline
 from sklearn.neural_network import MLPRegressor
 
@@ -24,6 +22,7 @@ if __name__ == '__main__':
     y_test = pd.read_csv(join(data_path, 'y_test.csv'), index_col=False)
     x_cols = x_train.columns
     c_cols, n_cols = get_columns_type(x_train)
+    results = {}
 
     categorical_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='most_frequent')),
                                               ('encoder', OneHotEncoder())
@@ -43,41 +42,26 @@ if __name__ == '__main__':
     x_train_transformed = preprocessor.transform(x_train)
     x_test_transformed = preprocessor.transform(x_test)
 
-    # OneHotEncode for each category separately
-    acum_res = np.array([0, 0, 0])
-    print('Validation results')
-    print('r2, mean poisson deviance, mse')
-    clf = MLPRegressor(random_state=0, hidden_layer_sizes=(100, 100), max_iter=500)
-    folder = KFold(n_splits=5, random_state=10, shuffle=True)
-    for train_index, test_index in folder.split(x_train_transformed, y_train_end):
-        fold_train_x, fold_train_y = x_train_transformed[train_index], y_train_end[train_index].ravel()
-        fold_test_x, fold_test_y = x_train_transformed[test_index], y_train_end[test_index].ravel()
+    clf = MLPRegressor(random_state=0, hidden_layer_sizes=(10, 5), max_iter=500)
 
-        clf.fit(fold_train_x, fold_train_y)
-        y_pred = clf.predict(fold_test_x)
-
-        res = utils.calculate_regression_metrics(fold_test_y, y_pred)
-        acum_res = acum_res + res
-
-        print(','.join(map(str, res)))
-
-    print("Means in validation")
-    acum_res = acum_res / 5
-    print(','.join(map(str, np.round(acum_res, 3))))
+    results['cross_validation'] = utils.cross_validation(x_train_transformed, y_train_end, clf)
 
     clf.fit(x_train_transformed, y_train_end.ravel())
+
     print("Train score")
     y_pred = clf.predict(x_train_transformed)
-    train_res = utils.calculate_regression_metrics(y_train_end, y_pred)
-    print(','.join(map(str, train_res)))
+    results['train'] = utils.calculate_regression_metrics(y_train_end, y_pred)
 
     print("Test score")
     y_pred = clf.predict(x_test_transformed)
-    test_res = utils.calculate_regression_metrics(y_test_end, y_pred)
-    print(','.join(map(str, test_res)))
+    results['test'] = utils.calculate_regression_metrics(y_test_end, y_pred)
 
     utils.plot_scattered_error(y_test_end, y_pred, 'Scattered error plot for MLP', 'Observations', 'IEMedia',
                                args.save_figures, 'MLP')
 
-    utils.get_error_hist(y_test_end.ravel(), y_pred, 'Class', 'Count', 'Error count for MLP',
-                         args.save_figures, 'MLP')
+    results['hist'] = utils.get_error_hist(y_test_end.ravel(), y_pred, 'Class', 'Count', 'Error count for MLP',
+                                           args.save_figures, 'MLP')
+    if args.json_output:
+        import json
+        with open(join(utils.results_path, 'mlp_1.json'), mode='w') as fd:
+            json.dump(results, fd)
