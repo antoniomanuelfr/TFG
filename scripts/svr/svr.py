@@ -4,6 +4,7 @@
  of this license document, but changing it is not allowed.
 """
 from os.path import join
+from pathlib import Path
 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -12,8 +13,10 @@ from sklearn.svm import SVR
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-import packages.utils as utils
-from packages.manual_preprocessing import data_path, get_columns_type
+import tfg_utils.utils as utils
+from tfg_utils.manual_preprocessing import get_columns_type
+
+data_path = join(Path(__file__).parent.parent.parent, "data")
 
 
 def preprocessing(X_train: pd.DataFrame, Y_train: pd.DataFrame, X_test: pd.DataFrame, Y_test: pd.DataFrame):
@@ -75,5 +78,5 @@ if __name__ == '__main__':
 
     if args.json_output:
         import json
-        with open(join(utils.results_path, 'svr_1.json'), mode='w') as fd:
+        with open(join(args.json_output, 'svr_1.json'), mode='w') as fd:
             json.dump(results, fd)

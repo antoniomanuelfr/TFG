@@ -5,19 +5,12 @@
 """
 # Functions that will be used for the manual preprocessing of a dataset.
 
-import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from pathlib import Path
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
 ordinal_variables = ['BA10.a', 'BA10.b', 'BA10.c', 'BA10.d', 'BA10.f', 'BA10.g', 'BA10.h']
-
-
-data_path = os.path.join(Path(__file__).parent.parent.parent, "data")
-image_path = os.path.join(Path(__file__).parent.parent, "img")
 
 # Columns that after manually checking, are going to be removed, as they are redundant or useless
 columns_to_delete = ['ID', 'País', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 'CF7', 'CF8', 'CF9',
@@ -164,60 +157,3 @@ def one_hot_encoder(x_train, x_test, categorical_cols):
         x_test = pd.concat([x_test, df_test_enc], axis=1)
 
     return x_train, x_test
-
-
-if __name__ == "__main__":
-    import utils as utils
-    args = utils.argument_parser()
-
-    dataset = pd.read_csv(os.path.join(data_path, "data.csv"))
-    res_dataset = compare_columns(dataset, ['BF1Adaptada', 'BF2Adaptada', 'BF3Adaptada', 'BF4Adaptada'],
-                                  ['BF1', 'BF2', 'BF3', 'BF4'], 'Año', '19_20', int)
-    print(f"Dataset shape {dataset.shape}")
-    if res_dataset is not None:
-        print(f"Las columnas son iguales, shape actual = {res_dataset.shape}")
-        dataset = res_dataset
-    else:
-        print("Las columnas son distintas")
-
-    dataset.drop(columns=columns_to_delete, inplace=True)
-    dataset.rename(mapper=rename_dict, inplace=True)
-
-    print(dataset['Género'].unique())
-    dataset['Género'].replace(to_replace='Sí', value=np.nan, inplace=True)
-    dataset['Género'].replace(to_replace='No', value=np.nan, inplace=True)
-
-    dataset.replace(to_replace=' ', value=np.nan, inplace=True)
-    dataset.replace(to_replace='No contesta', value=np.nan, inplace=True)
-    dataset.replace(to_replace='No', value=0, inplace=True)
-    dataset.replace(to_replace='Sí', value=1, inplace=True)
-
-    # Looks for missing values
-
-    missing_values_col = get_missing_values(dataset, 0.5)
-    print(f"{len(missing_values_col)} columns have more than 50% of missing values.\nRemoving: {missing_values_col}")
-
-    dataset.drop(columns=missing_values_col, inplace=True)
-    # Get the predictors data
-    predictor_data = dataset[predictors_name]
-    dataset.drop(columns=predictors_name, inplace=True)
-
-    corr_cols = get_highly_correlated_columns(dataset, 0.9)
-    for pair in corr_cols:
-        dataset.drop(columns=pair[1], inplace=True)
-
-    # Print the class occurrence for the classification predictors.
-    fig, count = print_value_occurrences(predictor_data[classification_predictor])
-    fig.tight_layout()
-    if args.save_figures:
-        plt.savefig(f"{args.save_figures}/value_occurrences.png")
-    else:
-        plt.show()
-
-    predictor_data = predictor_data.drop(columns=['IEMedia'])
-    x_train, x_test, y_train, y_test = train_test_split(dataset, predictor_data, random_state=2342)
-    x_train.to_csv(os.path.join(data_path, 'x_train.csv'), index=False)
-    x_test.to_csv(os.path.join(data_path, 'x_test.csv'), index=False)
-    y_train.to_csv(os.path.join(data_path, 'y_train.csv'), index=False)
-    y_test.to_csv(os.path.join(data_path, 'y_test.csv'), index=False)
-    print(f"train size {x_train.shape} test_size {x_test.shape}")

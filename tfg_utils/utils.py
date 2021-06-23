@@ -24,7 +24,7 @@ def argument_parser():
     parser.add_argument('--save_figures', type=str, action='store', default=None,
                         help='Save figures in the specified folder')
 
-    parser.add_argument('--json_output', action='store_true', default=False,
+    parser.add_argument('--json_output', type=str, action='store', default=None,
                         help='Save script output to a json file')
 
     args = parser.parse_args()

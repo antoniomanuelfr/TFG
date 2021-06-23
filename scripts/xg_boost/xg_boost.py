@@ -3,19 +3,24 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
-from packages.manual_preprocessing import data_path, get_columns_type, one_hot_encoder
-import packages.utils as utils
+from os.path import join
+from pathlib import Path
+import warnings
+
+import xgboost as xgb
 import numpy as np
 import pandas as pd
-from os.path import join
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
-from sklearn.model_selection import KFold, GridSearchCV
-import xgboost as xgb
-import warnings
+from sklearn.model_selection import GridSearchCV
+
+from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder
+import tfg_utils.utils as utils
 
 # This warning is raised when creating a DMatrix. It's a normal behavior (https://github.com/dmlc/xgboost/issues/6908)
 warnings.filterwarnings(action='ignore', category=UserWarning)
+
+data_path = join(Path(__file__).parent.parent.parent, "data")
 
 if __name__ == '__main__':
     args = utils.argument_parser()
@@ -83,5 +88,5 @@ if __name__ == '__main__':
 
     if args.json_output:
         import json
-    with open(join(utils.results_path, 'xgboost_1.json'), mode='w') as fd:
-        json.dump(results, fd)
+        with open(join(args.json_output, 'xgboost_1.json'), mode='w') as fd:
+            json.dump(results, fd)

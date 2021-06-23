@@ -3,15 +3,20 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
-from packages.manual_preprocessing import data_path, get_columns_type, one_hot_encoder
-import packages.utils as utils
-import pandas as pd
 from os.path import join
+from pathlib import Path
+import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor, plot_tree
-import matplotlib.pyplot as plt
+
+import tfg_utils.utils as utils
+from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder
+
+
+data_path = join(Path(__file__).parent.parent.parent, "data")
 
 
 def preprocessing():
@@ -100,5 +105,5 @@ if __name__ == '__main__':
                                    'Decission Tree features', args.save_figures, 'dtree')
     if args.json_output:
         import json
-        with open(join(utils.results_path, 'decision_tree_1.json'), mode='w') as fd:
+        with open(join(args.json_output, 'decision_tree_1.json'), mode='w') as fd:
             json.dump(results, fd)

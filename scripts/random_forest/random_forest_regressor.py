@@ -3,15 +3,19 @@
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 """
-from packages.manual_preprocessing import data_path, get_columns_type, one_hot_encoder
-import packages.utils as utils
-import pandas as pd
 from os.path import join
-from pandas.core.frame import DataFrame
+from pathlib import Path
+
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
+
+from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder
+import tfg_utils.utils as utils
+
+data_path = join(Path(__file__).parent.parent.parent, "data")
 
 
 def preprocessing(X_train, Y_train, X_test, Y_test):
@@ -28,8 +32,8 @@ def preprocessing(X_train, Y_train, X_test, Y_test):
     y_test_transformed = y_test_transformed.mean(axis=1)
 
     preprocessor.fit(X_train)
-    x_train_transformed = DataFrame(preprocessor.transform(X_train), columns=transformed_cols)
-    x_test_transformed = DataFrame(preprocessor.transform(X_test), columns=transformed_cols)
+    x_train_transformed = pd.DataFrame(preprocessor.transform(X_train), columns=transformed_cols)
+    x_test_transformed = pd.DataFrame(preprocessor.transform(X_test), columns=transformed_cols)
 
     # OneHotEncode for each category separately
     x_train_transformed, x_test_transformed = one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
@@ -82,5 +86,5 @@ if __name__ == '__main__':
 
     if args.json_output:
         import json
-        with open(join(utils.results_path, 'random_forest_1.json'), mode='w') as fd:
+        with open(join(args.json_output, 'random_forest_1.json'), mode='w') as fd:
             json.dump(results, fd)
