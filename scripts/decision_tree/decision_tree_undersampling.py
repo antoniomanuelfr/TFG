@@ -6,22 +6,22 @@
 from os.path import join
 
 import pandas as pd
-import numpy as np
 import json
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor, plot_tree
 import matplotlib.pyplot as plt
 
 import tfg_utils.utils as utils
+import tfg_utils.compare as cmp
 from decision_tree_regressor import preprocessing
 
 if __name__ == '__main__':
     results = {}
+    under_sampler = DecisionTreeRegressor(max_depth=4, random_state=10)
+
     # Parse arguments
     args = utils.argument_parser()
     x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed = preprocessing()
-
-    under_sampler = DecisionTreeRegressor(max_depth=4)
 
     x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed, y_train_transformed,
                                                                               (4.5, 7), 0.8, under_sampler)
@@ -66,13 +66,11 @@ if __name__ == '__main__':
     print(utils.tree_to_code(best, x_train_transformed.columns.to_numpy()))
     utils.plot_feature_importances(results['importances'], 10, 'Variable', 'Importance', 'Decission Tree features',
                                    args.save_figures, 'dtree')
-
-    with open(join(args.json_output, 'decision_tree_1.json')) as fp:
-        json_dtree1 = json.load(fp)
-
-        plt.bar(np.arange(1, len(json_dtree1['hist']) + 1), json_dtree1['hist'], label='Without under sampling')
-        plt.bar(np.arange(1, len(results['hist']) + 1), results['hist'], label='With under sampling')
-        plt.xlabel('class')
-        plt.ylabel('Error count')
-        plt.legend()
-        plt.show()
+    if (args.json_output):
+        with open(join(args.json_output, 'decision_tree_1.json')) as fp:
+            json_dtree1 = json.load(fp)
+            d = {'regressor': (json_dtree1['hist'], 'Orginal tree regressor'),
+                 'under_sampler': (results['hist'], 'Tree regressor with under-sampling')
+                 }
+            cmp.comp_error_hist(d, 'Class', 'Error count', 'Tree regressor comparison', args.save_figures,
+                                'tree_orig_und')

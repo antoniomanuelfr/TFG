@@ -7,54 +7,28 @@ from os.path import join
 from pathlib import Path
 
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
-
-from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder
+from sklearn.tree import DecisionTreeRegressor
 import tfg_utils.utils as utils
+import tfg_utils.compare as cmp
+from random_forest_regressor import preprocessing
 
 data_path = join(Path(__file__).parent.parent.parent, "data")
 
 
-def preprocessing():
-    x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
-    y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)
-    x_test = pd.read_csv(join(data_path, 'x_test.csv'), index_col=False)
-    y_test = pd.read_csv(join(data_path, 'y_test.csv'), index_col=False)
-
-    c_cols, n_cols = get_columns_type(x_train)
-    preprocessor = ColumnTransformer(transformers=[('numerical',  KNNImputer(n_neighbors=2, weights='uniform'), n_cols),
-                                                   ('categorical', SimpleImputer(strategy='most_frequent'), c_cols)])
-    transformed_cols = n_cols + c_cols
-
-    y_imputer = SimpleImputer(strategy='median')
-    y_train_transformed = y_imputer.fit_transform(y_train)
-    y_test_transformed = y_imputer.transform(y_test)
-
-    y_train_transformed = y_train_transformed.mean(axis=1)
-    y_test_transformed = y_test_transformed.mean(axis=1)
-
-    preprocessor.fit(x_train)
-    x_train_transformed = pd.DataFrame(preprocessor.transform(x_train), columns=transformed_cols)
-    x_test_transformed = pd.DataFrame(preprocessor.transform(x_test), columns=transformed_cols)
-
-    # OneHotEncode for each category separately
-    x_train_transformed, x_test_transformed = one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
-
-    return x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed
-
-
 if __name__ == '__main__':
     args = utils.argument_parser()
+    under_sampler = SVR()
 
     results = {}
     param_grid = {'n_estimators': [20, 30, 40, 50, 60, 70, 80, 90],
                   'max_features': [None, 1/3]}
 
     x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed = preprocessing()
-
+    x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed, y_train_transformed,
+                                                                              (4.5, 7), 0.6, under_sampler)
     g_search = GridSearchCV(RandomForestRegressor(random_state=0), param_grid=param_grid, scoring='r2', n_jobs=-1)
 
     g_search.fit(x_train_transformed, y_train_transformed)
@@ -88,3 +62,11 @@ if __name__ == '__main__':
         import json
         with open(join(args.json_output, 'random_forest_1.json'), mode='w') as fd:
             json.dump(results, fd)
+    if (args.json_output):
+        with open(join(args.json_output, 'random_forest_1.json')) as fp:
+            json_dtree1 = json.load(fp)
+            d = {'regressor': (json_dtree1['hist'], 'Orginal RF regressor'),
+                 'under_sampler': (results['hist'], 'RF regressor with under-sampling')
+                 }
+            cmp.comp_error_hist(d, 'Class', 'Error count', 'RF regressor comparison', args.save_figures,
+                                'tree_orig_und')

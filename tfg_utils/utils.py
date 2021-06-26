@@ -27,15 +27,7 @@ def argument_parser():
     parser.add_argument('--json_output', type=str, action='store', default=None,
                         help='Save script output to a json file')
 
-    args = parser.parse_args()
-    if args.save_figures:
-        if not os.path.exists(args.save_figures):
-            os.mkdir(args.save_figures)
-
-    if args.json_output:
-        if not os.path.exists(results_path):
-            os.mkdir(results_path)
-    return args
+    return parser
 
 
 def plot_scattered_error(y_true: np.array, y_pred: np.array, title: str, xlabel: str, ylabel: str, save=None,
