@@ -11,7 +11,7 @@ from tfg_utils import manual_preprocessing as mp
 data_path = os.path.join(Path(__file__).parent.parent, "data")
 
 if __name__ == "__main__":
-    args = utils.argument_parser()
+    args = utils.argument_parser().parse_args()
 
     dataset = pd.read_csv(os.path.join(data_path, "data.csv"))
     res_dataset = mp.compare_columns(dataset, ['BF1Adaptada', 'BF2Adaptada', 'BF3Adaptada', 'BF4Adaptada'],

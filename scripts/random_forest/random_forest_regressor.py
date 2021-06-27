@@ -47,15 +47,23 @@ def preprocessing():
 
 
 if __name__ == '__main__':
-    args = utils.argument_parser()
-
+    name_str = 'rf'
+    args = utils.argument_parser().parse_args()
     results = {}
     param_grid = {'n_estimators': [20, 30, 40, 50, 60, 70, 80, 90],
                   'max_features': [None, 1/3]}
 
     x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed = preprocessing()
 
-    g_search = GridSearchCV(RandomForestRegressor(random_state=0), param_grid=param_grid, scoring='r2', n_jobs=-1)
+    if args.undersampling:
+        from sklearn.tree import DecisionTreeRegressor
+        name_str = 'rf_undersamp'
+        under_sampler = DecisionTreeRegressor(max_depth=4, random_state=utils.seed)
+        x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed,
+                                                                                  y_train_transformed,
+                                                                                  (4.5, 7), 0.8, under_sampler)
+
+    g_search = GridSearchCV(RandomForestRegressor(random_state=utils.seed), param_grid=param_grid, scoring='r2', n_jobs=-1)
 
     g_search.fit(x_train_transformed, y_train_transformed)
     print(f"Best score {g_search.best_score_} with {g_search.best_estimator_}")
@@ -74,17 +82,17 @@ if __name__ == '__main__':
     results['test'] = utils.calculate_regression_metrics(y_test_transformed, y_pred)
 
     utils.plot_scattered_error(y_test_transformed, y_pred, 'Scattered error plot for Random Forest',
-                               'Observations', 'IEMedia', args.save_figures, 'random_forest')
+                               'Observations', 'IEMedia', args.save_figures, name_str)
 
     results['hist'] = utils.get_error_hist(y_test_transformed, y_pred, 'Class', 'Count',
-                                           'Error count for Random Forest', args.save_figures, 'random_forest')
+                                           'Error count for Random Forest', args.save_figures, name_str)
 
     feature_importances = pd.Series(data=clf.feature_importances_, index=x_train_transformed.columns)
     print(f"{clf.get_params()}")
     utils.plot_feature_importances(feature_importances, 10, 'Variable', 'Importance', 'Random Forest features',
-                                   args.save_figures, 'rf')
+                                   args.save_figures, name_str)
 
     if args.json_output:
         import json
-        with open(join(args.json_output, 'random_forest_1.json'), mode='w') as fd:
+        with open(join(args.json_output, f'{name_str}.json'), mode='w') as fd:
             json.dump(results, fd)

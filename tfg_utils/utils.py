@@ -4,17 +4,15 @@
  of this license document, but changing it is not allowed.
 """
 import os
-from pathlib import Path
-
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
-import argparse
 import pandas as pd
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error
 from sklearn.model_selection import KFold
 from sklearn.tree import _tree
 
-results_path = os.path.join(Path(__file__).parent.parent, 'results')
+seed = 10
 
 
 def argument_parser():
@@ -26,6 +24,9 @@ def argument_parser():
 
     parser.add_argument('--json_output', type=str, action='store', default=None,
                         help='Save script output to a json file')
+
+    parser.add_argument('--undersampling', action='store_true', default=False,
+                        help='Use undersampler')
 
     return parser
 
@@ -194,7 +195,7 @@ def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tupl
     return x_data.drop(index=rows_to_delete), np.delete(y_data, rows_to_delete)
 
 
-def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, seed=10, shuffle=True, decimals=3):
+def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, custom_seed=seed, shuffle=True, decimals=3):
     cnt = 0
     results = {}
     acum_res = {'r2': 0,
@@ -202,7 +203,7 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, seed
                 'mse': 0
                 }
 
-    folder = KFold(n_splits=splits, random_state=seed, shuffle=shuffle)
+    folder = KFold(n_splits=splits, random_state=custom_seed, shuffle=shuffle)
 
     print('Cross validation results')
     print('r2, mean poisson deviance, mse')

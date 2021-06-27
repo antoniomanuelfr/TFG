@@ -23,7 +23,7 @@ warnings.filterwarnings(action='ignore', category=UserWarning)
 data_path = join(Path(__file__).parent.parent.parent, "data")
 
 if __name__ == '__main__':
-    args = utils.argument_parser()
+    args = utils.argument_parser().parse_args()
     x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
     y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)
     x_test = pd.read_csv(join(data_path, 'x_test.csv'), index_col=False)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     acum_res = np.array([0, 0, 0])
     param_grid = {'n_estimators': [20, 30, 40, 50, 60, 70, 80, 100]}
 
-    g_search = GridSearchCV(xgb.XGBRegressor(random_state=0), param_grid=param_grid, scoring='r2')
+    g_search = GridSearchCV(xgb.XGBRegressor(random_state=utils.seed), param_grid=param_grid, scoring='r2')
 
     g_search.fit(x_final_train, y_train_end)
     print(f"Best score {g_search.best_score_} with {g_search.best_estimator_}")

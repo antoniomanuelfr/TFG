@@ -56,9 +56,16 @@ def preprocessing():
 if __name__ == '__main__':
     results = {}
     # Parse arguments
-    args = utils.argument_parser()
-
+    args = utils.argument_parser().parse_args()
+    name_str = 'dtree'
     x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed = preprocessing()
+
+    if args.undersampling:
+        name_str = 'dtree_undersamp'
+        under_sampler = DecisionTreeRegressor(max_depth=4, random_state=utils.seed)
+        x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed,
+                                                                                  y_train_transformed,
+                                                                                  (4.5, 7), 0.8, under_sampler)
 
     param_grid = {'max_depth': [2, 4, 8, 9, 10, 16],
                   'max_leaf_nodes': [2, 4, 8, 16, 20, 22]}
@@ -84,15 +91,15 @@ if __name__ == '__main__':
     results['test'] = utils.calculate_regression_metrics(y_test_transformed, y_pred)
 
     utils.plot_scattered_error(y_test_transformed, y_pred, 'Scattered error plot for decission tree',
-                               'Observations', 'IEMedia', args.save_figures, 'dtree')
+                               'Observations', 'IEMedia', args.save_figures, name_str)
 
     results['hist'] = utils.get_error_hist(y_test_transformed.ravel(), y_pred, 'Class', 'Count',
-                                           'Error count for decision tree', args.save_figures, 'dtree')
+                                           'Error count for decision tree', args.save_figures, name_str)
 
     plt.figure(figsize=(20, 10))
     plot_tree(best, feature_names=x_train_transformed.columns, filled=True, fontsize=8)
     if args.save_figures:
-        plt.savefig(join(args.save_figures, 'decision_tree_plot.png'))
+        plt.savefig(join(args.save_figures, f'{name_str}_plot'))
         plt.clf()
     else:
         plt.show()
@@ -102,8 +109,18 @@ if __name__ == '__main__':
 
     print(utils.tree_to_code(best, x_train_transformed.columns.to_numpy()))
     utils.plot_feature_importances(features_importances, 10, 'Variable', 'Importance',
-                                   'Decission Tree features', args.save_figures, 'dtree')
+                                   'Decission Tree features', args.save_figures, name_str)
     if args.json_output:
         import json
-        with open(join(args.json_output, 'decision_tree_1.json'), mode='w') as fd:
+        with open(join(args.json_output, f'{name_str}.json'), mode='w') as fd:
             json.dump(results, fd)
+
+    if (args.json_output):
+        import tfg_utils.compare as cmp
+        with open(join(args.json_output, 'dtree.json')) as fp:
+            json_dtree1 = json.load(fp)
+            d = {'regressor': (json_dtree1['hist'], 'Orginal tree regressor'),
+                 'under_sampler': (results['hist'], 'Tree regressor with under-sampling')
+                 }
+            cmp.comp_error_hist(d, 'Class', 'Error count', 'Tree regressor comparison', args.save_figures,
+                                'tree_orig_und')

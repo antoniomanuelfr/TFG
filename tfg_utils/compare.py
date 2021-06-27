@@ -21,7 +21,6 @@ def comp_error_hist(models: dict, xlabel: str, ylabel: str, title: str, save, ex
     plt.ylabel(ylabel)
     plt.title(title)
     plt.legend()
-    plt.show()
     if save:
         plt.savefig(os.path.join(save, f'error_hist_{extra}.png'))
         plt.clf()

@@ -45,7 +45,7 @@ def preprocessing(X_train: pd.DataFrame, Y_train: pd.DataFrame, X_test: pd.DataF
 
 
 if __name__ == '__main__':
-    args = utils.argument_parser()
+    args = utils.argument_parser().parse_args()
 
     x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
     y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)

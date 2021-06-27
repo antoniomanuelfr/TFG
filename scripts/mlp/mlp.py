@@ -20,7 +20,7 @@ data_path = join(Path(__file__).parent.parent.parent, "data")
 
 
 if __name__ == '__main__':
-    args = utils.argument_parser()
+    args = utils.argument_parser().parse_args()
     x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
     y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)
     x_test = pd.read_csv(join(data_path, 'x_test.csv'), index_col=False)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     x_train_transformed = preprocessor.transform(x_train)
     x_test_transformed = preprocessor.transform(x_test)
 
-    clf = MLPRegressor(random_state=0, hidden_layer_sizes=(10, 5), max_iter=500)
+    clf = MLPRegressor(random_state=utils.seed, hidden_layer_sizes=(10, 5), max_iter=500)
 
     results['cross_validation'] = utils.cross_validation(x_train_transformed, y_train_end, clf)
     clf.fit(x_train_transformed, y_train_end.ravel())
