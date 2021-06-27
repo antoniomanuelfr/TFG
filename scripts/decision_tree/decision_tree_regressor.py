@@ -54,7 +54,6 @@ def preprocessing():
 
 
 if __name__ == '__main__':
-    results = {}
     # Parse arguments
     args = utils.argument_parser().parse_args()
     name_str = 'dtree'
@@ -66,6 +65,7 @@ if __name__ == '__main__':
         x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed,
                                                                                   y_train_transformed,
                                                                                   (4.5, 7), 0.8, under_sampler)
+    results = {'name': name_str}
 
     param_grid = {'max_depth': [2, 4, 8, 9, 10, 16],
                   'max_leaf_nodes': [2, 4, 8, 16, 20, 22]}
@@ -114,13 +114,3 @@ if __name__ == '__main__':
         import json
         with open(join(args.json_output, f'{name_str}.json'), mode='w') as fd:
             json.dump(results, fd)
-
-    if (args.json_output):
-        import tfg_utils.compare as cmp
-        with open(join(args.json_output, 'dtree.json')) as fp:
-            json_dtree1 = json.load(fp)
-            d = {'regressor': (json_dtree1['hist'], 'Orginal tree regressor'),
-                 'under_sampler': (results['hist'], 'Tree regressor with under-sampling')
-                 }
-            cmp.comp_error_hist(d, 'Class', 'Error count', 'Tree regressor comparison', args.save_figures,
-                                'tree_orig_und')

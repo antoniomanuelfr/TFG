@@ -154,8 +154,18 @@ def tree_to_code(tree, feature_names):
     return expand_branch(0, 0)
 
 
-def plot_feature_importances(feature_importances: pd.Series, n: int, xlabel, ylabel, title, save=None, extra=None):
-    to_plot = feature_importances.sort_values(ascending=False)[:n]
+def plot_feature_importance(feature_importance: pd.Series, n: int, xlabel, ylabel, title, save=None, extra=None):
+    """ Function to plot the features importance.
+        Args:
+            feature_importance (Series): Pandas series with the name of the variable and the importance of the variable.
+            n (int): Number of variables to plot
+            xlabel (str): Label of the X axis.
+            ylabel (str): Label of the y axis.
+            title (str): Title of the plot.
+            save (str): Folder where the images will be saved. If None, the image will be shown.
+            extra (str): Extra name to append at the end of the file name if save is not none.
+    """
+    to_plot = feature_importance.sort_values(ascending=False)[:n]
 
     plt.figure(figsize=(10, 8))
     plt.bar(np.arange(0, len(to_plot)), to_plot.values, width=0.4)
@@ -196,6 +206,16 @@ def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tupl
 
 
 def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, custom_seed=seed, shuffle=True, decimals=3):
+    """Function to perform the cross validation process.
+        Args:
+            x_train (Numpy array): Training data.
+            y_tain (Numpy array): Training data labels.
+            model: Model to train.
+            splits: Number of splits in cross validation. Defaults to 5.
+            custom_seed: seed to use. Defaults to `seed`.
+            shuffle: True if the data is going to be shuffled. Defaults to True.
+            decimals: Max number of decimals in results. Defaults to 3.
+    """
     cnt = 0
     results = {}
     acum_res = {'r2': 0,

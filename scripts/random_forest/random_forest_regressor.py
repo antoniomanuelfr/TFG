@@ -49,7 +49,7 @@ def preprocessing():
 if __name__ == '__main__':
     name_str = 'rf'
     args = utils.argument_parser().parse_args()
-    results = {}
+
     param_grid = {'n_estimators': [20, 30, 40, 50, 60, 70, 80, 90],
                   'max_features': [None, 1/3]}
 
@@ -62,6 +62,7 @@ if __name__ == '__main__':
         x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed,
                                                                                   y_train_transformed,
                                                                                   (4.5, 7), 0.8, under_sampler)
+    results = {'name': name_str}
 
     g_search = GridSearchCV(RandomForestRegressor(random_state=utils.seed), param_grid=param_grid, scoring='r2', n_jobs=-1)
 
