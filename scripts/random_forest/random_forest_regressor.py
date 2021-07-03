@@ -93,7 +93,4 @@ if __name__ == '__main__':
     utils.plot_feature_importances(feature_importances, 10, 'Variable', 'Importance', 'Random Forest features',
                                    args.save_figures, name_str)
 
-    if args.json_output:
-        import json
-        with open(join(args.json_output, f'{name_str}.json'), mode='w') as fd:
-            json.dump(results, fd)
+    utils.save_dict_as_json(args.json_output, name_str, results)

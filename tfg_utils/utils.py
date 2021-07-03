@@ -4,10 +4,12 @@
  of this license document, but changing it is not allowed.
 """
 import os
+import json
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import warnings
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error
 from sklearn.model_selection import KFold
 from sklearn.tree import _tree
@@ -205,7 +207,8 @@ def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tupl
     return x_data.drop(index=rows_to_delete), np.delete(y_data, rows_to_delete)
 
 
-def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, custom_seed=seed, shuffle=True, decimals=3):
+def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, custom_seed=seed, shuffle=True, decimals=3,
+                     metrics=calculate_regression_metrics):
     """Function to perform the cross validation process.
         Args:
             x_train (Numpy array): Training data.
@@ -235,7 +238,7 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
         model.fit(fold_train_x, fold_train_y)
         y_pred = model.predict(fold_test_x)
 
-        res = calculate_regression_metrics(fold_test_y, y_pred)
+        res = metrics(fold_test_y, y_pred)
 
         results[f'fold_{cnt}'] = res
         acum_res['r2'] = acum_res['r2'] + res['r2']
@@ -253,3 +256,30 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
     results['validation_mean'] = acum_res
 
     return results
+
+
+def save_dict_as_json(path: str, name_str: str, dict_to_save: dict):
+    if path is None or name_str is None:
+        return
+
+    with open(os.path.join(path, f'{name_str}.json'), mode='w') as fd:
+        json.dump(dict_to_save, fd)
+
+
+def categorize_regression(y_train: np.array, y_test: np.array):
+    """Transforms the regression problem into a classification by setting a class for each value in a interval
+    Args:
+        y_train (Numpy Array): Numpy array with the train values of y.
+        y_test (Numpy Array): Numpy array with the test values of y.
+    """
+
+    y_train = np.where(y_train <= 2.5, 1, y_train)
+    y_test = np.where(y_test <= 2.5, 1, y_test)
+
+    y_train = np.where((y_train <= 5) & (y_train > 1), 2, y_train)
+    y_test = np.where((y_test <= 5) & (y_test > 1), 2, y_test)
+
+    y_train = np.where((y_train <= 7) & (y_train > 2), 3, y_train)
+    y_test = np.where((y_test <= 7) & (y_test > 2), 3, y_test)
+
+    return y_train, y_test
