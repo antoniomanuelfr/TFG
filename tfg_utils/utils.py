@@ -9,8 +9,7 @@ import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import warnings
-from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error
+from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error, f1_score, roc_auc_score, accuracy_score
 from sklearn.model_selection import KFold
 from sklearn.tree import _tree
 
@@ -68,11 +67,30 @@ def calculate_regression_metrics(y_true, y_pred, decimals=3):
             y_pred (Numpy array): Array with the predicted value of the sample.
             decimals (int): Number of decimals to round.
         Returns:
-            A numpy array with the used metrics (r2, poisson deviance and mse).
+            A dictionary where the key is the name of the metric and the value is the value of the metric.
     """
     res = {'r2': round(r2_score(y_true, y_pred), decimals),
            'poisson': round(mean_poisson_deviance(y_true, y_pred), decimals),
            'mse': round(mean_squared_error(y_true, y_pred), decimals)
+           }
+    print(res)
+    return res
+
+
+def calculate_classification_metrics(y_true, y_pred, proba, decimals=3):
+    """Calculates the classification metrics.
+        Args:
+            y_true (Numpy array): Array with the true value of the sample.
+            y_pred (Numpy array): Array with the predicted value of the sample.
+            proba (Numpy array): Array of shape (n_samples, n_classes) of probability estimates provided by the
+                                 predict_proba method
+            decimals (int): Number of decimals to round.
+        Returns:
+            A dictionary where the key is the name of the metric and the value is the value of the metric.
+    """
+    res = {'f1': round(f1_score(y_true, y_pred, average='macro'), decimals,),
+           'auc_score': round(roc_auc_score(y_true, proba, average='macro', multi_class='ovo'), decimals),
+           'accuracy': round(accuracy_score(y_true, y_pred), decimals)
            }
     print(res)
     return res
@@ -208,7 +226,7 @@ def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tupl
 
 
 def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, custom_seed=seed, shuffle=True, decimals=3,
-                     metrics=calculate_regression_metrics):
+                     metric_callback=calculate_regression_metrics):
     """Function to perform the cross validation process.
         Args:
             x_train (Numpy array): Training data.
@@ -218,18 +236,16 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
             custom_seed: seed to use. Defaults to `seed`.
             shuffle: True if the data is going to be shuffled. Defaults to True.
             decimals: Max number of decimals in results. Defaults to 3.
+            metric_callback: Function that will calculate the metrics. It must return a dictionary where the key
+                             is the name of the metric and the value is the value of the metric.
     """
     cnt = 0
     results = {}
-    acum_res = {'r2': 0,
-                'poisson': 0,
-                'mse': 0
-                }
+    acum_res = {}
 
     folder = KFold(n_splits=splits, random_state=custom_seed, shuffle=shuffle)
 
     print('Cross validation results')
-    print('r2, mean poisson deviance, mse')
 
     for train_index, test_index in folder.split(x_train, y_train):
         fold_train_x, fold_train_y = x_train[train_index], y_train[train_index]
@@ -237,20 +253,24 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
 
         model.fit(fold_train_x, fold_train_y)
         y_pred = model.predict(fold_test_x)
+        if metric_callback == calculate_classification_metrics:
+            res = metric_callback(fold_test_y, y_pred, model.predict_proba(fold_test_x))
+        else:
+            res = metric_callback(fold_test_y, y_pred)
 
-        res = metrics(fold_test_y, y_pred)
+        for key in res.keys():
+            if key not in acum_res.keys():
+                acum_res[key] = res[key]
+            else:
+                acum_res[key] = acum_res[key] + res[key]
 
         results[f'fold_{cnt}'] = res
-        acum_res['r2'] = acum_res['r2'] + res['r2']
-        acum_res['poisson'] = acum_res['poisson'] + res['poisson']
-        acum_res['mse'] = acum_res['mse'] + res['mse']
-
         cnt += 1
 
     print("Means in validation")
-    acum_res['r2'] = round(acum_res['r2'] / splits, decimals)
-    acum_res['poisson'] = round(acum_res['poisson'] / splits, decimals)
-    acum_res['mse'] = round(acum_res['mse'] / splits, decimals)
+    for key in acum_res.keys():
+        acum_res[key] = round(acum_res[key] / splits, decimals)
+
     print(acum_res)
 
     results['validation_mean'] = acum_res
@@ -259,6 +279,12 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
 
 
 def save_dict_as_json(path: str, name_str: str, dict_to_save: dict):
+    """Function that saves a dictionary in a JSON file.
+    Args:
+        path (str): Path where the file will be stored.
+        name_str (str): Name of the JSON file (without the extension)
+        dict_to_save (dict): Dictionary to save.
+    """
     if path is None or name_str is None:
         return
 

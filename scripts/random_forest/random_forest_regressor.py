@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
     feature_importances = pd.Series(data=clf.feature_importances_, index=x_train_transformed.columns)
     print(f"{clf.get_params()}")
-    utils.plot_feature_importances(feature_importances, 10, 'Variable', 'Importance', 'Random Forest features',
+    utils.plot_feature_importance(feature_importances, 10, 'Variable', 'Importance', 'Random Forest features',
                                    args.save_figures, name_str)
 
     utils.save_dict_as_json(args.json_output, name_str, results)
