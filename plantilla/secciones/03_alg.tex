@@ -361,6 +361,16 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\label{fig:knn_error_plot}
 \end{figure}
 \subsection{SVM}
+Maquina de soporte de vectores (Support Vector Machines) es un algoritmo de aprendizaje supervisado cuyo objetivo es encontrar un hiper-plano dentro de un espacio de  $N$ dimensiones ($N$ es el número de características del conjunto de datos) que clasifique las muestras de dentro del espacio en distintas clases.  Originalmente, se diseñó para clasificación binaria, pero en la actualidad este algoritmo se ha adaptado para regresión, clasificación multi-clase y  multi-etiqueta\\
+\linebreak
+Pueden existir muchos hiper-planos que separen los puntos del espacios en distintas clases. El objetivo de SVM es encontrar aquel hiper-plano con mayor \textbf{margen} (distancia entre puntos de distintas clases),  ya que incrementa la posibilidad de clasificar correctamente muestras que no se han usado en entrenamiento al disponer de un margen mayor de error. Los vectores soporte son aquellas observaciones del conjunto de datos que definen el hiper-plano. Idealmente, estas o\\
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{svm}
+	\caption{Ejemplo de SVM en dos dimensiones}
+	\label{fig:svm}
+\end{figure}
+
 \subsubsection{Procesado de datos}
 \subsubsection{Resultados}
 \begin{table}[H]
@@ -387,7 +397,7 @@ La siguiente figura muestra el gráfico de dispersión de errores:
 	\label{fig:svr_scattered}
 \end{figure}
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
-\linebreak
+\linebreak 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/error_hist_svr.png}
