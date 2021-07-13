@@ -20,7 +20,7 @@ import tfg_utils.utils as utils
 # This warning is raised when creating a DMatrix. It's a normal behavior (https://github.com/dmlc/xgboost/issues/6908)
 warnings.filterwarnings(action='ignore', category=UserWarning)
 
-data_path = join(Path(__file__).parent.parent.parent, "data")
+data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
     args = utils.argument_parser().parse_args()
@@ -30,8 +30,9 @@ if __name__ == '__main__':
     y_test = pd.read_csv(join(data_path, 'y_test.csv'), index_col=False)
     x_cols = x_train.columns
     c_cols, n_cols = get_columns_type(x_train)
+    name_str = 'xgboost'
     type_dict = {}
-    results = {}
+    results = {'name': name_str}
 
     for col in n_cols:
         type_dict[col] = x_train[col].dtype
@@ -64,29 +65,25 @@ if __name__ == '__main__':
     g_search = GridSearchCV(xgb.XGBRegressor(random_state=utils.seed), param_grid=param_grid, scoring='r2')
 
     g_search.fit(x_final_train, y_train_end)
-    print(f"Best score {g_search.best_score_} with {g_search.best_estimator_}")
+    print(f'Best score {g_search.best_score_} with {g_search.best_estimator_}')
     clf = g_search.best_estimator_
-    print(f"Best parameters {clf.get_params()}")
+    print(f'Best parameters {clf.get_params()}')
     results['cross_validation'] = utils.cross_validation(x_final_train.to_numpy(), y_train_end, clf)
 
     clf.fit(x_final_train, y_train_end)
 
-    print("Train score")
     y_pred = clf.predict(x_final_train)
     results['train'] = utils.calculate_regression_metrics(y_train_end, y_pred)
 
-    print("Test score")
     y_pred = clf.predict(x_final_test)
     results['test'] = utils.calculate_regression_metrics(y_test_end, y_pred)
+    print(utils.json_metrics_to_latex(results))
 
     utils.plot_scattered_error(y_test_end, y_pred, 'Scattered error plot for XGBoost', 'Observations', 'IEMedia',
-                               args.save_figures, 'xgboost')
+                               args.save_figures, name_str)
 
     results['hist'] = utils.get_error_hist(y_test_end.ravel(), y_pred, 'Class', 'Count', 'Error count for XGBoost',
-                                           args.save_figures, 'xgboost')
+                                           args.save_figures, name_str)
     print(clf.get_params())
 
-    if args.json_output:
-        import json
-        with open(join(args.json_output, 'xgboost_1.json'), mode='w') as fd:
-            json.dump(results, fd)
+    utils.save_dict_as_json(args.json_output, name_str, results)

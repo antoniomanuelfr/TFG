@@ -49,7 +49,7 @@ def comp_error_ranges(models: dict, xlabel: str, ylabel: str, title: str, save, 
 def compare_metrics(models: dict,  xlabel: str, ylabel: str, title: str, save, extra: str):
     """Compare the metrics between two models.
         Args:
-            models (dict): Dictionary where the key is the label and the value is a dict with the metrics resutls.
+            models (dict): Dictionary where the key is the label and the value is a dict with the metrics results.
             title (str): Title of the plot.
             xlabel (str): Label of the X axis.
             ylabel (str): Label of the y axis.

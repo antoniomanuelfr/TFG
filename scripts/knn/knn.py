@@ -15,7 +15,7 @@ from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 import tfg_utils.utils as utils
 from tfg_utils.manual_preprocessing import get_columns_type
 
-data_path = join(Path(__file__).parent.parent.parent, "data")
+data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
     args = utils.argument_parser().parse_args()
@@ -25,7 +25,8 @@ if __name__ == '__main__':
     y_test = pd.read_csv(join(data_path, 'y_test.csv'), index_col=False)
     x_cols = x_train.columns
     c_cols, n_cols = get_columns_type(x_train)
-    results = {}
+    name_str = 'knn'
+    results = {'name': name_str}
 
     categorical_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='most_frequent')),
                                               ('encoder', OneHotEncoder())
@@ -49,22 +50,19 @@ if __name__ == '__main__':
     results['cross_validation'] = utils.cross_validation(x_train_transformed, y_train_end, clf)
 
     clf.fit(x_train_transformed, y_train_end.ravel())
-    print("Train score")
     y_pred = clf.predict(x_train_transformed)
 
     results['train'] = utils.calculate_regression_metrics(y_train_end, y_pred)
 
-    print("Test score")
     y_pred = clf.predict(x_test_transformed)
     results['test'] = utils.calculate_regression_metrics(y_test_end, y_pred)
 
+    print(utils.json_metrics_to_latex(results))
+
     utils.plot_scattered_error(y_test_end, y_pred, 'Scattered error plot for KNN', 'Observations', 'IEMedia',
-                               args.save_figures, 'knn')
+                               args.save_figures, name_str)
 
     results['hist'] = utils.get_error_hist(y_test_end.ravel(), y_pred, 'Class', 'Count', 'Error count for KNN',
-                                           args.save_figures, 'knn')
+                                           args.save_figures, name_str)
 
-    if args.json_output:
-        import json
-        with open(join(args.json_output, 'knn_1.json'), mode='w') as fd:
-            json.dump(results, fd)
+    utils.save_dict_as_json(args.json_output, name_str, results)

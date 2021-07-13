@@ -90,7 +90,7 @@ def get_highly_correlated_columns(data: pd.DataFrame, perc: float):
     upper = upper.sort_values(ascending=False)
 
     to_drop = [upper.index.get_loc(index) for index in upper.index if upper.values[upper.index.get_loc(index)] > perc]
-    print(f"{len(to_drop)} features are highly correlated. They will be removed: \n{upper[to_drop]}")
+    print(f'{len(to_drop)} features are highly correlated. They will be removed: \n{upper[to_drop]}')
 
     return upper.index[to_drop]
 
@@ -122,7 +122,7 @@ def print_value_occurrences(data: pd.DataFrame):
         axs[plot].set_xticks(count[0])
 
         for index, value in enumerate(count[1]):
-            axs[plot].text(x=index+0.80, y=value+1, s=f"{value}")
+            axs[plot].text(x=index+0.80, y=value+1, s=f'{value}')
 
         axs[plot].set_xticklabels(count[0])
         axs[plot].set_xlabel(f'Value occurrence for {col}')

@@ -13,7 +13,7 @@ from sklearn.tree import DecisionTreeClassifier, plot_tree
 import tfg_utils.utils as utils
 from decision_tree_regressor import preprocessing
 
-data_path = join(Path(__file__).parent.parent.parent, "data")
+data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
     # Parse arguments
@@ -34,24 +34,24 @@ if __name__ == '__main__':
 
     # Grid search
     g_search.fit(x_train_transform, y_train_transform)
-    print(f"Best score {g_search.best_score_} with {g_search.best_estimator_}")
+    print(f'Best score {g_search.best_score_} with {g_search.best_estimator_}')
     best = g_search.best_estimator_
-    print(f"Best parameters {best.get_params()}")
+    print(f'Best parameters {best.get_params()}')
 
     results['cross_validation'] = utils.cross_validation(x_train_transform.to_numpy(), y_train_transform, best,
                                                          metric_callback=utils.calculate_classification_metrics)
 
     best.fit(x_train_transform, y_train_transform.ravel())
 
-    print("Train score")
     y_pred = best.predict(x_train_transform)
     results['train'] = utils.calculate_classification_metrics(y_train_transform, y_pred,
                                                               best.predict_proba(x_train_transform))
 
-    print("Test score")
     y_pred = best.predict(x_test_transform)
     results['test'] = utils.calculate_classification_metrics(y_test_transform, y_pred,
                                                              best.predict_proba(x_test_transform))
+
+    print(utils.json_metrics_to_latex(results))
 
     plt.figure(figsize=(20, 10))
     plot_tree(best, feature_names=x_train_transform.columns, filled=True, fontsize=8)
@@ -61,10 +61,10 @@ if __name__ == '__main__':
     else:
         plt.show()
 
-    features_importances = pd.Series(data=best.feature_importances_, index=x_train_transform.columns)
-    results['feature_importances'] = dict(features_importances)
+    feature_importance = pd.Series(data=best.feature_importances_, index=x_train_transform.columns)
+    results['feature_importance'] = dict(feature_importance)
 
-    utils.plot_feature_importance(features_importances, 10, 'Variable', 'Importance',
+    utils.plot_feature_importance(feature_importance, 10, 'Variable', 'Importance',
                                   'Decission Tree features', args.save_figures, name_str)
 
     utils.save_dict_as_json(args.json_output, name_str, results)
