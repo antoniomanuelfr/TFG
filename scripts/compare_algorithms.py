@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+def generate_label_str(def_str: str):
+    return def_str.replace('0_', '0.').replace('_', ' ')
+
+
 def load_json(path: str):
     """Function to load a JSON from a file.
     Args:
@@ -34,13 +38,14 @@ def comp_error_ranges(models: dict, xlabel: str, ylabel: str, title: str, save, 
             extra (str): Extra name to append at the end of the file name if save is not none.
     """
     for key in models.keys():
-        plt.bar(np.arange(1, len(models[key]) + 1), models[key], label=key)
+        plt.bar(np.arange(1, len(models[key]) + 1), models[key], label=generate_label_str(key))
+
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
     plt.legend()
     if save:
-        plt.savefig(os.path.join(save, f'error_hist_{extra}.png'))
+        plt.savefig(os.path.join(save, f'{extra}.png'))
         plt.clf()
     else:
         plt.show()
@@ -56,53 +61,76 @@ def compare_metrics(models: dict,  xlabel: str, ylabel: str, title: str, save, e
             save (str): Folder where the images will be saved. If None, the image will be shown.
             extra (str): Extra name to append at the end of the file name if save is not none.
    """
-    for key in models.keys():
+    max_metric_dic = {}
+    for model in models.keys():
         values = []
-        for value in models[key]:
-            values.append(models[key][value])
-        plt.bar(list(models[key].keys()), values, label=key)
+        for metric in models[model]:
+            metric_value = models[model][metric]
+
+            if metric not in max_metric_dic:
+                max_metric_dic[metric] = metric_value
+            else:
+                if max_metric_dic[metric] < metric_value:
+                    max_metric_dic[metric] = metric_value
+
+            values.append(metric_value)
+
+        model_str = model.replace('0_', '0.').replace('_', ' ')
+        plt.bar(list(models[model].keys()), values, label=generate_label_str(model_str))
+
+    for index, metric in enumerate(max_metric_dic):
+        plt.text(x=index-0.25, y=max_metric_dic[metric]+0.01, s=f'{max_metric_dic[metric]}')
 
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
     plt.legend()
     if save:
-        plt.savefig(os.path.join(save, f'error_hist_{extra}.png'))
+        plt.savefig(os.path.join(save, f'{extra}.png'))
         plt.clf()
     else:
         plt.show()
 
 
 if __name__ == '__main__':
+    alg_list = []
+    histogram_dict = {}
+    validation_dict = {}
+    test_dict = {}
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--results1', type=str, action='store', required=True,
+    parser.add_argument('--json', dest='algorithms', action='append', required=True,
                         help='Path with the json results of the first algorithm')
-
-    parser.add_argument('--results2', type=str, action='store', required=True,
-                        help='Path with the json results of the second algorithm')
 
     parser.add_argument('--save_figures', type=str, action='store', default=None,
                         help='Save figures in the specified folder')
+    parser.add_argument('--output_name', type=str, action='store', default=None,
+                        help='Name of the output files. If None, the name will be a hash of the names of all the values'
+                        )
 
-    args = parser.parse_args()
+    arguments = parser.parse_args()
 
-    alg_1 = load_json(args.results1)
-    alg_2 = load_json(args.results2)
+    if arguments.save_figures is not None and arguments.output_name is None:
+        parser.error('Argument "output_name" required if saving figures.')
 
-    cmp_str = f"{alg_1['name']}_{alg_2['name']}"
+    assert len(arguments.algorithms) >= 2, 'Need at least to algorithms to compare'
 
-    d = {alg_1['name']: alg_1['hist'],
-         alg_2['name']: alg_2['hist'],
-         }
-    comp_error_ranges(d, 'Class', 'Error count', 'Error plot', args.save_figures, f'{cmp_str}_error_hist')
+    cmp_str = arguments.output_name
+    for res in arguments.algorithms:
+        alg_list.append(load_json(res))
 
-    d[alg_1['name']] = alg_1['cross_validation']['validation_mean']
-    d[alg_2['name']] = alg_2['cross_validation']['validation_mean']
+    for res in alg_list:
+        alg_name = res['name']
 
-    compare_metrics(d, 'Metric', 'Metric value', 'Validations mean comparison', args.save_figures, f'{cmp_str}_metrics')
+        histogram_dict[alg_name] = res['hist']
+        validation_dict[alg_name] = res['cross_validation']['validation_mean']
+        test_dict[alg_name] = res['test']
 
-    d[alg_1['name']] = alg_1['test']
-    d[alg_2['name']] = alg_2['test']
+    comp_error_ranges(histogram_dict, 'Class', 'Error count', 'Error plot', arguments.save_figures,
+                      f'{cmp_str}_error_hist')
 
-    compare_metrics(d, 'Metric', 'Metric value', 'Test comparison', args.save_figures, f'{cmp_str}_metrics')
+    compare_metrics(validation_dict, 'Metric', 'Metric value', 'Validations mean comparison', arguments.save_figures,
+                    f'{cmp_str}_val_metrics')
+
+    compare_metrics(test_dict, 'Metric', 'Metric value', 'Test comparison', arguments.save_figures,
+                    f'{cmp_str}_test_metrics')

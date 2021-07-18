@@ -19,11 +19,14 @@ from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder
 data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 
-def preprocessing(undersampling=False, feature_selection=False):
+def preprocessing(undersampling_thr=None, feature_selection=None):
     """Function to perform the preprocessing for Decision Trees. This function will read the dataset and perform
     the preprocessing steps for decision trees.
     Args:
-        undersampling (bool): Flag to specify if the function will do the undersampling process before returning data.
+        undersampling_thr (float): Threshold to use when performing a undersampling. If None, the undersampling won't
+                                   be applied.
+        feature_selection (str): Model to use for doing a feature selection. If None, the feature selection process
+                                 won't be applied.
     Returns:
         tuple: x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed
     """
@@ -49,11 +52,10 @@ def preprocessing(undersampling=False, feature_selection=False):
     x_test_transformed = pd.DataFrame(preprocessor.transform(x_test), columns=transformed_cols)
     # OneHotEncode for each category separately
     x_train_transformed, x_test_transformed = one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
-
-    if undersampling:
+    if undersampling_thr:
         x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed,
                                                                                   y_train_transformed,
-                                                                                  (4.5, 7), 0.8, undersampling)
+                                                                                  (1, 7), undersampling_thr)
     if feature_selection:
         x_train_transformed, x_test_transformed = utils.feature_selection(x_train_transformed, x_test_transformed,
                                                                           y_train_transformed, feature_selection)
@@ -64,10 +66,10 @@ def preprocessing(undersampling=False, feature_selection=False):
 if __name__ == '__main__':
     # Parse arguments
     args = utils.argument_parser().parse_args()
-    name_str = 'dtree'
+    name_str = 'DT'
 
     if args.undersampling:
-        name_str = f'{name_str}_{args.undersampling}_undersamp'
+        name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"
 
     if args.feature_selection:
         name_str = f'{name_str}_{args.feature_selection}_feature_selection'
@@ -79,7 +81,7 @@ if __name__ == '__main__':
     param_grid = {'max_depth': [2, 4, 8, 9, 10, 16],
                   'max_leaf_nodes': [2, 4, 8, 16, 20, 22]}
 
-    g_search = GridSearchCV(DecisionTreeRegressor(), param_grid=param_grid, scoring='r2')
+    g_search = GridSearchCV(DecisionTreeRegressor(random_state=utils.seed), param_grid=param_grid, scoring='r2')
 
     # Grid search
     g_search.fit(x_train, y_train)

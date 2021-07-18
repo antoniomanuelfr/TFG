@@ -19,7 +19,7 @@ from tfg_utils.manual_preprocessing import one_hot_encoder, get_columns_type
 data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 
-def preprocessing(undersampling=False, feature_selection=False):
+def preprocessing(undersampling_thr=None, feature_selection=None):
     x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
     y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)
     x_test = pd.read_csv(join(data_path, 'x_test.csv'), index_col=False)
@@ -37,10 +37,8 @@ def preprocessing(undersampling=False, feature_selection=False):
 
     y_imputer = SimpleImputer(strategy='median')
 
-    y_train_transformed = y_imputer.fit_transform(y_train)
-    y_test_transformed = y_imputer.transform(y_test)
-    y_train_end = y_train_transformed.mean(axis=1)
-    y_test_end = y_test_transformed.mean(axis=1)
+    y_train_transformed = y_imputer.fit_transform(y_train).mean(axis=1)
+    y_test_transformed = y_imputer.transform(y_test).mean(axis=1)
 
     preprocessor.fit(x_train)
     x_train_transformed = pd.DataFrame(preprocessor.transform(x_train), columns=transformed_cols)
@@ -48,23 +46,23 @@ def preprocessing(undersampling=False, feature_selection=False):
 
     x_train_transformed, x_test_transformed = one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
 
-    if undersampling:
-        x_train_transformed, y_train_end = utils.regression_under_sampler(x_train_transformed, y_train_end,
-                                                                          (4.5, 7), 0.8, undersampling)
+    if undersampling_thr:
+        x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed,
+                                                                                  y_train_transformed,
+                                                                                  (1, 7), undersampling_thr)
     if feature_selection:
         x_train_transformed, x_test_transformed = utils.feature_selection(x_train_transformed, x_test_transformed,
-                                                                          y_train_end, feature_selection)
+                                                                          y_train_transformed, feature_selection)
 
-    return x_train_transformed, y_train_end, x_test_transformed, y_test_end
+    return x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed
 
 
 if __name__ == '__main__':
     args = utils.argument_parser().parse_args()
     name_str = 'svr'
-    x_train, y_train, x_test, y_test = preprocessing(args.undersampling, args.feature_selection)
 
     if args.undersampling:
-        name_str = f'{name_str}_{args.undersampling}_undersampling'
+        name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"
 
     if args.feature_selection:
         name_str = f'{name_str}_{args.feature_selection}_feature_selection'

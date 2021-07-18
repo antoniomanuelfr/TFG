@@ -18,7 +18,7 @@ import tfg_utils.utils as utils
 data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 
-def preprocessing(undersampling=False, feature_selection=False):
+def preprocessing(undersampling_thr=False, feature_selection=False):
     x_train = pd.read_csv(join(data_path, 'x_train.csv'), index_col=False)
     y_train = pd.read_csv(join(data_path, 'y_train.csv'), index_col=False)
     x_test = pd.read_csv(join(data_path, 'x_test.csv'), index_col=False)
@@ -43,10 +43,10 @@ def preprocessing(undersampling=False, feature_selection=False):
     # OneHotEncode for each category separately
     x_train_transformed, x_test_transformed = one_hot_encoder(x_train_transformed, x_test_transformed, c_cols)
 
-    if undersampling:
+    if undersampling_thr:
         x_train_transformed, y_train_transformed = utils.regression_under_sampler(x_train_transformed,
                                                                                   y_train_transformed,
-                                                                                  (4.5, 7), 0.8, undersampling)
+                                                                                  (1, 7), undersampling_thr)
     if feature_selection:
         x_train_transformed, x_test_transformed = utils.feature_selection(x_train_transformed, x_test_transformed,
                                                                           y_train_transformed, feature_selection)
@@ -61,10 +61,10 @@ if __name__ == '__main__':
     param_grid = {'n_estimators': [20, 30, 40, 50, 60, 70, 80, 90],
                   'max_features': [None, 1/3]}
 
-    x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed = preprocessing()
+    x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(args.undersampling, args.feature_selection)
 
     if args.undersampling:
-        name_str = f'{name_str}_{args.undersampling}_undersamling'
+        name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"
 
     if args.feature_selection:
         name_str = f'{name_str}_{args.feature_selection}_feature_selection'
@@ -74,30 +74,30 @@ if __name__ == '__main__':
     g_search = GridSearchCV(RandomForestRegressor(random_state=utils.seed), param_grid=param_grid, scoring='r2',
                             n_jobs=-1)
 
-    g_search.fit(x_train_transformed, y_train_transformed)
+    g_search.fit(x_train_p, y_train_p)
     print(f'Best score {g_search.best_score_} with {g_search.best_estimator_}')
     clf = g_search.best_estimator_
     print(f'Best parameters {clf.get_params()}')
 
-    results['cross_validation'] = utils.cross_validation(x_train_transformed.to_numpy(), y_train_transformed, clf)
+    results['cross_validation'] = utils.cross_validation(x_train_p.to_numpy(), y_train_p, clf)
 
-    clf.fit(x_train_transformed, y_train_transformed)
+    clf.fit(x_train_p, y_train_p)
 
-    y_pred = clf.predict(x_train_transformed)
-    results['train'] = utils.calculate_regression_metrics(y_train_transformed, y_pred)
+    y_pred = clf.predict(x_train_p)
+    results['train'] = utils.calculate_regression_metrics(y_train_p, y_pred)
 
-    y_pred = clf.predict(x_test_transformed)
-    results['test'] = utils.calculate_regression_metrics(y_test_transformed, y_pred)
+    y_pred = clf.predict(x_test_p)
+    results['test'] = utils.calculate_regression_metrics(y_test_p, y_pred)
 
     print(utils.json_metrics_to_latex(results))
 
-    utils.plot_scattered_error(y_test_transformed, y_pred, 'Scattered error plot for Random Forest',
+    utils.plot_scattered_error(y_test_p, y_pred, 'Scattered error plot for Random Forest',
                                'Observations', 'IEMedia', args.save_figures, name_str)
 
-    results['hist'] = utils.get_error_hist(y_test_transformed, y_pred, 'Class', 'Count',
+    results['hist'] = utils.get_error_hist(y_test_p, y_pred, 'Class', 'Count',
                                            'Error count for Random Forest', args.save_figures, name_str)
 
-    feature_importance = pd.Series(data=clf.feature_importances_, index=x_train_transformed.columns)
+    feature_importance = pd.Series(data=clf.feature_importances_, index=x_train_p.columns)
     print(f'{clf.get_params()}')
     utils.plot_feature_importance(feature_importance, 10, 'Variable', 'Importance', 'Random Forest features',
                                   args.save_figures, name_str)

@@ -10,16 +10,62 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error, f1_score, roc_auc_score, \
-                            accuracy_score, confusion_matrix
+                            accuracy_score, confusion_matrix, plot_roc_curve
 from sklearn.model_selection import KFold
 from sklearn.tree import _tree
 from sklearn.feature_selection import SelectFromModel
-
+import seaborn as sns
 seed = 10
+
+metric_name_parser = {
+        'r2': 'R2',
+        'poisson': 'Poisson Deviance',
+        'mse': 'MSE',
+        'f1': 'F1 Score',
+        'auc_score': 'AUC Score',
+        'accuracy': 'Accuracy'
+    }
 
 
 def argument_parser():
     """Argument parser to share between all scripts."""
+
+    class Range(object):
+        """This class is restricted to the argument function,
+           as it use is only to check if a floating number is in a range of values. This looks complex, but it's the
+           best way to check for correctness of the parameters.
+        """
+        def __init__(self, start: float, end: float):
+            """Constructor for the class.
+            Args:
+                start (float): Lower boundary.
+                end (float): Higher boundary
+            """
+            self.start = start
+            self.end = end
+
+        def __eq__(self, needle: float):
+            """Equal operator for the class. This function will check if a value is in the specific range.
+               Args:
+                needle(float): Value to check if it's inside the range.
+            """
+            return self.start <= needle <= self.end
+
+        def __contains__(self, needle: float):
+            """Contains method that will be used when argparse checks for the choices. It will call to the __eq__
+               methdod.
+               Args:
+                needle(float): Value to check if it's inside the range.
+            """
+            return self.__eq__(needle)
+
+        def __iter__(self):
+            yield self
+
+        def __repr__(self):
+            """Get a string with the data to show an error message when an invalid choice is introduced."""
+            return f'[{self.start}, {self.end}]'
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--save_figures', type=str, action='store', default=None,
@@ -28,12 +74,14 @@ def argument_parser():
     parser.add_argument('--json_output', type=str, action='store', default=None,
                         help='Save script output to a json file')
 
-    parser.add_argument('--undersampling', action='store', choices=['SVR', 'DTREE'], default=False,
-                        help='Use undersampler')
+    parser.add_argument('--undersampling', type=float, action='store', choices=Range(0.1, 1),
+                        help='Use undersampler with a given threshold.')
 
     parser.add_argument('--feature_selection', action='store', choices=['SVR', 'DTREE'], default=False,
-                        help='Performs a feature selection.')
+                        help='Perform a feature selection using the given model.')
 
+    parser.add_argument('--ranges', action='store', type=float, default=None, nargs='+',
+                        help='Ranges used to categorize the regression. This parameters is ignored in regression')
     return parser
 
 
@@ -204,23 +252,18 @@ def plot_feature_importance(feature_importance: pd.Series, n: int, xlabel, ylabe
         plt.show()
 
 
-def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tuple, threshold: float, predictor_t: str):
+def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tuple, threshold: float):
     """A simple under-sample for regression.
     Args:
         x_data(DataFrame): Train data used for training the model.
         y_data(DataFrame): Real values for train data.
         range(tuple): Range from where the under-sampler will remove the data. (min, max)
         threshold(float): If the difference between a prediction and a real value is bigger, the sample will be removed.
-        predictor_t (str): Model to train. SVR will use a Supported Vector Regressor and DTREE will use decision trees,
     Returns:
         List: indexes of the rows to delete.
     """
-    from sklearn.svm import LinearSVR
     from sklearn.tree import DecisionTreeRegressor
     predictor = DecisionTreeRegressor(max_depth=4, random_state=seed)
-
-    if predictor_t == 'SVR':
-        predictor = LinearSVR()
 
     rows_to_delete = []
     predictor.fit(x_data, y_data)
@@ -231,7 +274,7 @@ def regression_under_sampler(x_data: pd.DataFrame, y_data: np.array, range: tupl
         prediction = predictor.predict(x_data.iloc[[row]])
         if abs(prediction - y_data[row]) > threshold:
             rows_to_delete.append(row)
-
+    print(f'Removing {len(rows_to_delete)} samples of the training dataset.')
     return x_data.drop(index=rows_to_delete), np.delete(y_data, rows_to_delete)
 
 
@@ -284,15 +327,6 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
 
 
 def json_metrics_to_latex(res_dic: dict):
-    metric_name_parser = {
-        'r2': 'R2',
-        'poisson': 'Poisson Deviance',
-        'mse': 'MSE',
-        'f1': 'F1 Score',
-        'auc_score': 'AUC Score',
-        'accuracy': 'Accuracy'
-    }
-
     metrics = list(res_dic['train'].keys())
     for i in range(len(metrics)):
         metrics[i] = metric_name_parser[metrics[i]]
@@ -354,24 +388,35 @@ def feature_selection(x_train, x_test, y_train, predictor_t):
     return pd.DataFrame(data=x_train_new, columns=columns), pd.DataFrame(data=x_test_new, columns=columns)
 
 
-def categorize_regression(y_train: np.array, y_test: np.array):
+def categorize_regression(y_train: np.array, y_test: np.array, ranges=(2.5, 5, 7)):
     """Transforms the regression problem into a classification by setting a class for each value in a interval
     Args:
         y_train (Numpy Array): Numpy array with the train values of y.
         y_test (Numpy Array): Numpy array with the test values of y.
     """
 
-    y_train = np.where(y_train <= 2.5, 1, y_train)
-    y_test = np.where(y_test <= 2.5, 1, y_test)
+    y_train = np.where(y_train <= int(ranges[0]), 1, y_train)
+    y_test = np.where(y_test <= int(ranges[0]), 1, y_test)
 
-    y_train = np.where((y_train <= 5) & (y_train > 1), 2, y_train)
-    y_test = np.where((y_test <= 5) & (y_test > 1), 2, y_test)
+    y_train = np.where((y_train <= int(ranges[1])) & (y_train > 1), 2, y_train)
+    y_test = np.where((y_test <= int(ranges[1])) & (y_test > 1), 2, y_test)
 
-    y_train = np.where((y_train <= 7) & (y_train > 2), 3, y_train)
-    y_test = np.where((y_test <= 7) & (y_test > 2), 3, y_test)
+    y_train = np.where((y_train <= int(ranges[2])) & (y_train > 2), 3, y_train)
+    y_test = np.where((y_test <= int(ranges[2])) & (y_test > 2), 3, y_test)
 
     return y_train, y_test
 
 
-def get_confusion_matrix(y_true: np.array, y_pred: np.array, labels=None, plot=True):
-    matrix = confusion_matrix(y_true, y_pred, labels=labels)
+def plot_confusion_matrix(y_true: np.array, y_pred: np.array, labels, title='', save=None,
+                          extra=None):
+    matrix = confusion_matrix(y_true, y_pred, normalize='true')
+    sns.heatmap(matrix, xticklabels=labels, yticklabels=labels, annot=True)
+    plt.title(title)
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    if save:
+        plt.savefig(os.path.join(save, f'confusion_matrix_{extra}.png'))
+        plt.clf()
+    else:
+        plt.show()
+    return matrix
