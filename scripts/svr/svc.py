@@ -23,9 +23,16 @@ if __name__ == '__main__':
     if args.feature_selection:
         name_str = f'{name_str}_{args.feature_selection}_feature_selection'
 
+    if args.ranges:
+        assert len(args.ranges) == 3, 'Len of ranges parameters must be 3'
+        c_str = ''
+        for i in args.ranges:
+            c_str = f"{c_str}_{str(i).replace('.0', '').replace('.', '-')}"
+        name_str = f'{name_str}{c_str}'
+
     x_train, y_train, x_test, y_test = preprocessing(
         args.undersampling, args.feature_selection)
-    y_train, y_test = utils.categorize_regression(y_train, y_test)
+    y_train, y_test = utils.categorize_regression(y_train, y_test, args.ranges)
 
     results = {'name': name_str}
 

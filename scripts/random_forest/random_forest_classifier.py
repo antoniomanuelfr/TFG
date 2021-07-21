@@ -31,7 +31,7 @@ if __name__ == '__main__':
         c_str = ''
         for i in args.ranges:
             c_str = f"{c_str}_{str(i).replace('.0', '').replace('.', '-')}"
-        name_str = f"name_str{c_str}"
+        name_str = f'{name_str}{c_str}'
 
     if args.undersampling:
         name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"

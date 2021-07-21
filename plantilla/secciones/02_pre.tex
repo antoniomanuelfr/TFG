@@ -15,8 +15,8 @@ Esta información es muy útil, ya que aparte de darnos un poco más de conocimi
 \begin{table}[H]
 	\begin{tabular}{|l|l|l|}
 		\cline{1-3}
-		CF9  &	Normalmente es posible reducir...&	Respuesta: Verdadera/Falsa. \\ \cline{1-3}
-		QF9	& Variable creada a partir de CF9.  & Valor 1 si la respuesta es correcta, 0 si no. \\ \cline{1-3}
+		CF9 & Normalmente es posible reducir... & Respuesta: Verdadera/Falsa.                   \\ \cline{1-3}
+		QF9 & Variable creada a partir de CF9.  & Valor 1 si la respuesta es correcta, 0 si no. \\ \cline{1-3}
 	\end{tabular}
 	\label{tab:columnas_iguales}
 	\caption{Comparación de dos características redundantes.}
@@ -25,11 +25,11 @@ Como podemos ver, estas dos columnas contienen información redundante, ya que s
 \linebreak
 El siguiente paso ha sido el de obtener las columnas que se van a usar como predictores.
 La peculiaridad de este conjunto de datos tenemos 7 columnas que van a ser las que los algoritmos tienen que intentar predecir. De estas 7 columnas tenemos 6 de ellas que son de tipo ordinal, almacenando la opinión (en escala Likert) que ha tenido el entrevistado sobre la pregunta en concreto. La ultima de estas columnas es la media de las 6 columnas.\\
- A continuación se muestra una tabla con la ocurrencia de cada valor para las columnas que vamos a usar:\\
+A continuación se muestra una tabla con la ocurrencia de cada valor para las columnas que vamos a usar:\\
 \linebreak
- \begin{figure}[H]
- 	 \centering
-	 \includegraphics[scale=0.5]{src/value_occurrences.png}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/value_occurrences.png}
 	\caption{Conteo de valores para las columnas usadas como predictores}
 	\label{tab:ocurrencia_valores}
 \end{figure}
@@ -54,11 +54,11 @@ El resultado ha sido: \\
 	\centering
 	\begin{tabular}{|l|l|l|l|}
 		\cline{1-3}
-		Columna 1             & Columna 2              & Correlación  \\ \cline{1-3}
-		IF1.6jTiene    	      &  FI\_Insur             &  1.000000    \\ \cline{1-3}
-		FinLit total(1-19)    & FinLit normaliz        & 1.000000     \\ \cline{1-3}
-		ConFin(1\_7)          & ConFin(1\_8)           &  0.987110    \\ \cline{1-3}
-		FinBehSinBorrow (1-6) & FinBeh con borrow(1-7) &  0.948779    \\ \cline{1-3}
+		Columna 1             & Columna 2              & Correlación \\ \cline{1-3}
+		IF1.6jTiene           & FI\_Insur              & 1.000000    \\ \cline{1-3}
+		FinLit total(1-19)    & FinLit normaliz        & 1.000000    \\ \cline{1-3}
+		ConFin(1\_7)          & ConFin(1\_8)           & 0.987110    \\ \cline{1-3}
+		FinBehSinBorrow (1-6) & FinBeh con borrow(1-7) & 0.948779    \\ \cline{1-3}
 	\end{tabular}
 	\label{tab:correlacion}
 	\caption{Matriz de correlación}
@@ -67,9 +67,9 @@ Volviendo a revisar la documentación, tenemos las siguientes descripciones:
 \linebreak
 \begin{itemize}
 	\item \textit{FI\_Insur}: Si tiene Productos de seguro: contrato de seguros (IF1.6jTiene). Valor 1 cuando tiene alguno, en caso contrario toma valor 0.
-	 \item \textit{FinLit normaliz}: Puntuación de Competencia financiera normalizada calculado dividiendo entre 19 y multiplicando por 100. Indica el porcentaje de competencia financiera general sobre 100. (columna \textit{FinLit total}).
-	 \item \textit{ConFin(1\_7)}: Variable global de Conocimientos financieros generales sumando QF3 a QF9. \textit{ConFin(1\_8)} suma de QF2 a QF9.
-	 \item \textit{FinBehSinBorrow (1-6)}: Suma de las variables de comportamiento financiero excepto Borrow. \textit{FinBeh con borrow(1-7) } introduce Borrow.
+	\item \textit{FinLit normaliz}: Puntuación de Competencia financiera normalizada calculado dividiendo entre 19 y multiplicando por 100. Indica el porcentaje de competencia financiera general sobre 100. (columna \textit{FinLit total}).
+	\item \textit{ConFin(1\_7)}: Variable global de Conocimientos financieros generales sumando QF3 a QF9. \textit{ConFin(1\_8)} suma de QF2 a QF9.
+	\item \textit{FinBehSinBorrow (1-6)}: Suma de las variables de comportamiento financiero excepto Borrow. \textit{FinBeh con borrow(1-7) } introduce Borrow.
 \end{itemize}
 Como vemos, viendo la explicación de las variables, podemos prescindir de ciertas columnas. En este caso se han descartados las características de la columna 2.\\
 \linebreak
@@ -98,7 +98,7 @@ Una opción puede ser eliminar aquellas variables categóricas, pero se podría 
 Existen dos opciones para la codificación:
 \begin{enumerate}
 	\item \textbf{Codificación por etiqueta:} Cada valor único de la variable se sustituye por un valor entero.
-	\item\textbf{Codificación \textit{one-hot }:} Se cambia la variable categórica por una serie de variables \textit{dummies}
+	      \item\textbf{Codificación \textit{one-hot }:} Se cambia la variable categórica por una serie de variables \textit{dummies}
 \end{enumerate}
 
 La codificación por etiqueta tiene la ventaja que es la más natural para los humanos y podría parecer suficiente, pero tiene una gran desventaja: Los valores enteros tienen una \textbf{relación de orden} entre cada valor. Los algoritmos de machine learning son capaces de entender esta relación de orden y perjudicar la eficacia del modelo.\\
@@ -109,11 +109,11 @@ Dada el siguiente conjunto de datos de ejemplo:\\
 	\centering
 	\begin{tabular}{|c|c|}
 		\cline{1-2}
-		ID    &	  Vehículo.  \\ \cline{1-2}
-		0	  &   Moto       \\ \cline{1-2}
-		1	  &   Camión     \\ \cline{1-2}
-		2     &   Coche      \\ \cline{1-2}
-		3	  &   Moto       \\ \cline{1-2}
+		ID & Vehículo. \\ \cline{1-2}
+		0  & Moto      \\ \cline{1-2}
+		1  & Camión    \\ \cline{1-2}
+		2  & Coche     \\ \cline{1-2}
+		3  & Moto      \\ \cline{1-2}
 	\end{tabular}
 	\caption{Conjunto de datos de ejemplo.}
 	\label{tab:conjunto_ejemplo}
@@ -124,11 +124,11 @@ Si usamos codificamos la variable \textit{vehículo} usando la etiqueta, estarí
 	\centering
 	\begin{tabular}{|c|c|c|c|}
 		\cline{1-4}
-		ID  & Vehículo\_moto & Vehículo\_camión & Vehículo\_coche. \\ \cline{1-4}
-		0	& 1  			 & 0				& 0		           \\ \cline{1-4}
-		1	& 0				 & 1				& 0 			   \\ \cline{1-4}
-		2   & 0 			 & 0 				& 1				   \\ \cline{1-4}
-		3   & 1 			 & 0 				& 0			       \\ \cline{1-4}
+		ID & Vehículo\_moto & Vehículo\_camión & Vehículo\_coche. \\ \cline{1-4}
+		0  & 1              & 0                & 0                \\ \cline{1-4}
+		1  & 0              & 1                & 0                \\ \cline{1-4}
+		2  & 0              & 0                & 1                \\ \cline{1-4}
+		3  & 1              & 0                & 0                \\ \cline{1-4}
 	\end{tabular}
 	\caption{Conjunto de datos de ejemplo tras codificar}
 	\label{tab:conjunto_ejemplo_cod}

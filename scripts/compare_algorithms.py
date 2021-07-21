@@ -6,13 +6,14 @@
 import os
 import argparse
 import json
-
+import seaborn as sns
+import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
 
 def generate_label_str(def_str: str):
-    return def_str.replace('0_', '0.').replace('_', ' ')
+    return def_str.replace('0_', '0.').replace('_', ' ').replace('-', '.')
 
 
 def load_json(path: str):
@@ -84,7 +85,7 @@ def compare_metrics(models: dict,  xlabel: str, ylabel: str, title: str, save, e
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
-    plt.legend()
+    plt.legend(loc='center')
     if save:
         plt.savefig(os.path.join(save, f'{extra}.png'))
         plt.clf()
@@ -121,13 +122,13 @@ if __name__ == '__main__':
 
     for res in alg_list:
         alg_name = res['name']
-
-        histogram_dict[alg_name] = res['hist']
+        if 'hist' in res:
+            histogram_dict[alg_name] = res['hist']
         validation_dict[alg_name] = res['cross_validation']['validation_mean']
         test_dict[alg_name] = res['test']
-
-    comp_error_ranges(histogram_dict, 'Class', 'Error count', 'Error plot', arguments.save_figures,
-                      f'{cmp_str}_error_hist')
+    if histogram_dict:
+        comp_error_ranges(histogram_dict, 'Class', 'Error count', 'Error plot', arguments.save_figures,
+                          f'{cmp_str}_error_hist')
 
     compare_metrics(validation_dict, 'Metric', 'Metric value', 'Validations mean comparison', arguments.save_figures,
                     f'{cmp_str}_val_metrics')

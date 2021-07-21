@@ -52,7 +52,7 @@ Para ver el comportamiento de un modelo, no basta con definir un conjunto de ent
 Para solventar estas y algunos otros problemas que que tiene esta metodología, se usa la \textbf{validación cruzada}.\\
 \linebreak
 En lugar de usar el conjunto de entrenamiento para entrenar un único modelo, se divide el conjunto de entrenamiento en $k$ partes, entrenando $k$ modelos usando $k-1$ subconjunto y usando el restante como de test. \\
- \begin{figure}[H]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{grid_search_cross_validation.png}
 	\caption{Ejemplo de validación cruzada con $k=5$}
@@ -67,7 +67,7 @@ Las gráficas que se han desarrollado son las siguientes:
 	\item Cantidad de errores por rango. (probablemente sea mejor cambiar este nombre, pero es el nombre que se me ocurrió)
 \end{itemize}
 El gráfico de dispersión de errores consiste en mostrar en la misma gráfica el valor real de las variables objetivo y el valor predicho por nuestro modelo. Esto nos permite ver como de juntos están las predicciones, identificando así en que zonas el algoritmo se está equivocando más frecuentemente.\\
- \begin{figure}[H]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{scattered.png}
 	\caption{Ejemplo de gráfico de dispersión de errores}
@@ -77,7 +77,7 @@ El gráfico de dispersión de errores consiste en mostrar en la misma gráfica e
 El segundo gráfico consiste en lo siguiente:
 Los modelos que han sido entrenados están prediciendo valores medios. El proceso seguido para realizar estos gráficos ha sido el de obtener los valores redondeados tanto de la predicción como del valor real. Si el valor redondeado de la predicción y del dato real son distintos, se ha considerado como error.  Sumando estos errores, se puede generar un gráfico de barras como el siguiente para tener una visión más clara de en que zonas de la predicción el algoritmo esta funcionando peor:
 \linebreak
- \begin{figure}[H]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{error_hist.png}
 	\caption{Ejemplo de gráfico de errores por rango}
@@ -107,7 +107,7 @@ Las modificaciones que se han hecho previamente son: (por orden)
 	\item \textbf{Imputación de valores perdidos}
 	\item \textbf{Transformación de variables categóricas a numéricas}
 \end{enumerate}
- Por este motivo, se ha tenido que introducir una fase extra transformando las variables categóricas en numéricas.
+Por este motivo, se ha tenido que introducir una fase extra transformando las variables categóricas en numéricas.
 \subsubsection*{Resultados}
 \label{sec:res_tree}
 Antes de mostrar los resultados, hay que destacar que cuando se entrena un árbol de decisión sin limitar los parámetros, este va a seguir separando los datos de entrenamiento hasta que no pueda realizar más divisiones. Para encontrar el árbol óptimo, primero se ha entrenado el árbol por defecto y se han obtenido los parámetros. Esos parámetros se han establecido como limite, se han entrenado varios árboles con distintos parámetros (sin superar el límite establecido por el primer modelo) y se ha escogido el que mejores resultados obtenía. Los parámetros que mejor resultados dieron son: \\
@@ -118,30 +118,31 @@ Antes de mostrar los resultados, hay que destacar que cuando se entrena un árbo
 En esta sección se va a exponer los resultados obtenidos usando  \textbf{Árboles de Decisión}.\\
 La siguiente tabla expone los resultados obtenidos en validación:
 \begin{table}[htbp]
-    \centering
-    \begin{tabular}{|c|c|c|c|c}
-    \cline{1-4}
-    Métricas         & R2    & Poisson deviance & MSE   \\ \cline{1-4}
-    FOLD 1           & 0.678 & 0.211            & 0.886 \\ \cline{1-4}
-    FOLD 2           & 0.65  & 0.213            & 0.913 \\ \cline{1-4}
-    FOLD 3           & 0.629 & 0.239            & 0.98  \\ \cline{1-4}
-    FOLD 4           & 0.679 & 0.187            & 0.779 \\ \cline{1-4}
-    FOLD 5           & 0.636 & 0.211            & 0.933 \\ \cline{1-4}
-    Media Validación & 0.654 & 0.212            & 0.898 \\ \cline{1-4}
-    Test             & 0.69  & 0.196            & 0.815 \\ \cline{1-4}
-    \end{tabular}
-	\caption{Árbol de decisión:  Profundidad 8, número máximo de hojas 16}
+	\centering
+	\begin{tabular}{|c|c|c|c|c}
+		\cline{1-4}
+		FOLD   & R2    & Poisson Deviance & MSE   \\ \cline{1-4}
+		Fold 0 & 0.678 & 0.211            & 0.886 \\ \cline{1-4}
+		Fold 1 & 0.661 & 0.206            & 0.884 \\ \cline{1-4}
+		Fold 2 & 0.629 & 0.239            & 0.98  \\ \cline{1-4}
+		Fold 3 & 0.67  & 0.191            & 0.8   \\ \cline{1-4}
+		Fold 4 & 0.636 & 0.211            & 0.933 \\ \cline{1-4}
+		Fold 5 & 0.655 & 0.212            & 0.897 \\ \cline{1-4}
+		Train  & 0.748 & 0.156            & 0.659 \\ \cline{1-4}
+		Test   & 0.69  & 0.196            & 0.815 \\ \cline{1-4}
+	\end{tabular}
+	\caption{Árbol de decisión: Profundidad 8, número máximo de hojas 16}
 	\label{tab:tree_res}
 \end{table}
 La siguiente figura muestra el gráfico de dispersión de errores:\\
- \begin{figure}[H]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/scattered_error_dtree.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:tree_scattered}
 \end{figure}
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
- \begin{figure}[H]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/error_hist_dtree.png}
 	\caption{Conteo de errores}
@@ -153,66 +154,11 @@ En este caso, vamos a usar una representación gráfica del árbol, las reglas q
 \linebreak
 La siguiente figura muestra la representación gráfica del árbol de decisión entrenado:\\
 \linebreak
- \begin{figure}[H]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.2]{src/dtree_plot.png}
 	\caption{Árbol de decisión}
 	\label{fig:decission_tree1}
-\end{figure}
-A continuación se muestra en pseudo-código, las reglas que ha inferido el árbol de decisión:\\
-
-\begin{figure}[H]
-	\begin{lstlisting}
-def predict(sample):
-	if AE5 <= 4.5:
-		if AcMedia <= 3.1:
-			if AE5 <= 1.5:
-				return 1.28
-			else:  # if AE5 > 1.5
-				return 2.12
-		else:  # if AcMedia > 3.1
-			if SE2 <= 3.5:
-				if BA3.f <= 0.5:
-					return 3.27
-				else:  # if BA3.f > 0.5
-					return 4.61
-			else:  # if SE2 > 3.5
-				if Beca <= 0.75:
-					if Nota <= 6.85:
-						return 3.46
-					else:  # if Nota > 6.85
-						return 4.52
-				else:  # if Beca > 0.75
-					return 3.32
-	else:  # if AE5 > 4.5
-		if AE5 <= 5.75:
-			if SE2 <= 3.5:
-				if CEF19 <= 3.75:
-					return 4.7
-				else:  # if CEF19 > 3.75
-					return 3.79
-			else:  # if SE2 > 3.5
-				return 5.19
-		else:  # if AE5 > 5.75
-			if AcMedia <= 6.55:
-				if SE5 <= 1.5:
-					return 2.75
-				else:  # if SE5 > 1.5
-					if NS1 <= 6.75:
-						return 5.5
-					else:  # if NS1 > 6.75
-						if AE7 <= 2.75:
-							return 4.69
-						else:  # if AE7 > 2.75
-							return 6.13
-			else:  # if AcMedia > 6.55
-				if SEMedia <= 3.58:
-					return 5.68
-				else:  # if SEMedia > 3.58
-					return 6.6
-	\end{lstlisting}
-\caption{Reglas del árbol de decisión}
-\label{fig:tree_rules}
 \end{figure}
 \pagebreak
 Por ultimo, estas son las 10 variables que el modelo consideró con más relevancia. El valor asociado a cada variable es la \textbf{importancia Gini}:
@@ -253,7 +199,7 @@ Al igual que los árboles de decisión, se ha hecho una imputación de valores p
 Antes de mostrar los resultados, estos son los parámetros que se han usado al entrenar el modelo:
 \begin{itemize}
 	\item \textbf{max\_features}:  Número de variables que se van a escoger de manera aleatoria: $\frac{1}{3}$ del número de variables.
-	\item\textbf{n\_estimators}: Número de árboles que forman el Random Forest: $500$
+	      \item\textbf{n\_estimators}: Número de árboles que forman el Random Forest: $500$
 \end{itemize}
 En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:
 \linebreak
@@ -261,14 +207,15 @@ En la siguiente tabla, se muestra el resultado para obtenidos en validación y e
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas          & R2    & Poisson deviance & MSE   \\ \cline{1-4}
-		FOLD 1            & 0.765 & 0.156            & 0.647 \\ \cline{1-4}
-		FOLD 2            & 0.778 & 0.136            & 0.577 \\ \cline{1-4}
-		FOLD 3            & 0.735 & 0.174            & 0.7   \\ \cline{1-4}
-		FOLD 4            & 0.732 & 0.152            & 0.65  \\ \cline{1-4}
-		FOLD 5            & 0.751 & 0.147            & 0.639 \\ \cline{1-4}
-		Media  Validación & 0.752 & 0.153            & 0.643 \\ \cline{1-4}
-		Test     		  & 0.768  & 0.15            & 0.609 \\ \cline{1-4}
+		FOLD   & R2    & Poisson Deviance & MSE   \\ \cline{1-4}
+		Fold 0 & 0.767 & 0.155            & 0.642 \\ \cline{1-4}
+		Fold 1 & 0.775 & 0.137            & 0.586 \\ \cline{1-4}
+		Fold 2 & 0.741 & 0.17             & 0.684 \\ \cline{1-4}
+		Fold 3 & 0.736 & 0.151            & 0.64  \\ \cline{1-4}
+		Fold 4 & 0.747 & 0.15             & 0.649 \\ \cline{1-4}
+		Fold 5 & 0.753 & 0.153            & 0.64  \\ \cline{1-4}
+		Train  & 0.967 & 0.023            & 0.087 \\ \cline{1-4}
+		Test   & 0.769 & 0.149            & 0.606 \\ \cline{1-4}
 	\end{tabular}
 	\caption{Random Forest}
 	\label{tab:res_random_forest}
@@ -333,17 +280,18 @@ Antes de mostrar los resultados, estos son los parámetros que se han usado al e
 En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:
 \linebreak
 \begin{table}[H]
-	 \centering
+	\centering
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas         & R2    & Poisson deviance & MSE   \\ \cline{1-4}
-		FOLD 1           & 0.47  & 0.356            & 1.46  \\ \cline{1-4}
-		FOLD 2           & 0.407 & 0.378            & 1.545 \\ \cline{1-4}
-		FOLD 3           & 0.449 & 0.362            & 1.457 \\ \cline{1-4}
-		FOLD 4           & 0.435 & 0.329            & 1.372 \\ \cline{1-4}
-		FOLD 5           & 0.467 & 0.321            & 1.367 \\ \cline{1-4}
-		Media Validación & 0.446 & 0.349            & 1.44  \\ \cline{1-4}
-		Test             & 0.527 & 0.301            & 1.242 \\ \cline{1-4}
+		FOLD   & R2    & Poisson Deviance & MSE   \\ \cline{1-4}
+		Fold 0 & 0.47  & 0.356            & 1.46  \\  \cline{1-4}
+		Fold 1 & 0.407 & 0.378            & 1.545 \\  \cline{1-4}
+		Fold 2 & 0.449 & 0.362            & 1.457 \\  \cline{1-4}
+		Fold 3 & 0.435 & 0.329            & 1.372 \\  \cline{1-4}
+		Fold 4 & 0.467 & 0.321            & 1.367 \\  \cline{1-4}
+		Fold 5 & 0.446 & 0.349            & 1.44  \\  \cline{1-4}
+		Train  & 0.653 & 0.227            & 0.907 \\ \cline{1-4}
+		Test   & 0.527 & 0.301            & 1.242 \\ \cline{1-4}
 	\end{tabular}
 	\caption{KNN: $K=5$, métrica Minkowski con $P=2$}
 	\label{tab:knn_res}
@@ -385,20 +333,21 @@ Las modificaciones que se han hecho previamente son: (por orden)
 \subsubsection*{Resultados}
 A continuación se muestra una tabla con los resultados obtenidos por SVM en el conjunto de validación y en el conjunto de test:
 \begin{table}[H]
-	  \centering
-	\begin{tabular}{|l|l|l|l|l}
+	\centering
+	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas         & R2      & Poisson deviance & MSE   \\ \cline{1-4}
-		FOLD 1   		 & 0.671   & 0.236            & 0.906 \\ \cline {1-4}
-		FOLD 2   		 & 0.718   & 0.186            & 0.734 \\ \cline {1-4}
-		FOLD 3   		 & 0.728   & 0.185            & 0.72  \\ \cline {1-4}
-		FOLD 4   		 & 0.691   & 0.192            & 0.75  \\ \cline {1-4}
-		FOLD 5   		 & 0.697   & 0.193            & 0.776 \\ \cline {1-4}
-		Media Validación & 0.701   & 0.198            & 0.777 \\ \cline {1-4}
-		Test             & 0.737   & 0.173            & 0.691 \\ \cline {1-4}
+		FOLD   & R2    & Poisson Deviance & MSE   \\ \cline{1-4}
+		Fold 0 & 0.671 & 0.236            & 0.906 \\ \cline{1-4}
+		Fold 1 & 0.718 & 0.186            & 0.734 \\ \cline{1-4}
+		Fold 2 & 0.728 & 0.185            & 0.72  \\ \cline{1-4}
+		Fold 3 & 0.691 & 0.192            & 0.75  \\ \cline{1-4}
+		Fold 4 & 0.697 & 0.193            & 0.776 \\ \cline{1-4}
+		Fold 5 & 0.701 & 0.198            & 0.777 \\ \cline{1-4}
+		Train  & 0.894 & 0.076            & 0.276 \\ \cline{1-4}
+		Test   & 0.737 & 0.173            & 0.691 \\ \cline{1-4}
 	\end{tabular}
-\caption{SVM: Tolerancia $1^{-3}$, Kernel RBF, $C=1$}
-\label{tab:svm_res}
+	\caption{SVM: Tolerancia $1^{-3}$, Kernel RBF, $C=1$}
+	\label{tab:svm_res}
 \end{table}
 La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
@@ -423,7 +372,7 @@ A diferencia de Random Forest (que también es un método combinado basado en á
 \linebreak
 \textit{Grandient Boosting} es un caso especial de \textit{Boosting} en el que se hace uso del algoritmo  \textbf{Gradiente Descendente} para minimizar los errores de los modelos simples.\\
 \linebreak
-Finalmente, XGBoost funciona añadiendo secuencialmente Árboles de Decisión, de tal manera que cada árbol reduzca el error de los previos aprendiendo de los errores que han cometido los árboles anteriores. 
+Finalmente, XGBoost funciona añadiendo secuencialmente Árboles de Decisión, de tal manera que cada árbol reduzca el error de los previos aprendiendo de los errores que han cometido los árboles anteriores.
 \subsubsection*{Procesado de datos}
 El pre-procesado aplicado para este modelo ha sido similar al usado en Árboles de Decisión:
 \begin{enumerate}
@@ -433,20 +382,21 @@ El pre-procesado aplicado para este modelo ha sido similar al usado en Árboles 
 \subsubsection*{Resultados}
 A continuación se muestra una tabla con los resultados obtenidos por \textbf{XGBoost} en los conjuntos de validación, train y test:
 \begin{table}[H]
-	 \centering
+	\centering
 	\begin{tabular}{|c|c|c|c|c|}
 		\cline{1-4}
-		Métricas         &	 R2  & Poisson deviance & MSE   \\ \cline{1-4}
-		FOLD 1           & 0.724 & 0.188            & 0.759 \\ \cline{1-4}
-		FOLD 2           & 0.73  & 0.166            & 0.704 \\ \cline{1-4}
-		FOLD 3           & 0.712 & 0.195            & 0.761 \\ \cline{1-4}
-		FOLD 4           & 0.72  & 0.162            & 0.679 \\ \cline{1-4}
-		FOLD 5           & 0.744 & 0.156            & 0.658 \\ \cline{1-4}
-		Media Validación & 0.726 & 0.173            & 0.712 \\ \cline{1-4}
-		Test             & 0.74  & 0.163            & 0.682 \\ \cline{1-4}
+		FOLD   & R2    & Poisson Deviance & MSE   \\ \cline{1-4}
+		Fold 0 & 0.726 & 0.186            & 0.754 \\ \cline{1-4}
+		Fold 1 & 0.734 & 0.165            & 0.693 \\ \cline{1-4}
+		Fold 2 & 0.71  & 0.196            & 0.766 \\ \cline{1-4}
+		Fold 3 & 0.723 & 0.16             & 0.671 \\ \cline{1-4}
+		Fold 4 & 0.744 & 0.157            & 0.658 \\ \cline{1-4}
+		Fold 5 & 0.727 & 0.173            & 0.708 \\ \cline{1-4}
+		Train  & 0.991 & 0.005            & 0.024 \\ \cline{1-4}
+		Test   & 0.741 & 0.162            & 0.68  \\ \cline{1-4}
 	\end{tabular}
-		\caption{Métricas de XGBoost con}
-		\label{tab:xgboost}
+	\caption{Métricas de XGBoost con}
+	\label{tab:xgboost}
 \end{table}
 La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
@@ -466,10 +416,10 @@ Finalizando con las gráficas, a continuación se muestra una gráfica con el co
 \subsection{Perceptrón multicapa}
 El Perceptrón Multicapa es un modelo de aprendizaje supervisado basada en red neuronales artificiales y haciendo uso del algoritmo \textbf{Perceptrón}.\\
 \linebreak
-El Perceptrón es un algoritmo de aprendizaje supervisado para clasificación binaria. Es un clasificador linear que funciona iterando sobre cada muestra del conjunto de datos hasta calcular un hiper-plano que separe el conjunto de datos. Los pasos de este algoritmo son: 
+El Perceptrón es un algoritmo de aprendizaje supervisado para clasificación binaria. Es un clasificador linear que funciona iterando sobre cada muestra del conjunto de datos hasta calcular un hiper-plano que separe el conjunto de datos. Los pasos de este algoritmo son:
 \begin{enumerate}
 	\item Establecer un plano inicial (generalmente de manera aleatoria ).
-	\item Por cada muestra del conjunto de datos, si la muestra está mal clasificada, se modifican los pesos que definen el hiper-plano para clasificar correctamente esa muestra.	
+	\item Por cada muestra del conjunto de datos, si la muestra está mal clasificada, se modifican los pesos que definen el hiper-plano para clasificar correctamente esa muestra.
 	\item El paso anterior se repite hasta que todas las muestras estén bien clasificadas ó no se haya hecho ninguna modificación. Por lo general, también se añade un número máximo de iteraciones que se van a realizar.
 \end{enumerate}
 Este algoritmo tiene una limitación muy fuerte: No puede resolver problemas no lineales (incluso funciones sencillas como la \textit{XOR}). \\
@@ -480,7 +430,7 @@ Para afrontar este problema, se propuso el usar una combinación de perceptrones
 	\item Capa/s oculta: Son las capas de la zona media de la red y son las encargadas del procesamiento de los datos para formar el modelo.
 	\item Capa de salida: Dan el valor de salida del modelo.
 \end{itemize}
-\begin{figure}[H] 
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{rnn}
 	\caption{Ejemplo de Red Neuronal con 1 capa oculta}
@@ -502,16 +452,17 @@ En esta tabla, se puede observar el rendimiento del modelo en los conjuntos de v
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
-		Métricas         & R2    & Poisson deviance & MSE   \\ \cline{1-4}
-		FOLD 1           & 0.569 & 0.275            & 1.187 \\ \cline{1-4}
-		FOLD 2           & 0.652 & 0.23             & 0.907 \\ \cline{1-4}
-		FOLD 3           & 0.609 & 0.255            & 1.033 \\ \cline{1-4}
-		FOLD 4           & 0.401 & 0.279            & 1.454 \\ \cline{1-4}
-		FOLD 5           & 0.567 & 0.251            & 1.112 \\ \cline{1-4}
-		Media Validación & 0.56  & 0.258            & 1.139 \\ \cline{1-4}
-		Test	         & 0.625 & 0.244            & 0.984 \\ \cline{1-4}
+		FOLD   & R2    & Poisson Deviance & MSE   \\\cline{1-4}
+		Fold 0 & 0.557 & 0.321            & 1.221 \\\cline{1-4}
+		Fold 1 & 0.566 & 0.274            & 1.13  \\\cline{1-4}
+		Fold 2 & 0.586 & 0.269            & 1.096 \\\cline{1-4}
+		Fold 3 & 0.412 & 0.291            & 1.427 \\\cline{1-4}
+		Fold 4 & 0.488 & 0.303            & 1.313 \\\cline{1-4}
+		Fold 5 & 0.522 & 0.292            & 1.237 \\\cline{1-4}
+		Train  & 0.999 & 0.0              & 0.002 \\\cline{1-4}
+		Test   & 0.616 & 0.27             & 1.007 \\\cline{1-4}
 	\end{tabular}
-	\caption{Perceptrón Multicapa: 2 capas de 100 neuronas, 500 iteraciones}
+	\caption{Perceptrón Multicapa: 1 capa oculta con 100 neuronas, 500 iteraciones max}
 	\label{tab:mlp_res}
 \end{table}
 La siguiente figura muestra el gráfico de dispersión de errores:
@@ -556,7 +507,7 @@ Como se ve en las figuras, vemos que hay dos variables que \textbf{ambos} algori
 	\item\textbf{AcMedia:} Variable global de Actitud emprendedora.
 \end{itemize}
 Repasando los resultados, se puede apreciar que a todos los algoritmos usados les está costando predecir correctamente los valores altos para la intención emprendedora media (véase figura \ref{fig:rf_error_plot}). Este comportamiento ha sido constante para cada algoritmo usado. La causa de este comportamiento puede ser que a medida que se incrementa el valor de intención emprendedora media, los datos son menos dispersos y a los algoritmos les está costando distinguir entre varios valores cercanos. Este comportamiento se puede apreciar en los gráficos de dispersión de errores que se han mostrado previamente.
- \pagebreak
+\pagebreak
 \section{Muestreo de datos}
 Una vez se ha comprobado el rendimiento de los distintos modelos que se han seleccionado, se va a intentar mejorarlo añadiendo nuevas etapas extra al procesamiento de datos antes de entrenar los modelos.
 \newline
@@ -566,19 +517,19 @@ Under-Sampling (se podría traducir como \textit{muestreo}) es una técnica para
 Como se puede ver en la \ref{tab:ocurrencia_valores} donde se muestra la ocurrencia de valores para las distintas variables a predecir,  aquellos con un valor alto son los más predominantes, siendo en estos valores donde los algoritmos más se están equivocando. El motivo puede ser que al estar prediciendo la media de las distintas variables, se está introduciendo una gran cantidad de ruido. \\
 En valores bajos, como se puede ver en la figura \ref{fig:rf_error_plot} donde se muestra el gráfico de errores para Random Forest, la cantidad de fallos en el algoritmo para estos valores es mucho menor. Esta tendencia se repite en todos los algoritmos.\\
 \subsection{Algoritmo}
- Para realizar el proceso de muestreo, se ha desarrollado el siguiente algoritmo:
- \begin{enumerate}
- 	\item Se entrena un modelo de aprendizaje con el conjunto de entrenamiento.
- 	 \item Por cada muestra del conjunto de entrenamiento, se predice el valor usando el modelo entrenado.
- 	 \item Se comprueba la diferencia entre valor real y el valor predicho.
- 	 \item Si la diferencia es mayor que un umbral, se elimina esa muestra del conjunto de entrenamiento.
- \end{enumerate}
+Para realizar el proceso de muestreo, se ha desarrollado el siguiente algoritmo:
+\begin{enumerate}
+	\item Se entrena un modelo de aprendizaje con el conjunto de entrenamiento.
+	\item Por cada muestra del conjunto de entrenamiento, se predice el valor usando el modelo entrenado.
+	\item Se comprueba la diferencia entre valor real y el valor predicho.
+	\item Si la diferencia es mayor que un umbral, se elimina esa muestra del conjunto de entrenamiento.
+\end{enumerate}
 La función que ejecuta este simple algoritmo de muestreo se llama \textit{\textbf{regression\_under\_sampler}}.
 \linebreak
 El modelo entrenado para hacer muestreo, es un árbol de decisión con un máximo de $4$ niveles, eliminando muestras de todo el rango de predicción.
- \subsection{Resultados}
- A continuación se muestra una serie de gráficos comparando los resultados obtenidos por los algoritmos seleccionados:
- \subsubsection*{Árboles de Decisión}
+\subsection{Resultados}
+A continuación se muestra una serie de gráficos comparando los resultados obtenidos por los algoritmos seleccionados:
+\subsubsection*{Árboles de Decisión}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/dtree_undersamp_error_hist.png }
@@ -611,7 +562,7 @@ En general, se aprecia una mejora en árboles de decisión reduciendo el ruido d
 	\label{fig:cmp_error_svr}
 \end{figure}
 Al contrario que los Árboles de Decisión, SVM han sido menos propicias al ruido del conjunto de datos. Al aplicar el muestreo se aprecia una bajada de rendimiento en todos los rangos de predicción. \\
-Como se explicaba en \nameref{sec:svm} - \ref{sec:svm}, SVM busca el hiperplano con más margen entre los clusters que forma el conjunto de datos, consiguiendo así un algoritmo robusto frente a ruido. 
+Como se explicaba en \nameref{sec:svm} - \ref{sec:svm}, SVM busca el hiperplano con más margen entre los clusters que forma el conjunto de datos, consiguiendo así un algoritmo robusto frente a ruido.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/svr_undersamp_val_metrics.png}
@@ -624,7 +575,7 @@ Como se explicaba en \nameref{sec:svm} - \ref{sec:svm}, SVM busca el hiperplano 
 	\caption{Métricas en test usando under-sampling}
 	\label{fig:cmp_test_svr}
 \end{figure}
-Las gráficas \ref{fig:cmp_val_svr} y \ref{fig:cmp_test_svr} complementan el resultado mostrado en la gráfica \ref{fig:cmp_error_svr}, las cuales demuestran que la mejora apreciada en Árboles de Decisión no ha aplicó en SVM y lejos de mejorar, ha empeorado el valor obtenido por algunas métricas de regresión.\\ 
+Las gráficas \ref{fig:cmp_val_svr} y \ref{fig:cmp_test_svr} complementan el resultado mostrado en la gráfica \ref{fig:cmp_error_svr}, las cuales demuestran que la mejora apreciada en Árboles de Decisión no ha aplicó en SVM y lejos de mejorar, ha empeorado el valor obtenido por algunas métricas de regresión.\\
 \subsubsection*{Random Forest}
 \begin{figure}[H]
 	\centering
@@ -651,5 +602,5 @@ En test se aprecia el mismo comportamiento que en los conjuntos de validación: 
 Se ha apreciado una mejora en en los algoritmos basados en árboles de decisión. La principal mejora ha sido el obtener una menor cantidad de errores en aquellas zonas donde los algoritmos se están comportando peor. También se ha podido observar que Random Forest obtuvo mejores resultados con un umbral más alto que Árboles de Decisión. \\
 La causa más probable de que necesite un umbral más alto es que al usar varios árboles para predecir el resultado, la probabilidad de que varios árboles contradigan el valor predicho por un árbol que clasificó mal un valor es alta. Por eso, al eliminar aquellas muestras más problemáticas del conjunto, el propio Random Forest es capaz de lidiar con el ruido de muestras que son menos problemáticas y beneficiarse de tener un conjunto de entrenamiento más grande.\\
 \linebreak
-Respecto a SVM, observando los resultados obtenidos, se aprecia que ha medida que se reduce la cantidad de muestras que se eliminan, el rendimiento es mejor. 
-Como se están eliminando muestras que pueden estar en la frontera (o incluso vectores soporte),, es posible que el hiper-plano calculado por el modelo de un menor margen o sea en general peor. 
+Respecto a SVM, observando los resultados obtenidos, se aprecia que ha medida que se reduce la cantidad de muestras que se eliminan, el rendimiento es mejor.
+Como se están eliminando muestras que pueden estar en la frontera (o incluso vectores soporte),, es posible que el hiper-plano calculado por el modelo de un menor margen o sea en general peor.
