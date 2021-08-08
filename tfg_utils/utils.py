@@ -388,21 +388,21 @@ def feature_selection(x_train, x_test, y_train, predictor_t):
     return pd.DataFrame(data=x_train_new, columns=columns), pd.DataFrame(data=x_test_new, columns=columns)
 
 
-def categorize_regression(y_train: np.array, y_test: np.array, ranges=(2.5, 5, 7)):
+def categorize_regression(y_train: np.array, y_test: np.array, ranges=(2.5, 5)):
     """Transforms the regression problem into a classification by setting a class for each value in a interval
     Args:
         y_train (Numpy Array): Numpy array with the train values of y.
         y_test (Numpy Array): Numpy array with the test values of y.
     """
+    max_value = int(max(max(y_train), max(y_test)))
 
-    y_train = np.where(y_train <= int(ranges[0]), 1, y_train)
-    y_test = np.where(y_test <= int(ranges[0]), 1, y_test)
+    y_train = np.where(y_train <= int(ranges[0]), 0, y_train)
+    y_test = np.where(y_test <= int(ranges[0]), 0, y_test)
 
-    y_train = np.where((y_train <= int(ranges[1])) & (y_train > 1), 2, y_train)
-    y_test = np.where((y_test <= int(ranges[1])) & (y_test > 1), 2, y_test)
-
-    y_train = np.where((y_train <= int(ranges[2])) & (y_train > 2), 3, y_train)
-    y_test = np.where((y_test <= int(ranges[2])) & (y_test > 2), 3, y_test)
+    y_train = np.where((y_train <= int(ranges[1])) & (y_train > 1), 1, y_train)
+    y_test = np.where((y_test <= int(ranges[1])) & (y_test > 1), 1, y_test)
+    y_train = np.where((y_train <= max_value) & (y_train > 2), 2, y_train)
+    y_test = np.where((y_test <= max_value) & (y_test > 2), 2, y_test)
 
     return y_train, y_test
 
