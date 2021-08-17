@@ -1,4 +1,8 @@
 \chapter{Regresión}
+El objetivo principal de esta sección es el de comprobar el comportamiento de una serie de modelos e intentar mejorar el rendimiento de los mismos, añadiendo nuevos pasos a la etapa de pre-procesamiento y volviendo a entrenar los modelos que se han seleccionado. \\
+Como se ha comentado previamente, se está trabajando sobre un problema bastante peculiar, donde se intenta predecir distintas variables ordinales. Antes de comenzar con algoritmos más complejos, el primer enfoque para resolver el problema ha sido el de usar una media de cada variable a predecir. \\
+Es cierto que usando este enfoque, estamos perdiendo información muy importante: se está suponiendo que todas las variables son igualmente importantes, lo cual es una desventaja de esta aproximación al problema.
+Por el contrario, este enfoque tiene la ventaja de estar usando algoritmos clásicos de regresión, proporcionando una salida más general, además de que usando este enfoque primero, descartamos la posibilidad de tener un conjunto de datos con mucho ruido o con un mal muestreo de los datos.
 \section{Rendimiento de modelos de regresión}
 Para comprobar el comportamiento de los distintos modelos seleccionados, se han usado las siguientes \textbf{métricas de regresión}: \textit{\textbf{Coeficiente de determinación}} (se denota como $R^2$), \textit{\textbf{Desviación de Poisson}} y \textit{\textbf{Error cuadrático medio}}
 \subsection{Coeficiente de determinación}
@@ -13,15 +17,15 @@ Donde:
 \begin{itemize}
 	\item $y$ es el conjunto de valores reales para las variables objetivo.
 	\item $\hat{y}$ es el valor predicho para los valores objetivo.
-	\item $\hat{y}_i$ es la predicción de la  i-ésima muestra.
+	\item $\hat{y}_i$ es la predicción de la i-ésima muestra.
 	\item $y_i$ es el valor real de la i-ésima muestra.
 	\item $\overline{y} = \frac{1}{n} \sum_{i=1}^{n} y_i$.
 	\item $n$ es el numero de muestras del conjunto.
 \end{itemize}
-insertar graficos explicando varianza,  etc
+insertar graficos explicando varianza, etc
 \subsection{Desviación de Poisson}
 \subsection{Error cuadrático medio}
-El error cuadrático medio de un estimador mide el promedio de los errores al cuadrado.  \\
+El error cuadrático medio de un estimador mide el promedio de los errores al cuadrado.\\
 Matemáticamente, se define el error cuadrático medio como:
 \[
 	MSE(y,\hat{y}) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i) ^2
@@ -30,7 +34,7 @@ Donde:
 \begin{itemize}
 	\item $y$ es el conjunto de valores reales para las variables objetivo.
 	\item $\hat{y}$ es el valor predicho para los valores objetivo.
-	\item $\hat{y}_i$ es la predicción de la  i-ésima muestra.
+	\item $\hat{y}_i$ es la predicción de la i-ésima muestra.
 	\item $y_i$ es el valor real de la i-ésima muestra.
 	\item $n$ es el numero de muestras del conjunto.
 \end{itemize}
@@ -51,7 +55,7 @@ El gráfico de dispersión de errores consiste en mostrar en la misma gráfica e
 \end{figure}
 
 El segundo gráfico consiste en lo siguiente:
-Los modelos que han sido entrenados están prediciendo valores medios. El proceso seguido para realizar estos gráficos ha sido el de obtener los valores redondeados tanto de la predicción como del valor real. Si el valor redondeado de la predicción y del dato real son distintos, se ha considerado como error.  Sumando estos errores, se puede generar un gráfico de barras como el siguiente para tener una visión más clara de en que zonas de la predicción el algoritmo esta funcionando peor:
+Los modelos que han sido entrenados están prediciendo valores medios. El proceso seguido para realizar estos gráficos ha sido el de obtener los valores redondeados tanto de la predicción como del valor real. Si el valor redondeado de la predicción y del dato real son distintos, se ha considerado como error. Sumando estos errores, se puede generar un gráfico de barras como el siguiente para tener una visión más clara de en que zonas de la predicción el algoritmo esta funcionando peor:
 \linebreak
 \begin{figure}[H]
 	\centering
@@ -75,7 +79,7 @@ Sin embargo, también presentan ciertas desventajas:
 \end{enumerate}
 Se ha seleccionado este modelo debido a que puede proporcionar información extra sobre conjunto de datos como la importancia de variables, que puede ser interesante a la hora de hacer uso de la información obtenida por los modelos.
 \subsubsection*{Procesado de datos}
-Antes de ejecutar la fase de entrenamiento, hay que modificar los datos para adaptarlos a las limitaciones del modelo. En este caso,  los Árboles de Decisión no admiten valores perdidos y debido a ciertas limitaciones de la librería que se está usando,  no son capaces de trabajar con variables categóricas, aunque generalmente si son capaces de trabajar con este tipo de variables..\\
+Antes de ejecutar la fase de entrenamiento, hay que modificar los datos para adaptarlos a las limitaciones del modelo. En este caso, los Árboles de Decisión no admiten valores perdidos y debido a ciertas limitaciones de la librería que se está usando, no son capaces de trabajar con variables categóricas, aunque generalmente si son capaces de trabajar con este tipo de variables..\\
 Las modificaciones que se han hecho previamente son: (por orden)
 \begin{enumerate}
 	\item \textbf{Imputación de valores perdidos}
@@ -89,7 +93,7 @@ Antes de mostrar los resultados, hay que destacar que cuando se entrena un árbo
 	\item \textbf{Profundidad máxima:} Limita la profundidad (cantidad de preguntas) del árbol. El mejor valor ha sido \textbf{8}
 	\item \textbf{Máximo número de hojas:} Máximo numero de hojas (grupos en el último nivel de una rama). El mejor valor ha sido \textbf{16}
 \end{itemize}
-En esta sección se va a exponer los resultados obtenidos usando  \textbf{Árboles de Decisión}.\\
+En esta sección se va a exponer los resultados obtenidos usando \textbf{Árboles de Decisión}.\\
 La siguiente tabla expone los resultados obtenidos en validación:
 \begin{table}[htbp]
 	\centering
@@ -144,7 +148,7 @@ Por ultimo, estas son las 10 variables que el modelo consideró con más relevan
 \end{figure}
 Volviendo a la documentación proporcionada para comprobar el significado de esos valores:
 \begin{itemize}
-	\item \textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales. Valor $0.735667$
+	\item \textbf{AE5:} Pregunta 5 sobre Actitudes financieras empresariales. Valor $0.735667$
 	\item \textbf{AcMedia:} Variable global de Actitud emprendedora. Valor $0.156046$
 	\item \textbf{SE2:} Estoy preparado para iniciar una empresa viable. Valor $0.037300$
 	\item \textbf{SE5:} Conozco cómo desarrollar un proyecto empresarial. Valor $0.014692$
@@ -157,22 +161,14 @@ Volviendo a la documentación proporcionada para comprobar el significado de eso
 \end{itemize}
 De las columnas \textit{AEx} y \textit{CEFx} no hay información en la documentación, unicamente se menciona que son una serie de preguntas relacionadas con actitudes financieras empresariales y sobre conocimientos financieros empresariales respectivamente.
 \subsection{Random Forest}
-\label{sec:rf}
-Random Forest es un modelo  combinado de aprendizaje que puede usarse para clasificación y/o regresión. Random Forest consiste en un conjunto de árboles de decisión que operan juntos. Una vez que cada árbol dentro del Random Forest realiza una predicción, se escoge la predicción con más votos. \\ Se ha escogido este modelo ya que como se comprobó en la sección \textbf{\ref{alg:dec_tree}-\nameref{alg:dec_tree}}, los árboles de decisión dieron buenos resultados
-\linebreak
-Para que Random Forest funciona bien, hay que asegurar que los distintos árboles que lo forman tengan una baja \textbf{correlación} entre ellos. Esto quiere decir que los árboles tienen que diferir y proporcionar predicciones distintas, de esta manera, si hay un conjunto de  árboles que da una predicción malas, puede haber otro conjunto que vaya en la dirección correcta. \\
-\linebreak
-Los Árboles de Decisión son modelos que son muy sensibles a los datos con los que se ha entrenado, por lo que cualquier cambio en los datos de entrenamiento puede hacer que cambie una predicción. Random Forest hace uso de esta peculiaridad de los árboles de decisión.
-En el momento de entrenar los distintos árboles, en vez de usar subconjuntos del conjunto de entrenamiento se usan $N$ conjuntos del mismo tamaño que el conjunto de entrenamiento obtenidos usando un \textbf{muestreo con reemplazo}. Una vez que se tienen los distintos conjuntos, se entrena cada conjunto con un árbol. Este proceso se conoce como \textbf{bagging}.\\
-\linebreak
-Una peculiaridad más que tiene Random Forest es la forma con la que los árboles seleccionan la variable que van a usar para dividir el conjunto de datos. Estos no eligen la variable en función de un criterio concreto, si no que eligen la variable usando un conjunto aleatorio de las características.  Esto fuerza a que los árboles sean mas diferentes entre ellos, bajando la correlación entre los árboles que forman el modelo.
+
 \subsubsection*{Procesado de datos}
 Al igual que los árboles de decisión, se ha hecho una imputación de valores perdidos y se ha transformado las variables categóricas a numéricas debido a limitación que hay en la librería usada.
 \pagebreak
 \subsubsection*{Resultados}
 Antes de mostrar los resultados, estos son los parámetros que se han usado al entrenar el modelo:
 \begin{itemize}
-	\item \textbf{max\_features}:  Número de variables que se van a escoger de manera aleatoria: $\frac{1}{3}$ del número de variables.
+	\item \textbf{max\_features}: Número de variables que se van a escoger de manera aleatoria: $\frac{1}{3}$ del número de variables.
 	      \item\textbf{n\_estimators}: Número de árboles que forman el Random Forest: $500$
 \end{itemize}
 En la siguiente tabla, se muestra el resultado para obtenidos en validación y en test:
@@ -218,7 +214,7 @@ Para finalizar, esta es la lista de las 10 variables más importantes que ha obt
 \end{figure}
 Volviendo a la documentación, esta es la explicación para cada variable:
 \begin{itemize}
-	\item\textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales. Valor = $0.246364$
+	\item\textbf{AE5:} Pregunta 5 sobre Actitudes financieras empresariales. Valor = $0.246364$
 	\item\textbf{AcMedia:} Variable global de Actitud emprendedora. Valor = $0.220202$
 	\item\textbf{AC2:} Ser emprendedor es una salida profesional atractiva para mí. Valor = $0.072907$
 	\item\textbf{AC4:}Ser emprendedor supondría una gran satisfacción para mí. Valor = $0.065776$
@@ -230,16 +226,7 @@ Volviendo a la documentación, esta es la explicación para cada variable:
 	\item\textbf{Nota:} Nota media del expediente académico hasta la fecha de la encuesta sobre 10 puntos. Valor = $0.012254$
 \end{itemize}
 \subsection{KNN}
-\label{alg:knn}
-KNN (\textit{K Nearest Neighbors}) es un algoritmo supervisado basado en instancias. Este algoritmo no aprende un modelo si no que almacena todas las muestras de entrenamiento y cuando hay que predecir una nueva ejemplo, el algoritmo usa las muestras almacenadas calculando la distancia a cada muestra y obteniendo los K vecinos más cercanos y usando las valores reales de los vecinos seleccionados, asigna una predicción al ejemplo a predecir, generalmente asignando aquella clase con más "votos".\\
-\linebreak
-Para medir la distancia entre dos muestras, KNN puede usar una gran cantidad métricas, las más comunes son:
-\begin{itemize}
-	\item \textbf{Distancia euclidiana:} Definida como $\sqrt{\sum(x_1 - x_2)^2}$
-	\item \textbf{Distancia Manhattan:} Definida como $\sum|x_1 - x_2|$
-	\item \textbf{Distancia Minkowski:} Definida como $(\sum|x_1 - x_2|^p)^{\frac{1}{p}}$, siendo P un entero positivo
-\end{itemize}
-La implementación del algoritmo KNN de ScikitLearn usa por defecto la distancia \textbf{Minkowski}. Esta tiene la peculiaridad de que cambiando el parámetro $p$ puede usarse la distancia euclidiana ($p=2$) o la distancia Manhattan ($p=1$)
+
 \subsubsection*{Procesado de datos}
 KNN es un algoritmo que depende de la distancia entre dos muestras, esto implica que si una caracteristica del conjunto de datos que se esta usando tiene un rango \textbf{mayor} que otra, esa característica aportará más al cálculo de la distancia, cuando no necesariamente debe de ser así. Por ese motivo, este algoritmo necesita que el conjunto de datos esté \textbf{normalizado} en el momento de entrenar.\\
 \linebreak
@@ -286,16 +273,7 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\label{fig:knn_error_plot}
 \end{figure}
 \subsection{SVM}
-\label{sec:svm}
-Maquina de soporte de vectores (Support Vector Machines) es un modelo de aprendizaje supervisado cuyo objetivo es encontrar un hiper-plano dentro de un espacio de  $N$ dimensiones ($N$ es el número de características del conjunto de datos) que clasifique las muestras de dentro del espacio en distintas clases.  Originalmente, se diseñó para clasificación binaria, pero en la actualidad este algoritmo se ha adaptado para regresión, clasificación multi-clase y  multi-etiqueta\\
-\linebreak
-Pueden existir muchos hiper-planos que separen los puntos del espacios en distintas clases. El objetivo de SVM es encontrar aquel hiper-plano con mayor \textbf{margen} (distancia entre puntos de distintas clases),  ya que incrementa la posibilidad de clasificar correctamente muestras que no se han usado en entrenamiento al disponer de un margen mayor de error. Los vectores soporte son aquellas observaciones del conjunto de datos que definen el hiper-plano. Idealmente, estas o\\
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{svm}
-	\caption{Ejemplo de SVM en dos dimensiones}
-	\label{fig:svm}
-\end{figure}
+
 \subsubsection*{Procesado de datos}
 SVM son modelos con una fuerte base matemática, por lo que son modelos que no pueden ser entrenados usando variables categóricas.
 Las modificaciones que se han hecho previamente son: (por orden)
@@ -339,14 +317,7 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\label{fig:svr_error_plot}
 \end{figure}
 \subsection{XGBoost}
-Extreme Gradient Boosting  es un método de aprendizaje combinado basado en árboles de decisión.\\
-A diferencia de Random Forest (que también es un método combinado basado en árboles de decisión), XGBoost hace uso de técnicas de \textit{Gradient Boosting}  frente a Random Forest que hace uso de \textit{Bagging} para entrenar los modelos que lo forman. (\ref{sec:rf}-\nameref{sec:rf}).\\
-\linebreak
-\textit{Boosting} se basa en la unión de varios modelos débiles para formar un modelo que en conjunto. Estos modelos débiles se van entrenando de forma iterativa, adaptando los parámetros del modelo en cada iteración,  teniendo en cuenta que estos modelos no deben aumentar en complejidad y deben mantener un rendimiento mínimo (idealmente, mejor que un clasificador aleatorio).\\
-\linebreak
-\textit{Grandient Boosting} es un caso especial de \textit{Boosting} en el que se hace uso del algoritmo  \textbf{Gradiente Descendente} para minimizar los errores de los modelos simples.\\
-\linebreak
-Finalmente, XGBoost funciona añadiendo secuencialmente Árboles de Decisión, de tal manera que cada árbol reduzca el error de los previos aprendiendo de los errores que han cometido los árboles anteriores.
+
 \subsubsection*{Procesado de datos}
 El pre-procesado aplicado para este modelo ha sido similar al usado en Árboles de Decisión:
 \begin{enumerate}
@@ -388,29 +359,7 @@ Finalizando con las gráficas, a continuación se muestra una gráfica con el co
 \end{figure}
 
 \subsection{Perceptrón multicapa}
-El Perceptrón Multicapa es un modelo de aprendizaje supervisado basada en red neuronales artificiales y haciendo uso del algoritmo \textbf{Perceptrón}.\\
-\linebreak
-El Perceptrón es un algoritmo de aprendizaje supervisado para clasificación binaria. Es un clasificador linear que funciona iterando sobre cada muestra del conjunto de datos hasta calcular un hiper-plano que separe el conjunto de datos. Los pasos de este algoritmo son:
-\begin{enumerate}
-	\item Establecer un plano inicial (generalmente de manera aleatoria ).
-	\item Por cada muestra del conjunto de datos, si la muestra está mal clasificada, se modifican los pesos que definen el hiper-plano para clasificar correctamente esa muestra.
-	\item El paso anterior se repite hasta que todas las muestras estén bien clasificadas ó no se haya hecho ninguna modificación. Por lo general, también se añade un número máximo de iteraciones que se van a realizar.
-\end{enumerate}
-Este algoritmo tiene una limitación muy fuerte: No puede resolver problemas no lineales (incluso funciones sencillas como la \textit{XOR}). \\
-\linebreak
-Para afrontar este problema, se propuso el usar una combinación de perceptrones siguiendo una estructura de red neuronal, consiguiendo así un modelo capaz de resolver problemas no lineales. Estas redes neuronales tienen al menos 3 capas:
-\begin{itemize}
-	\item Capa de entrada: Está formada por las primeras neuronas que forman la red y se encargan de introducir los datos a la red.
-	\item Capa/s oculta: Son las capas de la zona media de la red y son las encargadas del procesamiento de los datos para formar el modelo.
-	\item Capa de salida: Dan el valor de salida del modelo.
-\end{itemize}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.3]{rnn}
-	\caption{Ejemplo de Red Neuronal con 1 capa oculta}
-	\label{fig:rnn}
-\end{figure}
-Un elemento fundamental de las Redes Neuronales es el algoritmo de \textit{back-propagation}. Este algoritmo usa el error obtenido en las capas de salida y este era propagado hacia cada neurona anterior (de ahí el nombre de \textit{back-propagation}), ajustando así el peso calculado por cada neurona en función del comportamiento del modelo en la iteración anterior.
+
 \subsubsection*{Procesado de datos}
 Como se puede apreciar, el MLP son algoritmos con una fuerte base matemática, por lo que no son capaces de ser entrenados usando variables categóricas. Las modificaciones que se han hecho sobre el conjunto de datos son las siguientes:
 \begin{enumerate}

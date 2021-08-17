@@ -1,5 +1,4 @@
 \chapter{Clasificación a partir de regresión}
-
 Se ha comprobado que usando regresión, se ha conseguido unos buenos modelos para predecir un valor \textbf{preciso} de la intención emprendedora media. El siguiente paso realizado ha sido el de \textbf{categorizar} el caso de regresión, obteniendo así clases del tipo \textit{intención emprendedora alta, baja o media}.\\
 Hay que recordar que el resultado obtenido por el modelo de aprendizaje puede ser leído por personal no familiarizado con matemáticas o informática. Este enfoque lo que nos permite es usar una única variable como objetivo con los valores \textit{alto, bajo o alto}, siendo así más legible la salida del algoritmo.\\
 \linebreak
@@ -21,14 +20,14 @@ Esta métrica mide el porcentaje de casos que el modelo ha clasificado correctam
 \]
 
 \subsection{Matriz de confusión y métricas}
-Cada entrada $i.j$ de la matriz se define como el número de observaciones del grupo $i$ que han sido predichas como del grupo $j$.  Un ejemplo de matriz de confusión para el problema que se esta tratando es:
+Cada entrada $i.j$ de la matriz se define como el número de observaciones del grupo $i$ que han sido predichas como del grupo $j$. Un ejemplo de matriz de confusión para el problema que se esta tratando es:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{conf_matrix.png}
 	\caption{Ejemplo de matriz de confusión}
 	\label{fig:conf_matrix}
 \end{figure}
-Aquí podemos ver cuantas muestras de una clase  el modelo predijo como correctas (de la misma clase) y cuantas muestras de una clase predijo como  erróneas (de distinta clase).\\
+Aquí podemos ver cuantas muestras de una clase el modelo predijo como correctas (de la misma clase) y cuantas muestras de una clase predijo como erróneas (de distinta clase).\\
 \linebreak
 A partir de la matriz de confusión, se pueden sacar las siguiente métricas:
 \[Precision = \frac{TP} {TP + FP}\]
@@ -48,13 +47,13 @@ A medida que incrementamos el ratio de verdaderos positivos, se va a incrementar
 	\label{fig:roc}
 \end{figure}
 Lo ideal, es que la figura se acerque a la esquina superior izquierda lo máximo posible, ya que implicaría que se esta clasificando como correctos todas las muestras positivas y ninguna muestra negativa se está clasificando como positiva.\\
-Se puede usar el área bajo la curva  como una métrica para comprobar como de bueno es el modelo. Esta métrica se conoce como \textbf{AUC} (Area Under Curve).\\
+Se puede usar el área bajo la curva como una métrica para comprobar como de bueno es el modelo. Esta métrica se conoce como \textbf{AUC} (Area Under Curve).\\
 \linebreak
 Al igual que en regresión (\ref{sec:validation}-\nameref{sec:validation}), se ha usado la técnica de \textit{k-fold validation} para validar el rendimiento de los modelos entrenados.
 \section{Modelos de clasificación}
 Para clasificación, se van a usar unicamente aquellos modelos que se ha demostrado empíricamente en la sección \ref{sec:algoritmos}-\nameref{sec:algoritmos} que han tenido un buen desempeño. Por tanto se van a usar Árboles de Decisión, Random Forest y SVM.
 \subsection{Árboles de Decisión}
-En esta sección se va a exponer los resultados obtenidos en clasificación usando  \textbf{Árboles de Decisión}.\\
+En esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{Árboles de Decisión}.\\
 La siguiente tabla expone los resultados obtenidos:
 \begin{figure}[H]
 	\centering
@@ -119,7 +118,7 @@ A continuación, las tablas con los resultados de las métricas y las matrices d
 \end{figure}
 \pagebreak
 \subsection{Random Forest}
-En esta sección se va a exponer los resultados obtenidos en clasificación usando  \textbf{Random Forest}.
+En esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{Random Forest}.
 A continuación se muestran una serie de gráficos comparando las distintas métricas que se han seleccionado:
 \begin{figure}[H]
 	\centering
@@ -184,9 +183,7 @@ En las secciones siguientes, se va a mostrar las tablas con los valores de métr
 \end{figure}
 \pagebreak
 \subsection{Support Vector Machines}
-En esta sección se va a exponer los resultados obtenidos en clasificación usando  \textbf{Random Forest}.\\
-La siguiente tabla expone los resultados obtenidos:
-En esta sección se va a exponer los resultados obtenidos en clasificación usando  \textbf{Random Forest}.
+En esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{SVM}.
 A continuación se muestran una serie de gráficos comparando las distintas métricas que se han seleccionado:
 \begin{figure}[H]
 	\centering
