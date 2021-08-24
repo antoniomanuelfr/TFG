@@ -64,20 +64,9 @@ Los modelos que han sido entrenados están prediciendo valores medios. El proces
 	\label{fig:error_hist_example}
 \end{figure}
 \section{Modelos de regresión}
-partir de los datos con los que se entrena el algoritmo.\\
-Los árboles de decisión ofrecen ciertas ventajas:
-\begin{enumerate}
-	\item Son modelos fáciles de interpretar y pueden ser visualizados.
-	\item Son capaces de trabajar con variables categóricas y numéricas.
-	\item introducir alguna ventaja más
-\end{enumerate}
-Sin embargo, también presentan ciertas desventajas:
-\begin{enumerate}
-	\item Modelos que tienden al sobre-aprendizaje.
-	\item No soportan valores perdidos.
-	\item No trabajan bien con conjuntos de datos des-balanceados.
-\end{enumerate}
-Se ha seleccionado este modelo debido a que puede proporcionar información extra sobre conjunto de datos como la importancia de variables, que puede ser interesante a la hora de hacer uso de la información obtenida por los modelos.
+En esta sección, se va a mostrar los resultados obtenidos por los modelos seleccionados en \ref{sec:algoritmos}-\nameref{sec:algoritmos}.
+\subsection{Árboles de decisión}
+En esta sección se muestran los resultados obtenidos por el \textbf{Árboles de Decisión}, explicado en la sección \ref{alg:dec_tree}-\nameref{alg:dec_tree}.
 \subsubsection*{Procesado de datos}
 Antes de ejecutar la fase de entrenamiento, hay que modificar los datos para adaptarlos a las limitaciones del modelo. En este caso, los Árboles de Decisión no admiten valores perdidos y debido a ciertas limitaciones de la librería que se está usando, no son capaces de trabajar con variables categóricas, aunque generalmente si son capaces de trabajar con este tipo de variables..\\
 Las modificaciones que se han hecho previamente son: (por orden)
@@ -161,7 +150,7 @@ Volviendo a la documentación proporcionada para comprobar el significado de eso
 \end{itemize}
 De las columnas \textit{AEx} y \textit{CEFx} no hay información en la documentación, unicamente se menciona que son una serie de preguntas relacionadas con actitudes financieras empresariales y sobre conocimientos financieros empresariales respectivamente.
 \subsection{Random Forest}
-
+En esta sección se muestran los resultados obtenidos por el \textbf{Random Forest}, explicado en la sección \ref{alg:rf}-\nameref{alg:rf}.
 \subsubsection*{Procesado de datos}
 Al igual que los árboles de decisión, se ha hecho una imputación de valores perdidos y se ha transformado las variables categóricas a numéricas debido a limitación que hay en la librería usada.
 \pagebreak
@@ -226,7 +215,7 @@ Volviendo a la documentación, esta es la explicación para cada variable:
 	\item\textbf{Nota:} Nota media del expediente académico hasta la fecha de la encuesta sobre 10 puntos. Valor = $0.012254$
 \end{itemize}
 \subsection{KNN}
-
+En esta sección se muestran los resultados obtenidos por el \textbf{K-Nearest Neighbor}, explicado en la sección \ref{alg:knn}-\nameref{alg:knn}.
 \subsubsection*{Procesado de datos}
 KNN es un algoritmo que depende de la distancia entre dos muestras, esto implica que si una caracteristica del conjunto de datos que se esta usando tiene un rango \textbf{mayor} que otra, esa característica aportará más al cálculo de la distancia, cuando no necesariamente debe de ser así. Por ese motivo, este algoritmo necesita que el conjunto de datos esté \textbf{normalizado} en el momento de entrenar.\\
 \linebreak
@@ -273,7 +262,7 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\label{fig:knn_error_plot}
 \end{figure}
 \subsection{SVM}
-
+En esta sección se muestran los resultados obtenidos por el \textbf{Support Vector Machines}, explicado en la sección \ref{alg:svm}-\nameref{alg:svm}.
 \subsubsection*{Procesado de datos}
 SVM son modelos con una fuerte base matemática, por lo que son modelos que no pueden ser entrenados usando variables categóricas.
 Las modificaciones que se han hecho previamente son: (por orden)
@@ -317,7 +306,7 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\label{fig:svr_error_plot}
 \end{figure}
 \subsection{XGBoost}
-
+En esta sección se muestran los resultados obtenidos por el \textbf{Xtreme Gradient Boosting}, explicado en la sección \ref{alg:xgb}-\nameref{alg:xgb}.
 \subsubsection*{Procesado de datos}
 El pre-procesado aplicado para este modelo ha sido similar al usado en Árboles de Decisión:
 \begin{enumerate}
@@ -357,11 +346,10 @@ Finalizando con las gráficas, a continuación se muestra una gráfica con el co
 	\caption{Conteo de errores}
 	\label{fig:xgboost_error_plot}
 \end{figure}
-
-\subsection{Perceptrón multicapa}
-
+\subsection{Perceptrón multi-capa}
+En esta sección se muestran los resultados obtenidos por el \textbf{Perceptron multicapa}, explicado en la sección \ref{alg:mlp}-\nameref{alg:mlp}.
 \subsubsection*{Procesado de datos}
-Como se puede apreciar, el MLP son algoritmos con una fuerte base matemática, por lo que no son capaces de ser entrenados usando variables categóricas. Las modificaciones que se han hecho sobre el conjunto de datos son las siguientes:
+MLP es un algoritmo que no es capaz de ser entrenados usando variables categóricas. Las modificaciones que se han hecho sobre el conjunto de datos son las siguientes:
 \begin{enumerate}
 	\item \textbf{Imputación de valores perdidos.}
 	\item \textbf{Escalado de valores numéricos.}

@@ -1,4 +1,4 @@
-\chapter{Clasificación a partir de regresión}
+\chapter{Clasificación}
 Se ha comprobado que usando regresión, se ha conseguido unos buenos modelos para predecir un valor \textbf{preciso} de la intención emprendedora media. El siguiente paso realizado ha sido el de \textbf{categorizar} el caso de regresión, obteniendo así clases del tipo \textit{intención emprendedora alta, baja o media}.\\
 Hay que recordar que el resultado obtenido por el modelo de aprendizaje puede ser leído por personal no familiarizado con matemáticas o informática. Este enfoque lo que nos permite es usar una única variable como objetivo con los valores \textit{alto, bajo o alto}, siendo así más legible la salida del algoritmo.\\
 \linebreak
@@ -249,5 +249,27 @@ En las secciones siguientes, se va a mostrar las tablas con los valores de métr
 
 \subsection{Conclusiones}
 Como se puede apreciar, ninguno de los algoritmos no han tenido problemas clasificando la clase \textbf{IEAlta}, clasificando correctamente más del $80\%$ de las instancias de esta clase.
-Los algoritmos han tenido más problemas a la hora de clasificar correctamente la clase \textbf{IEBaja}, clasificando correctamente solo el $50\%$. Volviendo a la figura \ref{tab:ocurrencia_valores} donde se mostraba el conteo de clases, se puede apreciar que la clase formada por los valores más bajos tiene una menor cantidad de muestras, explicando así que los algoritmos fallen más comúnmente en estas clases, clasificando una gran parte como \textbf{IEMedia} (tiene sentido ya que es la clase más 'cercana') .
-Por
+Los algoritmos han tenido más problemas a la hora de clasificar correctamente la clase \textbf{IEBaja}, clasificando correctamente solo el $50\%$. Volviendo a la figura \ref{tab:ocurrencia_valores} donde se mostraba el conteo de clases, se puede apreciar que la clase formada por los valores más bajos tiene una menor cantidad de muestras, explicando así que los algoritmos fallen más comúnmente en estas clases, clasificando una gran parte como \textbf{IEMedia} (tiene sentido ya que es la clase más 'cercana').
+\linebreak
+Respecto al rendimiento se puede observar como los modelos basados en árboles de decisión siguen comportándose correctamente, siendo Random Forest el que mejor resultados obtuvo. \\
+SVM siguió comportándose de manera correcta, obteniendo unos resultados ligeramente peores que Random Forest pero mejores que Árboles de decisión.
+
+\section{Segunda iteración}
+Como se puede observar, las resultados han sido buenos, teniendo la mayor parte de algoritmos un comportamiento similar al observado en regresión (Random Forest ha sido el modelo que mejor ha funcionado, mientras que Árboles de Decisión y SVM han tenido un comportamiento similar).\\
+La opción por la que se ha optado de \textbf{categorizar} el problema de regresión de la forma en la que se ha explicado tiene un inconveniente: No se está teniendo en cuenta el \textbf{orden} de las clases, ya que el algoritmo de clasificación trata las distintas clases como un conjunto de valores sin orden.
+Para mejorar este comportamiento, se va a optar por seguir el enfoque explicado en el artículo \textit{A Simple Approach to Ordinal Classification}. La propuesta es la siguiente:
+En lugar de clasificar $k$ clases, se van a entrenar $k-1$ clasificadores binarios donde la variable objetivo del modelo $M_i$ representa la \textbf{probabilidad} de que la clase sea mayor (según el orden) que la clase $K_i$. El siguiente ejemplo ayuda a explicar este enfoque:\\
+\linebreak
+Se quiere predecir el ranking ()de 1 a 5) que un usuario le va a dar a una película. Para ello se van a entrenar los siguientes $4$ modelos:
+\begin{enumerate}
+    \item El primer modelo calcula la probabilidad de que el ranking predicho sea mayor que 1.
+    \item El segundo modelo calcula la probabilidad de que el ranking predicho sea mayor que 2.
+    \item El tercer modelo calcula la probabilidad de que el ranking predicho sea mayor que 3.
+    \item El cuarto modelo calcula la probabilidad de que el ranking predicho sea mayor que 4.
+\end{enumerate}
+Una vez que se han calculado las probabilidades, el modelo escoge aquella clase con mayor probabilidad. Obviamente, es muy importante optar por este enfoque que el modelo seleccionado sea capaz de obtener la \textbf{probabilidad} de que una muestra pertenezca a una clase. Los modelos seleccionados en este capítulo son capaces de obtener las probabilidades de clase.
+\linebreak
+Este tipo de algoritmo no esta implementado en la librería Scikit-Learn, pero esta provee de las herramientas necesarias para construir modelos customizados y que sean compatibles con el resto de utilidades que la librería ofrece. Este proceso se va a explicar en la sección \ref{sec:sftw}-\nameref{sec:sftw}.\\
+\linebreak
+Los resultados obtenidos se van a mostrar en la siguiente sección.
+\subsection{Resultados}
