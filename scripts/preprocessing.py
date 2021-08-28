@@ -50,8 +50,7 @@ if __name__ == '__main__':
         dataset.drop(columns=pair[1], inplace=True)
 
     # Print the class occurrence for the classification predictors.
-    fig, count = mp.print_value_occurrences(predictor_data[mp.classification_predictor])
-    fig.tight_layout()
+    count = mp.print_value_occurrences(predictor_data[mp.classification_predictor])
     if args.save_figures:
         plt.savefig(f'{args.save_figures}/value_occurrences.png')
     else:

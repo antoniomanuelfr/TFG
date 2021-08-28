@@ -9,11 +9,12 @@ import json
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
+import tfg_utils.utils as utils
 
 
 def generate_label_str(def_str: str):
-    return def_str.replace('0_', '0.').replace('_', ' ').replace('-', '.')
+    return def_str.replace('0_', '0.').replace('_', ' ').replace('-', '.').replace('undersamp', '')\
+           .replace('classification', '')
 
 
 def load_json(path: str):
@@ -27,24 +28,32 @@ def load_json(path: str):
         return json.load(fp)
 
 
-def comp_error_ranges(models: dict, xlabel: str, ylabel: str, title: str, save, extra: str):
+def comp_error_ranges(models: dict, xlabel: str, ylabel: str, save, extra: str):
     """Compare the error ranges between two algorithms.
         Args:
             models (dict): Dictionary where the key is the label and the value is the error counts.
             model_2 (tuple): (Error per class, label)
-            title (str): Title of the plot.
             xlabel (str): Label of the X axis.
             ylabel (str): Label of the y axis.
             save (str): Folder where the images will be saved. If None, the image will be shown.
             extra (str): Extra name to append at the end of the file name if save is not none.
     """
-    for key in models.keys():
-        plt.bar(np.arange(1, len(models[key]) + 1), models[key], label=generate_label_str(key))
+    data = []
+    for model in models.keys():
+        row = []
+        for i in range(len(models[model])):
+            row = [generate_label_str(model), i, models[model][i]]
+            data.append(row)
 
+    data = pd.DataFrame(data, columns=['model', 'class', 'value'])
+
+    sns.barplot(x='class', y='value', hue='model', data=data, palette=utils.palette)
+
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+               ncol=3, mode="expand", borderaxespad=0.)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.title(title)
-    plt.legend()
+
     if save:
         plt.savefig(os.path.join(save, f'{extra}.png'))
         plt.clf()
@@ -52,40 +61,31 @@ def comp_error_ranges(models: dict, xlabel: str, ylabel: str, title: str, save, 
         plt.show()
 
 
-def compare_metrics(models: dict,  xlabel: str, ylabel: str, title: str, save, extra: str):
+def compare_metrics(models: dict,  xlabel: str, ylabel: str, save, extra: str):
     """Compare the metrics between two models.
         Args:
             models (dict): Dictionary where the key is the label and the value is a dict with the metrics results.
-            title (str): Title of the plot.
             xlabel (str): Label of the X axis.
             ylabel (str): Label of the y axis.
             save (str): Folder where the images will be saved. If None, the image will be shown.
             extra (str): Extra name to append at the end of the file name if save is not none.
    """
-    max_metric_dic = {}
+    data = []
     for model in models.keys():
-        values = []
+        row = []
         for metric in models[model]:
-            metric_value = models[model][metric]
+            row = [generate_label_str(model), utils.metric_name_parser[metric], models[model][metric]]
+            data.append(row)
 
-            if metric not in max_metric_dic:
-                max_metric_dic[metric] = metric_value
-            else:
-                if max_metric_dic[metric] < metric_value:
-                    max_metric_dic[metric] = metric_value
+    data = pd.DataFrame(data, columns=['model', 'metric', 'value'])
 
-            values.append(metric_value)
-
-        model_str = model.replace('0_', '0.').replace('_', ' ')
-        plt.bar(list(models[model].keys()), values, label=generate_label_str(model_str))
-
-    for index, metric in enumerate(max_metric_dic):
-        plt.text(x=index-0.25, y=max_metric_dic[metric]+0.01, s=f'{max_metric_dic[metric]}')
+    sns.barplot(x='metric', y='value', hue='model', data=data, palette=utils.palette)
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+               ncol=3, mode="expand", borderaxespad=0.)
 
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.title(title)
-    plt.legend(loc='center')
+
     if save:
         plt.savefig(os.path.join(save, f'{extra}.png'))
         plt.clf()
@@ -102,12 +102,13 @@ if __name__ == '__main__':
 
     parser.add_argument('--json', dest='algorithms', action='append', required=True,
                         help='Path with the json results of the first algorithm')
-
     parser.add_argument('--save_figures', type=str, action='store', default=None,
                         help='Save figures in the specified folder')
     parser.add_argument('--output_name', type=str, action='store', default=None,
-                        help='Name of the output files. If None, the name will be a hash of the names of all the values'
-                        )
+                        help='Name of the output files. '
+                             'If None, the name will be a hash of the names of all the values')
+    parser.add_argument('--legend_location', type=str, action='store', default=None,
+                        help="Specify where the legend will be plot. Defaults to 'best'")
 
     arguments = parser.parse_args()
 
@@ -126,12 +127,11 @@ if __name__ == '__main__':
             histogram_dict[alg_name] = res['hist']
         validation_dict[alg_name] = res['cross_validation']['validation_mean']
         test_dict[alg_name] = res['test']
+
     if histogram_dict:
         comp_error_ranges(histogram_dict, 'Class', 'Error count', 'Error plot', arguments.save_figures,
                           f'{cmp_str}_error_hist')
 
-    compare_metrics(validation_dict, 'Metric', 'Metric value', 'Validations mean comparison', arguments.save_figures,
-                    f'{cmp_str}_val_metrics')
+    compare_metrics(validation_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_val_metrics')
 
-    compare_metrics(test_dict, 'Metric', 'Metric value', 'Test comparison', arguments.save_figures,
-                    f'{cmp_str}_test_metrics')
+    compare_metrics(test_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_test_metrics')

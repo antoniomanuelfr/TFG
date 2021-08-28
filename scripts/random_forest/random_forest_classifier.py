@@ -27,7 +27,8 @@ if __name__ == '__main__':
         name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"
 
     if args.ranges:
-        assert len(args.ranges) == 3, 'Len of ranges parameters must be 3'
+        assert len(args.ranges) == 2, 'Len of ranges parameters must be 2'
+
         c_str = ''
         for i in args.ranges:
             c_str = f"{c_str}_{str(i).replace('.0', '').replace('.', '-')}"

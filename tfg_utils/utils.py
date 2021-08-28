@@ -10,11 +10,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error, f1_score, roc_auc_score, \
-                            accuracy_score, confusion_matrix, plot_roc_curve
+                            accuracy_score, confusion_matrix
 from sklearn.model_selection import KFold
 from sklearn.tree import _tree
 from sklearn.feature_selection import SelectFromModel
 import seaborn as sns
+
+palette = 'Set2'
+plot_color = 'mediumaquamarine'
 seed = 10
 
 metric_name_parser = {
@@ -163,6 +166,7 @@ def get_error_hist(y_true: np.array, y_pred: np.array, xlabel, ylabel, title, sa
             extra (str): Extra name to append at the end of the file name if save is not none.
     """
     res = np.zeros(shape=[len(np.unique(np.round(y_true)))])
+    plot_data = []
 
     for true, pred in zip(y_true, y_pred):
         if round(true) != round(pred):
@@ -171,13 +175,17 @@ def get_error_hist(y_true: np.array, y_pred: np.array, xlabel, ylabel, title, sa
                 index = index - 1
             res[index] = res[index] + 1
 
-    for index, data in enumerate(res):
-        plt.text(x=index+0.75, y=data+1, s=f'{data}')
+    for _class, err_count in zip(np.arange(1, len(res) + 1), res):
+        plot_data.append([_class, err_count])
+    plot_data = pd.DataFrame(data=plot_data, columns=['class', 'count'])
 
-    plt.bar(np.arange(1, len(res) + 1), res)
+    ax = sns.barplot(x='class', y='count', data=plot_data, color=plot_color)
+    ax.bar_label(ax.containers[0])
+
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
+
     if save:
         plt.savefig(os.path.join(save, f'error_hist_{extra}.png'))
         plt.clf()
@@ -239,11 +247,17 @@ def plot_feature_importance(feature_importance: pd.Series, n: int, xlabel, ylabe
     to_plot = feature_importance.sort_values(ascending=False)[:n]
 
     plt.figure(figsize=(10, 8))
-    plt.bar(np.arange(0, len(to_plot)), to_plot.values, width=0.4)
+    data_to_plot = []
+
+    for feature, value in zip(to_plot.index, to_plot.values):
+        data_to_plot.append([feature, value])
+    data_to_plot = pd.DataFrame(data=data_to_plot, columns=['feature', 'value'])
+
+    sns.barplot(x='feature', y='value', data=data_to_plot, color=plot_color)
+
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
-    plt.xticks(np.arange(0, len(to_plot)), to_plot.index)
 
     if save:
         plt.savefig(os.path.join(save, f'feature_importance_{extra}.png'))

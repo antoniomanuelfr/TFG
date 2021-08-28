@@ -15,12 +15,11 @@ data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 
 if __name__ == '__main__':
-    name_str = 'rf'
+    name_str = 'dt_ordinal'
     args = utils.argument_parser().parse_args()
 
     param_grid = {'max_depth': [4, 5, 6, 7, 8, 9, 10, 16],
                   'max_leaf_nodes': [16, 17, 18, 19, 20]}
-
 
     if args.undersampling:
         name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"
@@ -34,7 +33,7 @@ if __name__ == '__main__':
     x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(args.undersampling)
     y_train_p, y_test_p = utils.categorize_regression(y_train_p, y_test_p, args.ranges)
     results = {'name': name_str}
-    clf = DecissionTreeOrdinalClassifier()
+    clf = DecissionTreeOrdinalClassifier(random_state=utils.seed)
     g_search = GridSearchCV(clf, param_grid=param_grid, scoring='f1_macro', n_jobs=-1)
 
     g_search.fit(x_train_p, y_train_p)

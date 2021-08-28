@@ -104,14 +104,14 @@ La siguiente tabla expone los resultados obtenidos en validación:
 La siguiente figura muestra el gráfico de dispersión de errores:\\
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.8]{src/scattered_error_dtree.png}
+	\includegraphics[scale=0.8]{src/scattered_error_DT.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:tree_scattered}
 \end{figure}
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.8]{src/error_hist_dtree.png}
+	\includegraphics[scale=0.8]{src/error_hist_DT.png}
 	\caption{Conteo de errores}
 	\label{fig:tree_error_plot}
 \end{figure}
@@ -131,8 +131,8 @@ La siguiente figura muestra la representación gráfica del árbol de decisión 
 Por ultimo, estas son las 10 variables que el modelo consideró con más relevancia. El valor asociado a cada variable es la \textbf{importancia Gini}:
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.25]{src/feature_importance_dtree}
-	\caption{10 variables más importantes segun AD}
+	\includegraphics[scale=0.5]{src/feature_importance_DT}
+	\caption{10 variables más importantes según Árboles de Decisión}
 	\label{fig:feature_dtree}
 \end{figure}
 Volviendo a la documentación proporcionada para comprobar el significado de esos valores:
@@ -198,7 +198,7 @@ Para finalizar, esta es la lista de las 10 variables más importantes que ha obt
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{src/feature_importance_rf}
-	\caption{10 variables más importantes según RF}
+	\caption{10 variables más importantes según Random Forest}
 	\label{fig:feature_rf}
 \end{figure}
 Volviendo a la documentación, esta es la explicación para cada variable:
@@ -402,7 +402,7 @@ Respecto al Perceptrón Multicapa, ya que el rendimiento en comparación con otr
 Como ya se ha mencionado, los modelos basados en árboles de decisión son capaces de obtener la importancia de las características. A continuación se muestran las gráficas de nuevo para facilitar la comparación:
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/feature_importance_dtree}
+	\includegraphics[scale=0.5]{src/feature_importance_DT}
 	\caption{10 variables más importantes según árboles de decisión}
 	\label{fig:feature_dtree2}
 \end{figure}

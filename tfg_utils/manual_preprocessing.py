@@ -9,6 +9,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import OneHotEncoder
+from tfg_utils import utils
+import seaborn as sns
 
 ordinal_variables = ['BA10.a', 'BA10.b', 'BA10.c', 'BA10.d', 'BA10.f', 'BA10.g', 'BA10.h']
 
@@ -114,21 +116,18 @@ def print_value_occurrences(data: pd.DataFrame):
        Returns:
         A matplotlib Figure
     """
-    fig, axs = plt.subplots(len(data.columns), 1, figsize=(10, 10))
-    plot = 0
+    plot_data = []
     for col in data.columns:
         count = np.unique(data[col].dropna(), return_counts=True)
-        axs[plot].bar(count[0], count[1], align='center')
-        axs[plot].set_xticks(count[0])
+        for _class, _value in zip(count[0], count[1]):
+            plot_data.append([col, _class, _value])
 
-        for index, value in enumerate(count[1]):
-            axs[plot].text(x=index+0.80, y=value+1, s=f'{value}')
-
-        axs[plot].set_xticklabels(count[0])
-        axs[plot].set_xlabel(f'Value occurrence for {col}')
-        axs[plot].set_ylabel('Total')
-        plot = plot + 1
-    return fig, count
+    plot_data = pd.DataFrame(data=plot_data, columns=['Label', 'class_value', 'value_count'])
+    sns.barplot(x='class_value', y='value_count', hue='Label', data=plot_data, palette=utils.palette)
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left', ncol=3, mode="expand", borderaxespad=0.)
+    plt.xlabel('Class')
+    plt.ylabel('Value count')
+    return count
 
 
 def one_hot_encoder(x_train, x_test, categorical_cols):
