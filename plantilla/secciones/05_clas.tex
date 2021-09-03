@@ -198,7 +198,7 @@ A continuación se muestran una serie de gráficos comparando las distintas mét
 	\caption{Comparación en conjunto de test}
 	\label{fig:svc_class_cmp_test}
 \end{figure}
-En las secciones siguientes, se va a mostrar las tablas con los valores de métricas obtenidas por Random Forest y las matrices de confusión correspondientes.
+En las secciones siguientes, se va a mostrar las tablas con los valores de métricas obtenidas por SVM y las matrices de confusión correspondientes.
 \subsubsection*{Rango $(3.5,5.5,7)$}
 \begin{table}[H]
 	\centering
@@ -247,20 +247,47 @@ En las secciones siguientes, se va a mostrar las tablas con los valores de métr
 	\label{fig:confusion_matrix_svc2}
 \end{figure}
 
-\subsection{Conclusiones}
+\subsection{Análisis de resultados}
 Como se puede apreciar, ninguno de los algoritmos no han tenido problemas clasificando la clase \textbf{IEAlta}, clasificando correctamente más del $80\%$ de las instancias de esta clase.
 Los algoritmos han tenido más problemas a la hora de clasificar correctamente la clase \textbf{IEBaja}, clasificando correctamente solo el $50\%$. Volviendo a la figura \ref{tab:ocurrencia_valores} donde se mostraba el conteo de clases, se puede apreciar que la clase formada por los valores más bajos tiene una menor cantidad de muestras, explicando así que los algoritmos fallen más comúnmente en estas clases, clasificando una gran parte como \textbf{IEMedia} (tiene sentido ya que es la clase más 'cercana').
 \linebreak
 Respecto al rendimiento se puede observar como los modelos basados en árboles de decisión siguen comportándose correctamente, siendo Random Forest el que mejor resultados obtuvo. \\
 SVM siguió comportándose de manera correcta, obteniendo unos resultados ligeramente peores que Random Forest pero mejores que Árboles de decisión.
+\linebreak
+Por ultimo, se puede observar revisando los resultados que el rango de conversión que mejor ha funcionado para Random Forest y Árboles de decisión ha sido:
+\begin{enumerate}
+    \item Reemplazar por \textit{IEBAJA} aquellos valores de \textit{IEMEdia} menores a 4.
+    \item Reemplazar por \textit{IEMEDIA} aquellos valores de \textit{IEMEdia} menores a 6.
+    \item Reemplazar por \textit{IEALTA} aquellos valores de \textit{IEMEdia} menores a 7.
+\end{enumerate}
+Mientras que para SVM ha sido:
+\begin{enumerate}
+    \item Reemplazar por \textit{IEBAJA} aquellos valores de \textit{IEMEdia} menores a 3.5.
+    \item Reemplazar por \textit{IEMEDIA} aquellos valores de \textit{IEMEdia} menores a 5.5.
+    \item Reemplazar por \textit{IEALTA} aquellos valores de \textit{IEMEdia} menores a 7.
+\end{enumerate}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/class_comp_val_metrics.png}
+    \caption{Comparación del rendimiento en el conjunto de validación}
+    \label{fig:class_cmp_val}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/class_comp_test_metrics.png}
+    \caption{Comparación del rendimiento en el conjunto de test}
+    \label{fig:class_cmp_test}
+\end{figure}
+Cabe destacar que estos resultados no son comparables, ya que el conjunto de datos sobre el que se ha entrenado los algoritmos es distinto.
+Una causa por la que  SVM rindió mejor en el conjunto $(3.5,5.5,7)$ es que como el conjunto de datos tiene una mayor cantidad de valores en el rango medio, SVM dispone de una mayor cantidad de vectores soporte y facilitando el encontrar un hiperplano que divida mejor los datos.
 \section{Segunda iteración}
 Como se puede observar, las resultados han sido buenos, teniendo la mayor parte de algoritmos un comportamiento similar al observado en regresión (Random Forest ha sido el modelo que mejor ha funcionado, mientras que Árboles de Decisión y SVM han tenido un comportamiento similar).\\
 La opción por la que se ha optado de \textbf{categorizar} el problema de regresión de la forma en la que se ha explicado tiene un inconveniente: No se está teniendo en cuenta el \textbf{orden} de las clases, ya que el algoritmo de clasificación trata las distintas clases como un conjunto de valores sin orden.
 Para mejorar este comportamiento, se va a optar por seguir el enfoque explicado en el artículo \textit{A Simple Approach to Ordinal Classification}. La propuesta es la siguiente:
 En lugar de clasificar $k$ clases, se van a entrenar $k-1$ clasificadores binarios donde la variable objetivo del modelo $M_i$ representa la \textbf{probabilidad} de que la clase sea mayor (según el orden) que la clase $K_i$. El siguiente ejemplo ayuda a explicar este enfoque:\\
 \linebreak
-Se quiere predecir el ranking ()de 1 a 5) que un usuario le va a dar a una película. Para ello se van a entrenar los siguientes $4$ modelos:
+Se quiere predecir el ranking (de 1 a 5) que un usuario le va a dar a una película. Para ello se van a entrenar los siguientes $4$ modelos:
 \begin{enumerate}
     \item El primer modelo calcula la probabilidad de que el ranking predicho sea mayor que 1.
     \item El segundo modelo calcula la probabilidad de que el ranking predicho sea mayor que 2.
@@ -269,7 +296,91 @@ Se quiere predecir el ranking ()de 1 a 5) que un usuario le va a dar a una pelí
 \end{enumerate}
 Una vez que se han calculado las probabilidades, el modelo escoge aquella clase con mayor probabilidad. Obviamente, es muy importante optar por este enfoque que el modelo seleccionado sea capaz de obtener la \textbf{probabilidad} de que una muestra pertenezca a una clase. Los modelos seleccionados en este capítulo son capaces de obtener las probabilidades de clase.
 \linebreak
-Este tipo de algoritmo no esta implementado en la librería Scikit-Learn, pero esta provee de las herramientas necesarias para construir modelos customizados y que sean compatibles con el resto de utilidades que la librería ofrece. Este proceso se va a explicar en la sección \ref{sec:sftw}-\nameref{sec:sftw}.\\
-\linebreak
-Los resultados obtenidos se van a mostrar en la siguiente sección.
+Este tipo de algoritmo no esta implementado en la librería Scikit-Learn, pero esta provee de las herramientas necesarias para construir modelos personalizados y que sean compatibles con el resto de utilidades que la librería ofrece. Este proceso se va a explicar en la sección \ref{sec:sftw}-\nameref{sec:sftw}.\\
 \subsection{Resultados}
+En esta sección se van a presentar una comparativa entre los resultados obtenidos por los algoritmos de clasificación ordinal desarrollados y los resultados obtenidos por los algoritmos nativos que se han usado. Para facilitar la comparación, se han elegido unicamente los conjuntos de datos $(3.5,5.5,7)$  y $(4,6,7)$, puesto que han sido los conjuntos de datos en los que los algoritmos han mostrado diferencias en el rendimiento.
+
+\subsubsection*{Árboles de decisión}
+A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Árboles de Decisión) y el algoritmo de clasificación estándar:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/dt_ordinal_cmp_3_5_val_metrics.png}
+    \caption{Comparación en validación para el conjunto  $(3.5,5.5,7)$ }
+    \label{fig:dt_ordin_val_cmp_1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/dt_ordinal_cmp_3_5_test_metrics.png}
+    \caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
+    \label{fig:dt_ordint_test_cmp_1}
+\end{figure}
+Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Árboles de Decisión) y el algoritmo de clasificación estándar:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/dt_ordinal_cmp_4_6_val_metrics.png}
+    \caption{Comparación en validación para el conjunto $(4,6,7)$}
+    \label{fig:dt_ordin_val_cmp_2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/dt_ordinal_cmp_4_6_test_metrics.png}
+    \caption{Comparación en test para el conjunto  $(4,6,7)$}
+    \label{fig:dt_ordint_test_cmp_2}
+\end{figure}
+\subsubsection*{Random Forest}
+A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest)  y el algoritmo de clasificación estándar:\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/rf_ordinal_cmp_3_5_val_metrics.png}
+    \caption{Comparación en validación para el conjunto  $(3.5,5.5,7)$ }
+    \label{fig:rf_ordin_val_cmp_1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/rf_ordinal_cmp_3_5_test_metrics.png}
+    \caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
+    \label{fig:rf_ordint_test_cmp_1}
+\end{figure}
+Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest) y el algoritmo de clasificación estándar:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/rf_ordinal_cmp_4_6_val_metrics.png}
+    \caption{Comparación en validación para el conjunto $(4,6,7)$}
+    \label{fig:rf_ordin_val_cmp_2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/rf_ordinal_cmp_4_6_test_metrics.png}
+    \caption{Comparación en test para el conjunto  $(4,6,7)$}
+    \label{fig:rf_ordint_test_cmp_2}
+\end{figure}
+
+
+\subsubsection*{Support Vector Machine}
+A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest)  y el algoritmo de clasificación estándar:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/svc_ordinal_cmp_3_5_val_metrics.png}
+    \caption{Comparación en validación para el conjunto  $(3.5,5.5,7)$ }
+    \label{fig:svc_ordin_val_cmp_1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/svc_ordinal_cmp_3_5_test_metrics.png}
+    \caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
+    \label{fig:svc_ordin_test_cmp_1}
+\end{figure}
+Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entre el algoritmo de clasificación ordinal implementando  (usando SVM) y el algoritmo de clasificación estándar:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/svc_ordinal_cmp_4_6_val_metrics.png}
+    \caption{Comparación en validación para el conjunto $(4,6,7)$}
+    \label{fig:svc_ordin_val_cmp_2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{src/svc_ordinal_cmp_4_6_test_metrics.png}
+    \caption{Comparación en test para el conjunto  $(4,6,7)$}
+    \label{fig:svc_ordin_test_cmp_2}
+\end{figure}
+\subsection{Análisis de resultados}

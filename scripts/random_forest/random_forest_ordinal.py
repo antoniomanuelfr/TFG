@@ -15,7 +15,7 @@ data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 
 if __name__ == '__main__':
-    name_str = 'rf'
+    name_str = 'rf_ordinal'
     args = utils.argument_parser().parse_args()
 
     param_grid = {'n_estimators': [70, 80, 85, 90],
@@ -29,7 +29,7 @@ if __name__ == '__main__':
         c_str = ''
         for i in args.ranges:
             c_str = f"{c_str}_{str(i).replace('.0', '').replace('.', '-')}"
-        name_str = f'{name_str}{c_str}'
+        name_str = f'{name_str}{c_str}_7'
 
     x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(args.undersampling)
     y_train_p, y_test_p = utils.categorize_regression(y_train_p, y_test_p, args.ranges)

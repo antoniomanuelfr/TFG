@@ -61,7 +61,7 @@ def comp_error_ranges(models: dict, xlabel: str, ylabel: str, save, extra: str):
         plt.show()
 
 
-def compare_metrics(models: dict,  xlabel: str, ylabel: str, save, extra: str):
+def compare_metrics(models: dict,  xlabel: str, ylabel: str, save, extra: str, plot_values=False):
     """Compare the metrics between two models.
         Args:
             models (dict): Dictionary where the key is the label and the value is a dict with the metrics results.
@@ -79,12 +79,15 @@ def compare_metrics(models: dict,  xlabel: str, ylabel: str, save, extra: str):
 
     data = pd.DataFrame(data, columns=['model', 'metric', 'value'])
 
-    sns.barplot(x='metric', y='value', hue='model', data=data, palette=utils.palette)
+    ax = sns.barplot(x='metric', y='value', hue='model', data=data, palette=utils.palette)
     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
                ncol=3, mode="expand", borderaxespad=0.)
 
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    if plot_values:
+        for container in ax.containers:
+            ax.bar_label(container)
 
     if save:
         plt.savefig(os.path.join(save, f'{extra}.png'))
@@ -107,8 +110,8 @@ if __name__ == '__main__':
     parser.add_argument('--output_name', type=str, action='store', default=None,
                         help='Name of the output files. '
                              'If None, the name will be a hash of the names of all the values')
-    parser.add_argument('--legend_location', type=str, action='store', default=None,
-                        help="Specify where the legend will be plot. Defaults to 'best'")
+    parser.add_argument('--plot_values', action='store_true', default=False,
+                        help="Specify if the values will be added to the bar plots")
 
     arguments = parser.parse_args()
 
@@ -132,6 +135,8 @@ if __name__ == '__main__':
         comp_error_ranges(histogram_dict, 'Class', 'Error count', 'Error plot', arguments.save_figures,
                           f'{cmp_str}_error_hist')
 
-    compare_metrics(validation_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_val_metrics')
+    compare_metrics(validation_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_val_metrics',
+                    arguments.plot_values)
 
-    compare_metrics(test_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_test_metrics')
+    compare_metrics(test_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_test_metrics',
+                    arguments.plot_values)

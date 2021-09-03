@@ -84,7 +84,7 @@ Antes de mostrar los resultados, hay que destacar que cuando se entrena un árbo
 \end{itemize}
 En esta sección se va a exponer los resultados obtenidos usando \textbf{Árboles de Decisión}.\\
 La siguiente tabla expone los resultados obtenidos en validación:
-\begin{table}[htbp]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
 		\cline{1-4}
@@ -120,10 +120,10 @@ Como se mencionó en la sección \textbf{\ref{alg:dec_tree}-\nameref{alg:dec_tre
 En este caso, vamos a usar una representación gráfica del árbol, las reglas que ha obtenido el árbol y las variables más importantes.\\
 \linebreak
 La siguiente figura muestra la representación gráfica del árbol de decisión entrenado:\\
-\linebreak
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.2]{src/dtree_plot.png}
+	\includegraphics[scale=0.3]{src/dtree_plot.png}
 	\caption{Árbol de decisión}
 	\label{fig:decission_tree1}
 \end{figure}
@@ -390,7 +390,7 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\caption{Conteo de errores}
 	\label{fig:mlp_error_plot}
 \end{figure}
-\section{Conclusiones}
+\section{Análisis de resultados}
 Se ha observado que los modelos basados en Árboles de Decisión y Random Forest han tenido un buen comportamiento, por lo que se ha optado por seguir haciendo uso de ellos en secciones siguientes. XGBoost, tiene unos resultados ligeramente peores respecto a Random Forest pero con un comportamiento similar, fallando considerable en valores altos de intención emprendedora media). Como XGBoost no esta aportando nada nuevo, por ahora se va a descartar.\\
 \linebreak
 SVR se ha comportado casi al nivel de modelos como XGBoost o Random Forest. Por ahora, no se va a descartar su uso, ya que introduciendo el conocimiento que se ha obtenido usando modelos como Random Forest o árboles de decisión se podría mejorar el rendimiento.\\
@@ -509,7 +509,7 @@ En cuanto a la media en validación, a medida que se reduce la cantidad de muest
 	\label{fig:cmp_test_rf}
 \end{figure}
 En test se aprecia el mismo comportamiento que en los conjuntos de validación: el mejor valor para $R2$ ha sido el obtenido entrando el modelo sin aplicar el  muestreo, mientras que respecto al resto de métricas, ha obtenido los mejores resultados eliminando las muestras problemáticas.\\
-\subsection{Conclusiones}
+\subsection{Análisis de resultados}
 Se ha apreciado una mejora en en los algoritmos basados en árboles de decisión. La principal mejora ha sido el obtener una menor cantidad de errores en aquellas zonas donde los algoritmos se están comportando peor. También se ha podido observar que Random Forest obtuvo mejores resultados con un umbral más alto que Árboles de Decisión. \\
 La causa más probable de que necesite un umbral más alto es que al usar varios árboles para predecir el resultado, la probabilidad de que varios árboles contradigan el valor predicho por un árbol que clasificó mal un valor es alta. Por eso, al eliminar aquellas muestras más problemáticas del conjunto, el propio Random Forest es capaz de lidiar con el ruido de muestras que son menos problemáticas y beneficiarse de tener un conjunto de entrenamiento más grande.\\
 \linebreak

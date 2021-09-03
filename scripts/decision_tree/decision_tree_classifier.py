@@ -28,7 +28,7 @@ if __name__ == '__main__':
         c_str = ''
         for i in args.ranges:
             c_str = f"{c_str}_{str(i).replace('.0', '').replace('.', '-')}"
-        name_str = f'{name_str}{c_str}'
+        name_str = f'{name_str}{c_str}_7'
 
     x_train, y_train, x_test, y_test = preprocessing(args.undersampling)
     y_train, y_test = utils.categorize_regression(y_train, y_test, args.ranges)
