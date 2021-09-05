@@ -12,8 +12,6 @@ from sklearn.preprocessing import OneHotEncoder
 from tfg_utils import utils
 import seaborn as sns
 
-ordinal_variables = ['BA10.a', 'BA10.b', 'BA10.c', 'BA10.d', 'BA10.f', 'BA10.g', 'BA10.h']
-
 # Columns that after manually checking, are going to be removed, as they are redundant or useless
 columns_to_delete = ['ID', 'País', 'CF2', 'CF3', 'CF4', 'CF5', 'CF6', 'CF7', 'CF8', 'CF9',
                      'Los dividendos son parte de lo que una empresa paga al banco para devolver un préstamo.',

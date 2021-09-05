@@ -282,6 +282,7 @@ Mientras que para SVM ha sido:
 Cabe destacar que estos resultados no son comparables, ya que el conjunto de datos sobre el que se ha entrenado los algoritmos es distinto.
 Una causa por la que  SVM rindió mejor en el conjunto $(3.5,5.5,7)$ es que como el conjunto de datos tiene una mayor cantidad de valores en el rango medio, SVM dispone de una mayor cantidad de vectores soporte y facilitando el encontrar un hiperplano que divida mejor los datos.
 \section{Segunda iteración}
+\label{sec:ord}
 Como se puede observar, las resultados han sido buenos, teniendo la mayor parte de algoritmos un comportamiento similar al observado en regresión (Random Forest ha sido el modelo que mejor ha funcionado, mientras que Árboles de Decisión y SVM han tenido un comportamiento similar).\\
 La opción por la que se ha optado de \textbf{categorizar} el problema de regresión de la forma en la que se ha explicado tiene un inconveniente: No se está teniendo en cuenta el \textbf{orden} de las clases, ya que el algoritmo de clasificación trata las distintas clases como un conjunto de valores sin orden.
 Para mejorar este comportamiento, se va a optar por seguir el enfoque explicado en el artículo \textit{A Simple Approach to Ordinal Classification}. La propuesta es la siguiente:
@@ -301,6 +302,7 @@ Este tipo de algoritmo no esta implementado en la librería Scikit-Learn, pero e
 En esta sección se van a presentar una comparativa entre los resultados obtenidos por los algoritmos de clasificación ordinal desarrollados y los resultados obtenidos por los algoritmos nativos que se han usado. Para facilitar la comparación, se han elegido unicamente los conjuntos de datos $(3.5,5.5,7)$  y $(4,6,7)$, puesto que han sido los conjuntos de datos en los que los algoritmos han mostrado diferencias en el rendimiento.
 
 \subsubsection*{Árboles de decisión}
+\label{sec:ord_cmp_dt}
 A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Árboles de Decisión) y el algoritmo de clasificación estándar:
 \begin{figure}[H]
     \centering
@@ -314,6 +316,7 @@ A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre 
     \caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
     \label{fig:dt_ordint_test_cmp_1}
 \end{figure}
+A
 Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Árboles de Decisión) y el algoritmo de clasificación estándar:
 \begin{figure}[H]
     \centering
@@ -327,7 +330,10 @@ Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entr
     \caption{Comparación en test para el conjunto  $(4,6,7)$}
     \label{fig:dt_ordint_test_cmp_2}
 \end{figure}
+
+Se puede observar que los resultados obtenidos usando una clasificación estándar ha sido ligeramente mejor que usando el algoritmo de clasificación ordinal. Parece que para árboles de decisión, en este caso, el orden de las clases no ha tenido una relevancia
 \subsubsection*{Random Forest}
+\label{sec:ord_cmp_rf}
 A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest)  y el algoritmo de clasificación estándar:\\
 \begin{figure}[H]
     \centering
@@ -357,6 +363,7 @@ Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entr
 
 
 \subsubsection*{Support Vector Machine}
+\label{sec:ord_cmp_svm}
 A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest)  y el algoritmo de clasificación estándar:
 \begin{figure}[H]
     \centering
@@ -384,3 +391,10 @@ Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entr
     \label{fig:svc_ordin_test_cmp_2}
 \end{figure}
 \subsection{Análisis de resultados}
+Comenzando por \nameref{sec:ord_cmp_dt}, se puede apreciar como este algoritmo ha sido más robusto a la hora de clasificar de manera tradicional, ya que en este caso, el algoritmo de clasificación ordinal ha rendido ligeramente peor. Llama la atención que ha sido el \textbf{único} de los modelos seleccionados que ha rendido mejor el algoritmo de clasificación clásico. Este comportamiento puede darse a que debido que se está entrenando varios modelos para predecir la salida (explicado en \ref{sec:ord}-\nameref{sec:ord}) y siendo los árboles de decisión (como ya se ha visto en secciones anteriores) muy sensibles al ruido, la posibilidad de entrenar un modelo que induzca a error es alta,. Dado que el algoritmo implementado para la clasificación ordinal elige la salida que tenga una mayor probabilidad, es la causa probable de este comportamiento.\\
+\linebreak
+En cuanto a Random Forest, como se puede ver en las gráficas expuestas en \ref{sec:ord_cmp_rf}-\nameref{sec:ord_cmp_rf}, se ha conseguido una ligera mejora en las métricas usando el algoritmo de clasificación ordinal. A diferencia de Árboles de decisión, se ha podido apreciar en secciones anteriores como Random Forest es mas tolerante al ruido, eso hace que para usarlo como clasificador ordinal sea una buena opción.\\
+\linebreak
+Por ultimo, respecto a SVM, se ha apreciado una ligera mejora usando el algoritmo de clasificación ordinal. Al igual que Random Forest, se ha podido comprobar empíricamente que SVM ha sido tolerante con el ruido del conjunto de datos, por lo que hace que sea un algoritmo bueno a la hora de realizar la clasificación ordinal usando este conjunto de datos.\\
+\linebreak
+Generalmente, los algoritmos que han probado ser más sensibles al ruido han tenido un menor desempeño que algoritmos con mejor tolerancia a error. Random Forest en este caso, sigue siendo el algoritmo con mejores resultados, mientras que algoritmos más simples como Árboles de Decisión han tenido un rendimiento menor.
