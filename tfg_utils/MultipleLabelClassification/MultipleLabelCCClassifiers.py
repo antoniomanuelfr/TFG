@@ -1,13 +1,13 @@
-from tfg_utils.OrdinalClassification.BaseOrdinalClassifier import BaseOrdinalClassifier
+from tfg_utils.MultipleLabelClassification.BaseMultipleLabelCC import BaseMultipleLabelCC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 
 
-class RandomForestOrdinalClassifier(BaseOrdinalClassifier):
+class RFMultipleLabelCC(BaseMultipleLabelCC):
     def __init__(self, n_estimators=100, *, criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=1,
                  min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, min_impurity_decrease=0.0,
-                 bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0,
+                 min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0,
                  warm_start=False, class_weight=None, ccp_alpha=0.0, max_samples=None):
         self.n_estimators = n_estimators
         self.criterion = criterion
@@ -18,6 +18,7 @@ class RandomForestOrdinalClassifier(BaseOrdinalClassifier):
         self.max_features = max_features
         self.max_leaf_nodes = max_leaf_nodes
         self.min_impurity_decrease = min_impurity_decrease
+        self.min_impurity_split = min_impurity_split
         self.bootstrap = bootstrap
         self.oob_score = oob_score
         self.n_jobs = n_jobs
@@ -35,6 +36,7 @@ class RandomForestOrdinalClassifier(BaseOrdinalClassifier):
                                            min_weight_fraction_leaf=self.min_weight_fraction_leaf,
                                            max_features=self.max_features, max_leaf_nodes=self.max_leaf_nodes,
                                            min_impurity_decrease=self.min_impurity_decrease,
+                                           min_impurity_split=self.min_impurity_split,
                                            bootstrap=self.bootstrap, oob_score=self.oob_score,
                                            n_jobs=self.n_jobs, random_state=self.random_state,
                                            verbose=self.verbose, warm_start=self.warm_start,
@@ -43,10 +45,10 @@ class RandomForestOrdinalClassifier(BaseOrdinalClassifier):
         super().fit(X, y)
 
 
-class DecissionTreeOrdinalClassifier(BaseOrdinalClassifier):
+class DTMultipleLabelCC(BaseMultipleLabelCC):
     def __init__(self, criterion='gini', splitter='best', max_depth=None, min_samples_split=2, min_samples_leaf=1,
                  min_weight_fraction_leaf=0.0, max_features=None, random_state=None, max_leaf_nodes=None,
-                 min_impurity_decrease=0.0, class_weight=None, ccp_alpha=0.0):
+                 min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, ccp_alpha=0.0):
         self.criterion = criterion
         self.splitter = splitter
         self.max_depth = max_depth
@@ -72,7 +74,7 @@ class DecissionTreeOrdinalClassifier(BaseOrdinalClassifier):
         super().fit(X, y)
 
 
-class OrdinalSVC(BaseOrdinalClassifier):
+class SVCMultipleLabelCC(BaseMultipleLabelCC):
     def __init__(self, C=1.0, kernel='rbf', degree=3, gamma='scale', coef0=0.0, shrinking=True, probability=True,
                  tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=- 1,
                  decision_function_shape='ovr', break_ties=False, random_state=None):

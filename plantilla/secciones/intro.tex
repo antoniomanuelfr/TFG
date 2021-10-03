@@ -37,12 +37,30 @@ Ejemplos de este tipo de clasificación son detectar si un mensaje es spam, si e
 	\label{fig:bclass}
 \end{figure}
 \subsection*{Clasificación multi-clase}
-Los conjuntos de datos que se usan en clasificación multi-clase son una generalización del caso de clasificación binaria, ya que al igual que la clasificación binaria, solo existe una única variable objetivo, siendo la principal diferencia que la variable objetivo puede tener cualquier valor dentro de un conjunto de posibles valores. Es importante destacar que estos valores son \textbf{discretos} y \textbf{finitos}. El ejemplo más conocido de este tipo de clasificación es la \textbf{clasificación de la flor del Iris}, donde en función de la longitud y anchura del sépalo y del pétalo, se predice si la flor es setosa, virgínica o versicolor.
+Los conjuntos de datos que se usan en clasificación multi-clase son una generalización del caso de clasificación binaria. Solo existe una única variable objetivo, siendo la principal diferencia que esta puede tener cualquier valor dentro de un conjunto valores. Es importante destacar que estos valores son \textbf{discretos} y \textbf{finitos}. El ejemplo más conocido de este tipo de clasificación es la \textbf{clasificación de la flor del Iris}, donde en función de la longitud y anchura del sépalo y del pétalo, se predice si la flor es setosa, virgínica o versicolor.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{multiclass-class.png}
 	\caption{Ejemplo de clasificación multi-clase: Clasificación de la flor del Iris}
 	\label{fig:mcclass}
+\end{figure}
+Muchos de los algoritmos que se usan en Aprendizaje Automático han sido diseñados para clasificación binaria. Con el objetivo de adaptar estos algoritmos existentes a este tipo de problema, existe una técnica llama \textbf{binarización de clase}.
+Dos de los enfoques más usados en la actualidad son \textbf{OVA} (\textit{one vs all}) y \textbf{OVO} (\textit{one vs one}). Ambos enfoques tratan de dividir el problema de clasificación multi-clase en varios problemas de clasificación binaria. La diferencia reside en la manera de dividir el problema:
+\subsubsection*{One VS All}
+Por cada clase, se entrena un clasificador binario donde todas las muestras que pertenecen a la clase seleccionada se selecciona como la clase positiva, el resto como la clase negativa. Una vez que se quiere predecir una nueva muestra, por cada modelo entrenado, se obtiene la probabilidad de que pertenezca a la clase positiva, seleccionando como clase predicha aquella con mayor probabilidad.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{ova.png}
+	\caption{Ejemplo de One vs All}
+	\label{fig:ova}
+\end{figure}
+\subsubsection*{One VS One}
+A diferencia de \textit{OVA}, por cada par distinto de clases, se entrena un clasificador binario usando una como positiva y otra como negativa. Una vez que llega una nueva muestra, se elige por votación la clase predicha.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{ovo}
+	\caption{Ejemplo de One vs One}
+	\label{fig:ovo}
 \end{figure}
 \subsection*{Clasificación ordinal}
 Clasificación ordinal es un caso particular de clasificación multi-clase donde existe una relación de orden entre las clases.\\

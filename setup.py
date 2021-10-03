@@ -7,5 +7,6 @@ setuptools.setup(
                  author='Antonio Manuel Fresneda Rodriguez',
                  author_email='antoniomanuelfr@gmail.com',
                  packages=setuptools.find_packages(),
-                 install_requires=['numpy', 'scikit-learn', 'matplotlib', 'pandas', 'xgboost', 'seaborn']
+                 install_requires=['numpy', 'scikit-learn', 'matplotlib', 'pandas', 'xgboost', 'seaborn',
+                                   'scikit-multilearn']
                  )
