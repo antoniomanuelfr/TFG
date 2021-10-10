@@ -10,13 +10,12 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV
-from sklearn.tree import DecisionTreeRegressor, plot_tree
 from sklearn.metrics import make_scorer
 
 
 import tfg_utils.utils as utils
 from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder, get_missing_values
-from tfg_utils.MultipleLabelClassification.MultipleLabelCCClassifiers import DTMultipleLabelCC
+from tfg_utils.MultipleLabelClassification.MultipleLabelCCClassifiers import RFMultipleLabelCC
 from tfg_utils.MultipleLabelClassification.Metrics import calculate_ml_classification_metrics, f1_multilabel_mean
 data_path = join(Path(__file__).parent.parent.parent, 'data')
 
@@ -56,16 +55,15 @@ def preprocessing(undersampling_thr=None, feature_selection=None):
 
 
 if __name__ == '__main__':
-    name_str = 'dt_mlabel'
+    name_str = 'rf_mlabel'
     args = utils.argument_parser().parse_args()
 
-    param_grid = {'max_depth': [1, 2, 3, 4],
-                  'max_leaf_nodes': [1, 2, 3, 4]}
-
+    param_grid = {'n_estimators': [4, 5, 6, 7],
+                  'max_features': [None, 1/3]}
 
     x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(args.undersampling)
     results = {'name': name_str}
-    clf = DTMultipleLabelCC(random_state=utils.seed)
+    clf = RFMultipleLabelCC(random_state=utils.seed)
 
     custom_scorer = make_scorer(f1_multilabel_mean, greater_is_better=True)
     g_search = GridSearchCV(clf, param_grid=param_grid, scoring=custom_scorer, n_jobs=-1)
@@ -82,9 +80,5 @@ if __name__ == '__main__':
 
     y_pred = clf.predict(x_test_p)
     results['test'] = calculate_ml_classification_metrics(y_test_p, y_pred, clf.predict_proba(x_test_p))
-
-    # print(utils.json_metrics_to_latex(results))
-    print(results['train'])
-    print(results['test'])
 
     utils.save_dict_as_json(args.json_output, name_str, results)

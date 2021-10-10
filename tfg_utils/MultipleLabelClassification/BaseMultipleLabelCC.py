@@ -27,6 +27,7 @@ class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
         return self
 
     def predict(self, X):
+
         X = check_array(X)
         check_is_fitted(self, ['classes_', 'clf_', 'classifiers'])
         labels_prediction = []
@@ -34,4 +35,14 @@ class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
             prediction = self.classifiers[column].predict(X)
             labels_prediction.append(prediction)
 
-        return np.array(labels_prediction)
+        return np.array(labels_prediction).transpose()
+
+    def predict_proba(self, X):
+        X = check_array(X)
+        check_is_fitted(self, ['classes_', 'clf_', 'classifiers'])
+        labels_prediction = []
+        for column in self.classes_:
+            prediction = self.classifiers[column].predict_proba(X)
+            labels_prediction.append(prediction)
+
+        return np.array(labels_prediction).transpose()
