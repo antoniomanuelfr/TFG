@@ -1,8 +1,5 @@
 from tfg_utils.MultipleLabelClassification.BaseMultipleLabelCC import BaseMultipleLabelCC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.svm import SVC
-
+import tfg_utils.OrdinalClassification.OrdinalClassifiers as OC
 
 class RFMultipleLabelCC(BaseMultipleLabelCC):
     def __init__(self, n_estimators=100, *, criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=1,
@@ -29,7 +26,7 @@ class RFMultipleLabelCC(BaseMultipleLabelCC):
         self.max_samples = max_samples
 
     def fit(self, X, y):
-        self.clf_ = RandomForestClassifier(n_estimators=self.n_estimators, criterion=self.criterion,
+        self.clf_ = OC.RandomForestOrdinalClassifier(n_estimators=self.n_estimators, criterion=self.criterion,
                                            max_depth=self.max_depth, min_samples_split=self.min_samples_split,
                                            min_samples_leaf=self.min_samples_leaf,
                                            min_weight_fraction_leaf=self.min_weight_fraction_leaf,
@@ -61,7 +58,7 @@ class DTMultipleLabelCC(BaseMultipleLabelCC):
         self.ccp_alpha = ccp_alpha
 
     def fit(self, X, y):
-        self.clf_ = DecisionTreeClassifier(criterion=self.criterion, splitter=self.splitter,
+        self.clf_ = OC.DecissionTreeOrdinalClassifier(criterion=self.criterion, splitter=self.splitter,
                                            max_depth=self.max_depth, min_samples_split=self.min_samples_split,
                                            min_samples_leaf=self.min_samples_leaf,
                                            min_weight_fraction_leaf=self.min_weight_fraction_leaf,
@@ -93,7 +90,7 @@ class SVCMultipleLabelCC(BaseMultipleLabelCC):
         self.random_state = random_state
 
     def fit(self, X, y):
-        self.clf_ = SVC(C=self.C, kernel=self.kernel, degree=self.degree,
+        self.clf_ = OC.OrdinalSVC(C=self.C, kernel=self.kernel, degree=self.degree,
                         gamma=self.gamma, coef0=self.coef0, shrinking=self.shrinking,
                         probability=self.probability, tol=self.tol, cache_size=self.cache_size,
                         class_weight=self.class_weight, verbose=self.verbose, max_iter=self.max_iter,

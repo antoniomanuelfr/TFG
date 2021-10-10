@@ -27,7 +27,6 @@ class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
         return self
 
     def predict(self, X):
-
         X = check_array(X)
         check_is_fitted(self, ['classes_', 'clf_', 'classifiers'])
         labels_prediction = []
