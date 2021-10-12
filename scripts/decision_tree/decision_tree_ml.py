@@ -81,7 +81,6 @@ if __name__ == '__main__':
     y_pred = clf.predict(x_train_p)
 
     results['train'] = utils.calculate_ml_classification_metrics(y_train_p, y_pred, clf.predict_proba(x_train_p))
-    utils.plot_multilabel_class_metrics(results['train'], False, args.save_figures, classification_predictor, name_str)
 
     y_pred = clf.predict(x_test_p)
     results['test'] = utils.calculate_ml_classification_metrics(y_test_p, y_pred, clf.predict_proba(x_test_p))

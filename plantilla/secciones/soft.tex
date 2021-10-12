@@ -33,6 +33,7 @@ A continuación se va a mostrar un diagrama de paquetes para explicar como se ha
     \item \textbf{OrdinalClassification} contiene un paquete con la implementación del algoritmo de clasificación ordinal explicado en \ref{sec:ord}-\nameref{sec:ord}.
     \item \textbf{utils} contiene una serie de funciones que se han usado para todos los scripts. Contiene funciones para calcular las métricas, hacer la validación cruzada, etc.
 \end{itemize}
+\subsection{Paquete para clasificación ordinal}
  A continuación se va a mostrar un diagrama explicando las clases que contiene el paquete \textbf{OrdinalClassification}:
  \begin{figure}[H]
      \centering
@@ -42,6 +43,8 @@ A continuación se va a mostrar un diagrama de paquetes para explicar como se ha
  \end{figure}
 Las funciones \textbf{\textit{predict}} (predice una clase dada una entrada) y \textbf{\textit{predict\_proba}} (dada una entrada predice la probabilidad de que una muestra pertenezca a cada clase)  son iguales para todos los modelos, se ha optado por crear una clase abstracta que va a implementar estas funciones. El resto de clases implementará el método \textbf{\textit{fit}} con el modelo seleccionado. \\
 Cabe destacar que la implementación de estos modelos es compatible con todas las utilidades que proporciona \textit{scikit-learn}, facilitando mucho el proceso de validación cruzada, optimización de parámetros, etc.\\
+\subsection{Paquete para clasificación multi-etiqueta simple}
+\label{sec:sftw-mlc}
 \section{Scripts}
 Finalmente, la carpeta \textbf{\textit{scripts}} contiene todos los scripts usados para entrenar y mostrar resultados. Estos scripts son capaces de guardar la información obtenida en formato JSON y guardarlos en disco, facilitando así la integración con otras aplicaciones.\\
 \linebreak

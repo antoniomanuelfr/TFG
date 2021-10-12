@@ -19,11 +19,266 @@ Los enfoques que se han propuesto son:
 \end{enumerate}
 \subsection{Agrupación de algoritmos}
 El uso de conjunto de clasificadores junto con una estrategia para juntar sus predicciones se ha probado ser muy efectivos en problemas clásicos.
-\section{Métricas usadas}
-\section{}
-\subsection{Primer enfoque}
+
+\section{Soluciones propuestas}
+\subsection{Primera solución}
 En este primer caso, se va a usar uno de los enfoques más simples. Se va a entrenar un clasificador ordinal por cada variable.
-Dado que puede existir relaciones entre etiquetas, la princpal desventaja de este enfoque es que no se tiene en cuenta esta relación, perdiendo así información que puede ser importante.\\
+Dado que puede existir relaciones entre etiquetas, la principal desventaja de este enfoque es que no se tiene en cuenta esta relación, perdiendo así información que puede ser importante.\\
 \linebreak
 En el problema que se está abordando en este trabajo, estas variables son de tipo ordinal, por lo que se va a hacer uso del clasificador desarrollado en \ref{sec:ord}-\nameref{sec:ord}.
-Respecto al pre-procesamiento, se va a usar el mismo proceso explicado en \ref{sec:pre}-\nameref{sec:pre}.
+Respecto al pre-procesamiento, se va a usar el mismo proceso explicado en \ref{sec:pre}-\nameref{sec:pre}.\\
+
+Para realizar este enfoque, se ha optado por crear una nueva serie de clasificadores multi-etiqueta que sean compatible con la funcionalidad que incluye Scikit-Learn. Este proceso se explicará en la sección \ref{sec:sftw-mlc}-\nameref{sec:sftw-mlc}. Para ello se han usados los algoritmos con los que se ha trabajado en las secciones anteriores para modelar esta posible solución.
+\subsection{Resultados}
+A continuación, se van a mostrar los resultados obtenidos por los clasificadores que se han usado:
+\subsubsection*{Árboles de decisión}
+A continuación se muestra una tabla con las medias obtenidas en la validación cruzada por cada una de las etiquetas que se está clasificando:
+\begin{itemize}
+	\item \textbf{IE1}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.396    & 0.648     & 0.379    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.315    & 0.6       & 0.364    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE1}}
+	      \end{table}
+	\item  \textbf{IE2}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.345    & 0.617     & 0.349    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.375    & 0.641     & 0.397    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE2}}
+	      \end{table}
+
+	\item  \textbf{IE3}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.358    & 0.628     & 0.376    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.341    & 0.613     & 0.366    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE3}}
+	      \end{table}
+	\item  \textbf{IE4}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media validación & 0.339    & 0.613     & 0.357    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.358    & 0.622     & 0.402    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE4}}
+	      \end{table}
+	\item  \textbf{IE5}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.304    & 0.595     & 0.335    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.359    & 0.626     & 0.366    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE5}}
+	      \end{table}
+	\item  \textbf{IE6}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validación & 0.327    & 0.611     & 0.373    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.392    & 0.645     & 0.416    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE6}}
+	      \end{table}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/dt_mlabel_compare.png}
+	\caption{Rendimiento de Árboles de decisión en multi-etiqueta}
+	\label{fig:dtml_cmp}
+\end{figure}
+\subsubsection*{Random Forest}
+\begin{itemize}
+	\item \textbf{IE1}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.393    & 0.648     & 0.384    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.332    & 0.608     & 0.38     \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE1}}
+	      \end{table}
+	\item  \textbf{IE2}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.355    & 0.624     & 0.362    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.38     & 0.643     & 0.392    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE2}}
+	      \end{table}
+
+	\item  \textbf{IE3}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.356    & 0.628     & 0.378    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.38     & 0.636     & 0.39     \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE3}}
+	      \end{table}
+	\item  \textbf{IE4}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media validación & 0.34     & 0.616     & 0.359    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.368    & 0.63      & 0.407    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE4}}
+	      \end{table}
+	\item  \textbf{IE5}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.322    & 0.608     & 0.343    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.337    & 0.61      & 0.354    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE5}}
+	      \end{table}
+	\item  \textbf{IE6}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validación & 0.316    & 0.605     & 0.362    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.36     & 0.629     & 0.385    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE6}}
+	      \end{table}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/rf_mlabel_compare.png}
+	\caption{Rendimiento de Random Forest en multi-etiqueta}
+	\label{fig:rfml_cmp}
+\end{figure}
+\subsubsection*{SVM}
+\begin{itemize}
+	\item \textbf{IE1}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.385    & 0.643     & 0.371    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.34     & 0.613     & 0.378    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE1}}
+	      \end{table}
+	\item  \textbf{IE2}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.34     & 0.614     & 0.344    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.395    & 0.651     & 0.411    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE2}}
+	      \end{table}
+
+	\item  \textbf{IE3}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.365    & 0.631     & 0.385    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.33     & 0.607     & 0.359    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE3}}
+	      \end{table}
+	\item  \textbf{IE4}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media validación & 0.34     & 0.614     & 0.36     \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.374    & 0.63      & 0.4      \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE4}}
+	      \end{table}
+	\item  \textbf{IE5}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validacion & 0.31     & 0.599     & 0.34     \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.346    & 0.616     & 0.361    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE5}}
+	      \end{table}
+	\item  \textbf{IE6}
+	      \begin{table}[H]
+		      \centering
+		      \begin{tabular}{|c|c|c|c|c}
+			      \cline{1-4}
+			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
+			      Media Validación & 0.336    & 0.614     & 0.372    \\ \cline{1-4}
+			      Train            & 1        & 1         & 1        \\ \cline{1-4}
+			      Test             & 0.372    & 0.631     & 0.395    \\ \cline{1-4}
+		      \end{tabular}
+		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE6}}
+	      \end{table}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/svc_mlabel_compare.png}
+	\caption{Rendimiento de SVC en multi-etiqueta}
+	\label{fig:svcml_cmp}
+\end{figure}
+\subsubsection*{Conclusiones}
