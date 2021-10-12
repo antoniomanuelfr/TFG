@@ -32,6 +32,11 @@ Para realizar este enfoque, se ha optado por crear una nueva serie de clasificad
 \subsection{Resultados}
 A continuación, se van a mostrar los resultados obtenidos por los clasificadores que se han usado:
 \subsubsection*{Árboles de decisión}
+Los parámetros que mejores resultados dieron para Árboles de decisión fueron los siguientes:
+\begin{itemize}
+	\item 3 niveles de profundidad máxima.
+	\item Máximo de 2 hojas.
+\end{itemize}
 A continuación se muestra una tabla con las medias obtenidas en la validación cruzada por cada una de las etiquetas que se está clasificando:
 \begin{itemize}
 	\item \textbf{IE1}
@@ -40,9 +45,9 @@ A continuación se muestra una tabla con las medias obtenidas en la validación 
 		      \begin{tabular}{|c|c|c|c|c}
 			      \cline{1-4}
 			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.396    & 0.648     & 0.379    \\ \cline{1-4}
+			      Media Validacion & 0.389    & 0.648     & 0.382    \\ \cline{1-4}
 			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.315    & 0.6       & 0.364    \\ \cline{1-4}
+			      Test             & 0.341    & 0.618       & 0.383    \\ \cline{1-4}
 		      \end{tabular}
 		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE1}}
 	      \end{table}
@@ -52,9 +57,9 @@ A continuación se muestra una tabla con las medias obtenidas en la validación 
 		      \begin{tabular}{|c|c|c|c|c}
 			      \cline{1-4}
 			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.345    & 0.617     & 0.349    \\ \cline{1-4}
+			      Media Validacion & 0.347    & 0.617     & 0.356    \\ \cline{1-4}
 			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.375    & 0.641     & 0.397    \\ \cline{1-4}
+			      Test             & 0.378    & 0.64     & 0.397    \\ \cline{1-4}
 		      \end{tabular}
 		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE2}}
 	      \end{table}
@@ -65,9 +70,9 @@ A continuación se muestra una tabla con las medias obtenidas en la validación 
 		      \begin{tabular}{|c|c|c|c|c}
 			      \cline{1-4}
 			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.358    & 0.628     & 0.376    \\ \cline{1-4}
+			      Media Validacion & 0.356    & 0.625     & 0.376    \\ \cline{1-4}
 			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.341    & 0.613     & 0.366    \\ \cline{1-4}
+			      Test             & 0.342    & 0.614     & 0.371    \\ \cline{1-4}
 		      \end{tabular}
 		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE3}}
 	      \end{table}
@@ -77,9 +82,9 @@ A continuación se muestra una tabla con las medias obtenidas en la validación 
 		      \begin{tabular}{|c|c|c|c|c}
 			      \cline{1-4}
 			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media validación & 0.339    & 0.613     & 0.357    \\ \cline{1-4}
+			      Media validación & 0.341    & 0.616     & 0.357    \\ \cline{1-4}
 			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.358    & 0.622     & 0.402    \\ \cline{1-4}
+			      Test             & 0.345    & 0.614     & 0.385    \\ \cline{1-4}
 		      \end{tabular}
 		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE4}}
 	      \end{table}
@@ -89,9 +94,9 @@ A continuación se muestra una tabla con las medias obtenidas en la validación 
 		      \begin{tabular}{|c|c|c|c|c}
 			      \cline{1-4}
 			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.304    & 0.595     & 0.335    \\ \cline{1-4}
+			      Media Validacion & 0.307    & 0.596     & 0.333    \\ \cline{1-4}
 			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.359    & 0.626     & 0.366    \\ \cline{1-4}
+			      Test             & 0.352    & 0.618    & 0.364    \\ \cline{1-4}
 		      \end{tabular}
 		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE5}}
 	      \end{table}
@@ -101,9 +106,9 @@ A continuación se muestra una tabla con las medias obtenidas en la validación 
 		      \begin{tabular}{|c|c|c|c|c}
 			      \cline{1-4}
 			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.327    & 0.611     & 0.373    \\ \cline{1-4}
+			      Media Validación & 0.333    & 0.614     & 0.371    \\ \cline{1-4}
 			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.392    & 0.645     & 0.416    \\ \cline{1-4}
+			      Test             & 0.381    & 0.638     & 0.404    \\ \cline{1-4}
 		      \end{tabular}
 		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE6}}
 	      \end{table}
@@ -282,3 +287,4 @@ A continuación se muestra una tabla con las medias obtenidas en la validación 
 	\label{fig:svcml_cmp}
 \end{figure}
 \subsubsection*{Conclusiones}
+Como se puede observar, los resultados obtenidos son muy malos, independientemente de

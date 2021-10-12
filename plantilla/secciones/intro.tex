@@ -10,7 +10,7 @@ El \textbf{Machine Learning} (aprendizaje automático) es un campo de la Intelig
 \linebreak
 Estos datos pueden estar definidos de una gran número de formas, observaciones recogidas por sensores, imágenes, valoraciones de usuarios, etc. En el caso particular de este trabajo en el que se enfoca este proyecto, el \textbf{conjunto de datos} con el que se va a trabajar tiene una cantidad de \textbf{muestras} en la que cada muestra tiene un número fijo de \textbf{características} que identifican a cada muestra. Además, el conjunto de datos con el que se está trabajando, contiene una serie de \textbf{etiquetas} asignada a cada muestra.\\
 \linebreak
- Usando la naturaleza de los datos, se pueden dividir los distintos tipos de técnicas que se usan en ML.
+Usando la naturaleza de los datos, se pueden dividir los distintos tipos de técnicas que se usan en ML.
 \subsection{Agrupamiento en función de los datos disponibles}
 Se puede usar la naturaleza de los datos para definir varios tipos de algoritmos, ya que la metodología a seguir cuando se trabaja con datos \textbf{etiquetados} o con datos sin etiquetar es distinta. Usando esta idea, las técnicas usadas en ML pueden ser agrupadas en \textbf{aprendizaje supervisado}, \textbf{no supervisado} ó \textbf{semi-supervisado}:
 \begin{itemize}
@@ -20,9 +20,9 @@ Se puede usar la naturaleza de los datos para definir varios tipos de algoritmos
 Anteriormente se han mencionado tareas como \textbf{clasificación}, \textbf{regresión} o \textbf{clustering}, en la siguiente sección se va a profundizar más, explicando en que consiste cada una y que objetivos tienen.
 \subsection{Agrupamiento en función de la tarea}
 \begin{itemize}
-		 \item \textbf{Clasificación:} Como se mencionó previamente, esta tarea tiene sentido cuando se usa un conjunto de datos que está etiquetado. El objetivo principal de clasificación consiste en dada una nueva muestra, \textbf{predecir} una o varias etiquetas en función del conjunto de datos que se ha usado. Estas etiquetas suelen ser variables \textbf{discretas}
-		 \item \textbf{Regresión:} A diferencia de clasificación, donde las variables objetivo son discretas, en este caso las variables objetivo son continuas. El propósito de estas técnicas es el de predecir un \textbf{valor} para nuevas muestras.
-		 \item \textbf{Clustering:} El objetivo es el de detección de patrones usando datos no etiquetados.
+	\item \textbf{Clasificación:} Como se mencionó previamente, esta tarea tiene sentido cuando se usa un conjunto de datos que está etiquetado. El objetivo principal de clasificación consiste en dada una nueva muestra, \textbf{predecir} una o varias etiquetas en función del conjunto de datos que se ha usado. Estas etiquetas suelen ser variables \textbf{discretas}
+	\item \textbf{Regresión:} A diferencia de clasificación, donde las variables objetivo son discretas, en este caso las variables objetivo son continuas. El propósito de estas técnicas es el de predecir un \textbf{valor} para nuevas muestras.
+	\item \textbf{Clustering:} El objetivo es el de detección de patrones usando datos no etiquetados.
 \end{itemize}
 Dentro de las tareas de clasificación, se pueden dividir en varios grupos. En la siguiente sección se va a explicar los distintos tipos de clasificación, ya que ayudara a entender la naturaleza del problema que se esta tratando en este trabajo.
 \section{Tipos de clasificación}
@@ -85,12 +85,12 @@ Pongámonos en situación de una persona dentro del departamento de marketing de
 Una vez que se ha planteado un objetivo (calcular la intención emprendedora de un conjunto de personas), el siguiente paso es el de elegir como se van a obtener los datos para llegar a ese objetivo. En el caso que se enfoca este trabajo, se ha usado una \textbf{encuesta anónima} sobre un conjunto de personas.
 Analizando las preguntas que se hacen en la encuesta. se pueden distinguir tres tipos de preguntas:
 \begin{itemize}
-    \item \textbf{Variables de control:} Edad, género, estudios, país, etc.
-    \item \textbf{Variables de emprendimiento:} Son aquellas que vamos a usar como variables objetivo para los modelos que van a ser usados en las siguientes fases.
-    \item\textbf{Variables de competencias:} Estas son las más importantes de cara a los modelos, ya que son las que van a medir el comportamientos del conjunto de personas entrevistadas, dando así información al algoritmo para predecir las \textbf{variables de emprendimiento}.Algunos de estas variables miden \textbf{conocimientos financieros}, \textbf{experiencia}, \textbf{actitudes} que pueden favorecer el carácter emprendedor de un individuo, etc.
+	\item \textbf{Variables de control:} Edad, género, estudios, país, etc.
+	\item \textbf{Variables de emprendimiento:} Son aquellas que vamos a usar como variables objetivo para los modelos que van a ser usados en las siguientes fases.
+	\item\textbf{Variables de competencias:} Estas son las más importantes de cara a los modelos, ya que son las que van a medir el comportamientos del conjunto de personas entrevistadas, dando así información al algoritmo para predecir las \textbf{variables de emprendimiento}.Algunos de estas variables miden \textbf{conocimientos financieros}, \textbf{experiencia}, \textbf{actitudes} que pueden favorecer el carácter emprendedor de un individuo, etc.
 \end{itemize}
 Con este conjunto de preguntas, se podría obtener un conjunto de datos suficientemente bueno para poder extraer información de los datos. Es importante tener en cuenta que no se está trabajando sobre un conjunto de datos teórico, si no que es un conjunto de datos real, y dependiendo de la forma en la que se haya recogido la información puede ocurrir que se obtengo un conjunto de datos del que no se pueda extraer ninguna información, debido a que tenga un gran nivel de ruido, los datos estén mal muestreados o incluso un mal diseño de la encuesta.\\
 \linebreak
- La primera fase del proceso de extracción de conocimiento de un conjunto de datos va a ser precisamente esta, haciendo uso de una serie de modelos, se comprobará el rendimiento y se tomará la decisión de si el conjunto de datos es válido o no. En el caso de que todos los modelos seleccionados no funcionen correctamente, se debería de volver a la fase de recolección de datos, con las indicaciones necesarias para lograr un conjunto inicial lo suficientemente bueno. \\
- \linebreak
- En el caso de que los modelos se comporten bien, el paso seria analizar donde flaquean los algoritmos,  ajustarlos o realizar cambios en el conjunto inicial para incrementar el rendimiento del modelo. A todo este proceso se le conoce como \textbf{KDD} (\textit{Knowledge Discovery in Databases}).
+La primera fase del proceso de extracción de conocimiento de un conjunto de datos va a ser precisamente esta, haciendo uso de una serie de modelos, se comprobará el rendimiento y se tomará la decisión de si el conjunto de datos es válido o no. En el caso de que todos los modelos seleccionados no funcionen correctamente, se debería de volver a la fase de recolección de datos, con las indicaciones necesarias para lograr un conjunto inicial lo suficientemente bueno. \\
+\linebreak
+En el caso de que los modelos se comporten bien, el paso seria analizar donde flaquean los algoritmos,  ajustarlos o realizar cambios en el conjunto inicial para incrementar el rendimiento del modelo. A todo este proceso se le conoce como \textbf{KDD} (\textit{Knowledge Discovery in Databases}).

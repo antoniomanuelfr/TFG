@@ -12,9 +12,9 @@ A continuación, se listan las librerías usadas y una breve descripción de las
     \item \textbf{scikit-learn:} Es una biblioteca para aprendizaje automático que incluye una gran cantidad de algoritmos (SVM, árboles de decisión, Random Forest, etc) y distintas utilidades (métricas, validación cruzada, división de conjunto de entrenamiento y de test, etc). Es de software libre y está programada en C, C++ y Python.
     \item \textbf{Numpy}: Es una biblioteca que da soporte para crear vectores y matrices de grandes dimensiones junto con una colección de funciones para operar con estos tipos de datos. De nuevo, es una biblioteca de software libre y está escrita en Python, C y Fortran.
     \item \textbf{matplotlib}: Es una biblioteca para generar gráficos escrita en C++ y Python.
-     \item \textbf{seaborn}: Es una biblioteca basada en \textit{matplotlib} que proporciona una interfaz de alto nivel para crear gráficos. Está escrita en Python.
-     \item \textbf{pandas}: Es una biblioteca para la manipulación y análisis de datos.  Está escrita como una extensión de \textit{numpy}, siendo también software libre.
-     \item \textbf{xgboost}: Biblioteca que proporciona una implementación para el algoritmo XGBoost.
+    \item \textbf{seaborn}: Es una biblioteca basada en \textit{matplotlib} que proporciona una interfaz de alto nivel para crear gráficos. Está escrita en Python.
+    \item \textbf{pandas}: Es una biblioteca para la manipulación y análisis de datos.  Está escrita como una extensión de \textit{numpy}, siendo también software libre.
+    \item \textbf{xgboost}: Biblioteca que proporciona una implementación para el algoritmo XGBoost.
 \end{itemize}
 Para facilitar la instalación de todas estas librerías de manera que no proporcionen conflictos, se ha optado por usar \textit{pip}.
 \section{Entorno de programación}
@@ -34,13 +34,13 @@ A continuación se va a mostrar un diagrama de paquetes para explicar como se ha
     \item \textbf{utils} contiene una serie de funciones que se han usado para todos los scripts. Contiene funciones para calcular las métricas, hacer la validación cruzada, etc.
 \end{itemize}
 \subsection{Paquete para clasificación ordinal}
- A continuación se va a mostrar un diagrama explicando las clases que contiene el paquete \textbf{OrdinalClassification}:
- \begin{figure}[H]
-     \centering
-     \includegraphics[scale=0.35]{diagrama_od}
-     \caption{Diagrama para paquete \textbf{OrdinalClassification}}
-     \label{dig:paquetes_od}
- \end{figure}
+A continuación se va a mostrar un diagrama explicando las clases que contiene el paquete \textbf{OrdinalClassification}:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{diagrama_od}
+    \caption{Diagrama para paquete \textbf{OrdinalClassification}}
+    \label{dig:paquetes_od}
+\end{figure}
 Las funciones \textbf{\textit{predict}} (predice una clase dada una entrada) y \textbf{\textit{predict\_proba}} (dada una entrada predice la probabilidad de que una muestra pertenezca a cada clase)  son iguales para todos los modelos, se ha optado por crear una clase abstracta que va a implementar estas funciones. El resto de clases implementará el método \textbf{\textit{fit}} con el modelo seleccionado. \\
 Cabe destacar que la implementación de estos modelos es compatible con todas las utilidades que proporciona \textit{scikit-learn}, facilitando mucho el proceso de validación cruzada, optimización de parámetros, etc.\\
 \subsection{Paquete para clasificación multi-etiqueta simple}
@@ -54,7 +54,7 @@ Todos estos scripts, si se ejecutan con la opción \textbf{\textit{-h}} se mostr
 \section{Instalación del software}
 Para instalar el software se necesita una versión 3.x de Python (durante el desarrollo se ha usado la versión 3.9.6) y el gestor de paquetes \textbf{pip}. Una vez descargado el repositorio(https://github.com/antoniomanuelfr/TFG.git), simplemente ejecutando el comando \textit{pip3 install .} en la carpeta padre del repositorio, se instalará el paquete junto con todas las dependencias.
 A continuación se muestra una captura de pantalla del proceso completo para ejecutar el algoritmo \nameref{alg:knn}:
- \begin{figure}[H]
+\begin{figure}[H]
     \includegraphics[scale=0.3]{ejemplo_ex}
     \caption{Ejemplo de ejecución completa para KNN}
     \label{cap:ex}

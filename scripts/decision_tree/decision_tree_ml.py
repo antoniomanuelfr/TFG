@@ -58,8 +58,8 @@ if __name__ == '__main__':
     name_str = 'dt_mlabel'
     args = utils.argument_parser().parse_args()
 
-    param_grid = {'max_depth': [1, 2],
-                  'max_leaf_nodes': [1, 2, 3, 4]}
+    param_grid = {'max_depth': [2, 3],
+                  'max_leaf_nodes': [2, 3, 4]}
 
 
     x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(args.undersampling)

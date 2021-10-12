@@ -10,16 +10,16 @@ Esta sección está enfocada en introducir los algoritmos seleccionados para fac
 Los árboles de decisión son una técnica de aprendizaje supervisado que se puede usar para clasificación y regresión. Esta técnica hace uso de \textbf{reglas} del tipo \textit{si variable cumple condición entonces } inferidas a partir de los datos. \\
 Este tipo de técnicas son fáciles de representar usando una representación en árbol:
 \begin{itemize}
-	 \item Los nodos internos del árbol representan las características del conjunto de datos.
-	 \item Las ramas se usan para representar las \textbf{decisiones} tomadas por el algoritmo.
-	 \item Los nodos hojas se utilizan para representar la salida.
+	\item Los nodos internos del árbol representan las características del conjunto de datos.
+	\item Las ramas se usan para representar las \textbf{decisiones} tomadas por el algoritmo.
+	\item Los nodos hojas se utilizan para representar la salida.
 \end{itemize}
 El algoritmo básico que usan los árboles de decisión consta de los siguientes pasos:
 \begin{enumerate}[1º]
-	  \item Se comienza en el nodo raíz que contiene el conjunto de datos completo.
-	  \item Elegir una variable del dataset utilizando una \textbf{heurística}.
-	  \item Dividir el nodo raíz en distintos nodos para contener todos los posibles valores de la característica seleccionada en el paso anterior.
-	  \item Repetir el proceso anterior hasta que no se pueda dividir en más conjuntos.
+	\item Se comienza en el nodo raíz que contiene el conjunto de datos completo.
+	\item Elegir una variable del dataset utilizando una \textbf{heurística}.
+	\item Dividir el nodo raíz en distintos nodos para contener todos los posibles valores de la característica seleccionada en el paso anterior.
+	\item Repetir el proceso anterior hasta que no se pueda dividir en más conjuntos.
 \end{enumerate}
 El uso de una buena heurística a la hora de elegir la variable es clave a la hora de generar una buena división del conjunto de datos, provocando así un modelo con una buena capacidad de predicción. Algunas de las heurísticas que más se usan son:
 \begin{itemize}
