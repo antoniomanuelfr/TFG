@@ -54,7 +54,7 @@ def preprocessing(undersampling_thr=None, feature_selection=None):
 
 
 if __name__ == '__main__':
-    name_str = 'rf_mlabel'
+    name_str = 'rf_mlabelcc'
     args = utils.argument_parser().parse_args()
 
     param_grid = {'n_estimators': [4, 5, 6, 7],
