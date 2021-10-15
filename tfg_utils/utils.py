@@ -10,11 +10,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error, f1_score, roc_auc_score, \
-                            accuracy_score, confusion_matrix
+                            accuracy_score, confusion_matrix, hamming_loss, multilabel_confusion_matrix
 from sklearn.model_selection import KFold
 from sklearn.tree import _tree
 from sklearn.feature_selection import SelectFromModel
 import seaborn as sns
+from scipy.sparse import issparse
 
 palette = 'Set2'
 plot_color = 'mediumaquamarine'
@@ -147,10 +148,18 @@ def calculate_classification_metrics(y_true, y_pred, proba, decimals=3):
         Returns:
             A dictionary where the key is the name of the metric and the value is the value of the metric.
     """
-    res = {'f1': round(f1_score(y_true, y_pred, average='macro'), decimals,),
-           'auc_score': round(roc_auc_score(y_true, proba, average='macro', multi_class='ovo'), decimals),
-           'accuracy': round(accuracy_score(y_true, y_pred), decimals)
-           }
+    y_pred_use = y_pred
+    proba_use = proba
+
+    if issparse(y_pred):
+        y_pred_use = y_pred.toarray()
+    if issparse(proba):
+        proba_use = proba.toarray()
+
+    res = {'f1': round(f1_score(y_true, y_pred_use, average='macro'), decimals,),
+           'auc_score': round(roc_auc_score(y_true, proba_use, average='macro', multi_class='ovo'), decimals),
+           'accuracy': round(accuracy_score(y_true, y_pred_use), decimals),
+           'hamming_loss': round(hamming_loss(y_true, y_pred))}
     return res
 
 
@@ -251,13 +260,15 @@ def plot_feature_importance(feature_importance: pd.Series, n: int, xlabel, ylabe
     to_plot = feature_importance.sort_values(ascending=False)[:n]
 
     plt.figure(figsize=(10, 8))
-    data_to_plot = []
+    data = []
 
     for feature, value in zip(to_plot.index, to_plot.values):
-        data_to_plot.append([feature, value])
-    data_to_plot = pd.DataFrame(data=data_to_plot, columns=['feature', 'value'])
+        data.append([feature, value])
+    data = pd.DataFrame(data=data, columns=['feature', 'value'])
 
-    sns.barplot(x='feature', y='value', data=data_to_plot, color=plot_color)
+    ax = sns.barplot(x='feature', y='value', data=data, color=plot_color)
+    for item in ax.get_xticklabels():
+        item.set_rotation(90)
 
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
@@ -314,9 +325,11 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
     results = {}
     acum_res = {}
     multi_label = False
+    n_labels = 1
 
     try:
         multi_label = y_train.shape[1] > 1
+        n_labels = y_train.shape[1]
     except IndexError:
         pass
 
@@ -355,12 +368,19 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
         for key in acum_res.keys():
             acum_res[key] = round(acum_res[key] / splits, decimals)
     else:
+        mean_dict = {}
         for label in acum_res:
             label_metrics = acum_res[label]
             for metric in label_metrics:
-                acum_res[label][metric] = round(acum_res[label][metric] / splits, decimals)
+                if metric not in mean_dict:
+                    mean_dict[metric] = (acum_res[label][metric] / splits) / n_labels
+                else:
+                    mean_dict[metric] = mean_dict[metric] + ((acum_res[label][metric] / splits) / n_labels)
 
-        results['validation_mean'] = acum_res
+        for it in mean_dict:
+            mean_dict[it] = round(mean_dict[it], decimals)
+
+        results['validation_mean'] = mean_dict
 
     return results
 
@@ -446,8 +466,7 @@ def categorize_regression(y_train: np.array, y_test: np.array, ranges=(2.5, 5)):
     return y_train, y_test
 
 
-def plot_confusion_matrix(y_true: np.array, y_pred: np.array, labels, title='', save=None,
-                          extra=None):
+def plot_confusion_matrix(y_true: np.array, y_pred: np.array, labels, title='', save=None, extra=None):
     matrix = confusion_matrix(y_true, y_pred, normalize='true')
     sns.heatmap(matrix, xticklabels=labels, yticklabels=labels, annot=True)
     plt.title(title)
@@ -473,8 +492,17 @@ def calculate_ml_classification_metrics(y_true, y_pred, proba, decimals=3):
             A dictionary where the key is the name of the metric and the value is the value of the metric.
     """
     res = {}
-    for y_true_column, y_pred_column, proba_col, label_id in zip(y_true.transpose(), y_pred.transpose(),
-                                                                 proba.transpose(), range(y_true.shape[1])):
+    y_pred_use = y_pred
+    proba_use = proba
+
+    if issparse(y_pred):
+        y_pred_use = y_pred.toarray()
+
+    if issparse(proba):
+        proba_use = proba.toarray()
+
+    for y_true_column, y_pred_column, proba_col, label_id in zip(y_true.transpose(), y_pred_use.transpose(),
+                                                                 proba_use.transpose(), range(y_true.shape[1])):
         res[label_id] = {'f1': round(f1_score(y_true_column, y_pred_column, average='macro'), decimals),
                          'auc_score': round(roc_auc_score(y_true_column, proba_col, average='macro', multi_class='ovo'),
                                             decimals),
@@ -511,3 +539,49 @@ def plot_multilabel_class_metrics(metric_dict, plot_values=False, save_figures=N
         plt.clf()
     else:
         plt.show()
+
+
+def ml_feature_importance_ml(ml_classifier, columns_names, label_names, n, xlabel, ylabel, title, save=None, extra=None):
+    #calculate the feature importance for each classifier
+    importance_acum = np.zeros(ml_classifier.classifiers_[0].feature_importances_.shape)
+    result = {}
+    data = []
+    for classifier, label in zip(ml_classifier.classifiers_, label_names):
+        importance_acum += classifier.feature_importances_
+        label_importances = pd.Series(data=classifier.feature_importances_, index=columns_names).sort_values(ascending=False)[:n]
+        label_importances = label_importances[label_importances > 0]
+
+        for variable in label_importances.index:
+            data.append([label, variable, label_importances[variable]])
+
+    importance_acum = importance_acum / ml_classifier.model_count_
+
+    data_to_plot = pd.DataFrame(data, columns=['Label', 'Variable', 'Importance'])
+    ax = sns.barplot(x='Variable', y='Importance', hue='Label', data=data_to_plot, palette=palette)
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left', ncol=3, mode="expand", borderaxespad=0.)
+    for item in ax.get_xticklabels():
+        item.set_rotation(90)
+
+    if save:
+        plt.savefig(os.path.join(save, f"feature_importance_{extra}_compare.png"))
+        plt.clf()
+    else:
+        plt.show()
+
+    return plot_feature_importance(pd.Series(data=importance_acum, index=columns_names), n, xlabel, ylabel,
+                                   f"{title}_mean", save, f"{extra}_mean")
+
+
+def plot_multi_label_confusion_matrix(y_true: np.array, y_pred: np.array, labels, label_names, title='', save=None, extra=None):
+
+    matrixes = multilabel_confusion_matrix(y_true, y_pred)/y_pred.shape[0]
+    for (label_matrix, label) in zip(matrixes, label_names):
+        sns.heatmap(label_matrix, xticklabels=labels, yticklabels=labels, annot=True)
+        plt.title(f'{title}_{label}')
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        if save:
+            plt.savefig(os.path.join(save, f'confusion_matrix_{label}_{extra}.png'))
+            plt.clf()
+        else:
+            plt.show()

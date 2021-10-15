@@ -1,0 +1,40 @@
+\chapter{Conclusiones}
+\label{sec:conclusiones}
+En esta sección se van a exponer de manera resumida si el objetivo principal de este trabajo se ha completado y cuales son las conclusiones a las que se ha llegado.\\
+\linebreak
+Recapitulando los objetivos propuestos en \ref{sec:obj}-\nameref{sec:obj}, vamos a comenzar por \\
+\linebreak
+El primer objetivo que se plantea es el de comprobar si hay conocimiento en el conjunto de datos que se nos ha proporcionado. Probablemente, este sea uno de los pasos más importante a la hora de afrontar este tipo de problemas, ya que puede ocurrir que se hayan cometido errores a la hora de recoger los datos, no se haya recogido una muestra suficientemente grande para resolver el problema o simplemente, no se pueda abordar con estas técnicas. Ejecutar correctamente este paso es clave, ya que detectando estos problemas (entre otros que pueden ocurrir) antes de seguir profundizando, puede evitar invertir tiempo y esfuerzo.\\
+\linebreak
+Siguiendo con la lista de objetivos de este trabajo era el de comprobar que preguntas (variables del conjunto de entrenamiento) son relevantes y cuales no. Las variables usadas en todo el proceso de KDD han sido recogidas mediante una encuesta. Estas encuestas pueden resultar tediosas cuando se añaden preguntas que son muy poco relevantes, por lo que la posibilidad de re-plantear ciertas preguntas que se han demostrado que no influyen o que los algoritmos no han encontrado puede ser una buena idea, siempre y cuando se analice el porqué esa pregunta es mala, ya que hay que tener en cuenta la posibilidad de que para un modelo una o varias preguntas no sea relevantes, pero en otro  sí que lo sean.\\
+\linebreak
+Otro punto de mejora sobre la redacción de estas encuestas es el detectar si un cierto campo ha tenido mucha relevancia, podría ser buena idea plantear la posibilidad de, en un futuro, añadir nuevas preguntas relacionadas con ese campo para comprobar si se puede mejorar el rendimiento de los modelos, teniendo en cuenta (obviamente) que se va a trabajar con conjunto de datos distinto, por lo que puede haber ciertas diferencias.\\
+\linebreak
+El ultimo objetivo que se ha planteado es el de ser capaces de predecir si una persona tiene una actitud emprendedora o no, obteniendo una información muy importante a la hora de mejorar la selección de posibles candidatos en una campaña de marketing especializando las ofertas según la intención emprendedora. 
+
+Se va a comenzar comparando los valores medios obtenidos usando este enfoque y el enfoque propuesto en \nameref{sec:reg} y para árboles de decisión.
+La siguiente figura va a mostrar ambas gráficas que se obtuvieron para facilitar la lectura.
+Está claro que la variable \textit{AE5} (de esta variable, solo conocemos que es una pregunta sobre actitud financiera) es la que los algoritmos han encontrado que es más importante y con mucha diferencia del resto. La variable \textit{ACMedia} (mide la media de las respuestas de actitud emprendedora) ha sido una variable que los algoritmos también han encontrado que es relevante.\\
+La primera diferencia entre ambos enfoques, se observa en las variables \textit{SEx} y \textit{SEMedia} (Autoeficacia emprendedora).
+En el caso de regresión, se observa como estas variables tienen un ligero impacto, pero aparecen preguntas concretas, sin tener en cuenta el valor medio, a diferencia de los resultados obtenidos usando \textit{Binary Relevance}, donde este valor medio tiene una mayor relevancia. Aun así, la respuesta a la pregunta \textit{SE2} (Estoy preparado para iniciar una empresa viable) se puede observar que ha tenido una mayor influencia que el resto de preguntas de esta sección.
+En la figura \ref{fig:dt_ft_cmp1} se muestran la importancia de variables calculada usando ambos enfoques.
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{src/feature_importance_DT}
+		\caption{Importancia calculada en regresión}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{src/feature_importance_dt_br_mean.png}
+		\caption{Importancia calculada usando BR}
+	\end{subfigure}
+	\caption{Importancia calculadas por Árbol de Decisión}
+	\label{fig:dt_ft_cmp1}
+\end{figure}
+
+
+
+\chapter{Trabajos Futuros}
