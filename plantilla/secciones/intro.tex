@@ -95,21 +95,3 @@ El uso de conjunto de clasificadores junto con una estrategia para juntar sus pr
 \subsection{Clasificación multi-dimensional}
 Al igual que la clasificación multi-clase es una generalización del caso binario, la clasificación multi-dimensional es una generalización de la clasificación multi-etiqueta.\\
 En este caso, cada muestra tiene un conjunto fijo de variables objetivo que pueden tomar cualquier valor dentro de un conjunto de posibles valores.
-\section{Introducción al problema}
-\label{sec:problema}
-Pongámonos en situación de una persona dentro del departamento de marketing de una empresa que se centra en la creación de cursos. Determinar que variables son capaces de definir la intención emprendedora de una sección de la población podría ser beneficioso para la empresa, ya que podrían crear esos cursos enfocándose en aquellas variables más importantes (edad, estudios, ......) para que de una forma más eficiente captar a interesados, cambiar ciertas características de esos cursos para que sean accesibles a gente con más interés y, en definitiva, optimizar los recursos empleados en esos cursos para incrementar el beneficio.\\
-\linebreak
-Una vez que se ha planteado un objetivo (calcular la intención emprendedora de un conjunto de personas), el siguiente paso es el de elegir como se van a obtener los datos para llegar a ese objetivo. En el caso que se enfoca este trabajo, se ha usado una \textbf{encuesta anónima} sobre un conjunto de personas.
-Analizando las preguntas que se hacen en la encuesta. se pueden distinguir tres tipos de preguntas:
-\begin{itemize}
-	\item \textbf{Variables de control:} Edad, género, estudios, país, etc.
-	\item \textbf{Variables de emprendimiento:} Son aquellas que vamos a usar como variables objetivo para los modelos que van a ser usados en las siguientes fases.
-	\item\textbf{Variables de competencias:} Estas son las más importantes de cara a los modelos, ya que son las que van a medir el comportamientos del conjunto de personas entrevistadas, dando así información al algoritmo para predecir las \textbf{variables de emprendimiento}.Algunos de estas variables miden \textbf{conocimientos financieros}, \textbf{experiencia}, \textbf{actitudes} que pueden favorecer el carácter emprendedor de un individuo, etc.
-\end{itemize}
-Con este conjunto de preguntas, se podría obtener un conjunto de datos suficientemente bueno para poder extraer información de los datos. Es importante tener en cuenta que no se está trabajando sobre un conjunto de datos teórico, si no que es un conjunto de datos real, y dependiendo de la forma en la que se haya recogido la información puede ocurrir que se obtengo un conjunto de datos del que no se pueda extraer ninguna información, debido a que tenga un gran nivel de ruido, los datos estén mal muestreados o incluso un mal diseño de la encuesta.\\
-\linebreak
-La primera fase del proceso de extracción de conocimiento de un conjunto de datos va a ser precisamente esta, haciendo uso de una serie de modelos, se comprobará el rendimiento y se tomará la decisión de si el conjunto de datos es válido o no. En el caso de que todos los modelos seleccionados no funcionen correctamente, se debería de volver a la fase de recolección de datos, con las indicaciones necesarias para lograr un conjunto inicial lo suficientemente bueno. \\
-\linebreak
-En el caso de que los modelos se comporten bien, el paso seria analizar donde flaquean los algoritmos,  ajustarlos o realizar cambios en el conjunto inicial para incrementar el rendimiento del modelo. A todo este proceso se le conoce como \textbf{KDD} (\textit{Knowledge Discovery in Databases}).
-\subsection{Objetivos}
-\label{sec:obj}

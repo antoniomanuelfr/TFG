@@ -1,0 +1,27 @@
+\chapter{Introducción al problema}
+\label{sec:problema}
+Pongámonos en situación de una persona dentro del departamento de marketing de una empresa que se centra en la creación de cursos. Determinar que variables son capaces de definir la intención emprendedora de una sección de la población podría ser beneficioso para la empresa, ya que podrían crear esos cursos enfocándose en aquellas variables más importantes (edad, estudios, ......) para que de una forma más eficiente captar a interesados, cambiar ciertas características de esos cursos para que sean accesibles a gente con más interés y, en definitiva, optimizar los recursos empleados en esos cursos para incrementar el beneficio.\\
+\linebreak
+Una vez que se ha planteado un objetivo (calcular la intención emprendedora de un conjunto de personas), el siguiente paso es el de elegir como se van a obtener los datos para llegar a ese objetivo. En el caso que se enfoca este trabajo, se ha usado una \textbf{encuesta anónima} sobre un conjunto de personas.
+Analizando las preguntas que se hacen en la encuesta. se pueden distinguir tres tipos de preguntas:
+\begin{itemize}
+	\item \textbf{Variables de control:} Edad, género, estudios, país, etc.
+	\item \textbf{Variables de emprendimiento:} Son aquellas que vamos a usar como variables objetivo para los modelos que van a ser usados en las siguientes fases.
+	\item\textbf{Variables de competencias:} Estas son las más importantes de cara a los modelos, ya que son las que van a medir el comportamientos del conjunto de personas entrevistadas, dando así información al algoritmo para predecir las \textbf{variables de emprendimiento}.Algunos de estas variables miden \textbf{conocimientos financieros}, \textbf{experiencia}, \textbf{actitudes} que pueden favorecer el carácter emprendedor de un individuo, etc.
+\end{itemize}
+Con este conjunto de preguntas, se podría obtener un conjunto de datos suficientemente bueno para poder extraer información de los datos. Es importante tener en cuenta que no se está trabajando sobre un conjunto de datos teórico, si no que es un conjunto de datos real, y dependiendo de la forma en la que se haya recogido la información puede ocurrir que se obtengo un conjunto de datos del que no se pueda extraer ninguna información, debido a que tenga un gran nivel de ruido, los datos estén mal muestreados o incluso un mal diseño de la encuesta.\\
+\linebreak
+La primera fase del proceso de extracción de conocimiento de un conjunto de datos va a ser precisamente esta, haciendo uso de una serie de modelos, se comprobará el rendimiento y se tomará la decisión de si el conjunto de datos es válido o no. En el caso de que todos los modelos seleccionados no funcionen correctamente, se debería de volver a la fase de recolección de datos, con las indicaciones necesarias para lograr un conjunto inicial lo suficientemente bueno. \\
+\linebreak
+En el caso de que los modelos se comporten bien, el paso seria analizar donde flaquean los algoritmos,  ajustarlos o realizar cambios en el conjunto inicial para incrementar el rendimiento del modelo. A todo este proceso se le conoce como \textbf{KDD} (\textit{Knowledge Discovery in Databases}).
+\section{Objetivos}
+\label{sec:obj}
+A continuación, se enumeran los distintos objetivos que se han puesto a la hora de realizar el trabajo. \\
+\linebreak
+El primer objetivo que se plantea es el de comprobar si hay conocimiento en el conjunto de datos que se nos ha proporcionado. Probablemente, este sea uno de los pasos más importante a la hora de afrontar este tipo de problemas, ya que puede ocurrir que se hayan cometido errores a la hora de recoger los datos, no se haya recogido una muestra suficientemente grande para resolver el problema o simplemente, no se pueda abordar con estas técnicas. Ejecutar correctamente este paso es clave, ya que detectando estos problemas (entre otros que pueden ocurrir) antes de seguir profundizando, puede evitar invertir tiempo y esfuerzo.\\
+\linebreak
+Siguiendo con la lista de objetivos de este trabajo era el de comprobar que preguntas (variables del conjunto de entrenamiento) son relevantes y cuales no. Las variables usadas en todo el proceso de KDD han sido recogidas mediante una encuesta. Estas encuestas pueden resultar tediosas cuando se añaden preguntas que son muy poco relevantes, por lo que la posibilidad de re-plantear ciertas preguntas que se han demostrado que no influyen o que los algoritmos no han encontrado puede ser una buena idea, siempre y cuando se analice el porqué esa pregunta es mala, ya que hay que tener en cuenta la posibilidad de que para un modelo una o varias preguntas no sea relevantes, pero en otro  sí que lo sean.\\
+\linebreak
+Otro punto de mejora sobre la redacción de estas encuestas es el detectar si un cierto campo ha tenido mucha relevancia, podría ser buena idea plantear la posibilidad de, en un futuro, añadir nuevas preguntas relacionadas con ese campo para comprobar si se puede mejorar el rendimiento de los modelos, teniendo en cuenta (obviamente) que se va a trabajar con conjunto de datos distinto, por lo que puede haber ciertas diferencias.\\
+\linebreak
+El ultimo objetivo que se ha planteado es el de ser capaces de predecir si una persona tiene una actitud emprendedora o no, obteniendo una información muy importante a la hora de mejorar la selección de posibles candidatos en una campaña de marketing especializando las ofertas según la intención emprendedora. 
