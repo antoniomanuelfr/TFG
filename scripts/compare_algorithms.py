@@ -95,12 +95,40 @@ def compare_metrics(models: dict,  xlabel: str, ylabel: str, save, extra: str, p
     else:
         plt.show()
 
+def compare_feature_importance(feature_importance_dict: dict, xlabel, ylabel, n=10, save=None, extra=None, plot_values=False):
+    data =  []
+    for algorithm_name in feature_importance_dict:
+        important_features = pd.Series(feature_importance_dict[algorithm_name]).sort_values(ascending=False)[:n]
+        for f_name in important_features.index:
+            data.append([generate_label_str(algorithm_name), f_name, important_features[f_name]])
+
+    data = pd.DataFrame(data, columns=['Name', 'Feature', 'Importance'])
+    ax = sns.barplot(x='Feature', y='Importance', hue='Name', data=data, palette=utils.palette)
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+               ncol=3, mode="expand", borderaxespad=0.)
+
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    if plot_values:
+        for container in ax.containers:
+            ax.bar_label(container)
+
+    if save:
+        plt.savefig(os.path.join(save, f'{extra}.png'))
+        plt.clf()
+    else:
+        plt.show()
+
+
+
+
 
 if __name__ == '__main__':
     alg_list = []
     histogram_dict = {}
     validation_dict = {}
     test_dict = {}
+    feature_importance_dict = {}
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--json', dest='algorithms', action='append', required=True,
@@ -131,12 +159,22 @@ if __name__ == '__main__':
         validation_dict[alg_name] = res['cross_validation']['validation_mean']
         test_dict[alg_name] = res['test']
 
+
+    for algorithm in alg_list:
+        feature_importance_dict[algorithm['name']] = algorithm['feature_importance']
+
+
     if histogram_dict:
-        comp_error_ranges(histogram_dict, 'Class', 'Error count', 'Error plot', arguments.save_figures,
+        comp_error_ranges(histogram_dict, 'Class', 'Error count', arguments.save_figures,
                           f'{cmp_str}_error_hist')
+
+    # Plot metrics
 
     compare_metrics(validation_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_val_metrics',
                     arguments.plot_values)
 
     compare_metrics(test_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_test_metrics',
                     arguments.plot_values)
+
+    compare_feature_importance(feature_importance_dict, 'Features', 'Importance', 10, arguments.save_figures,
+                               f'{cmp_str}_features')

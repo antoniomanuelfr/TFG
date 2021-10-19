@@ -158,8 +158,8 @@ def calculate_classification_metrics(y_true, y_pred, proba, decimals=3):
 
     res = {'f1': round(f1_score(y_true, y_pred_use, average='macro'), decimals,),
            'auc_score': round(roc_auc_score(y_true, proba_use, average='macro', multi_class='ovo'), decimals),
-           'accuracy': round(accuracy_score(y_true, y_pred_use), decimals),
-           'hamming_loss': round(hamming_loss(y_true, y_pred))}
+           'accuracy': round(accuracy_score(y_true, y_pred_use), decimals)
+           }
     return res
 
 
@@ -367,6 +367,9 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
     if not multi_label:
         for key in acum_res.keys():
             acum_res[key] = round(acum_res[key] / splits, decimals)
+
+        results['validation_mean'] = acum_res
+
     else:
         mean_dict = {}
         for label in acum_res:

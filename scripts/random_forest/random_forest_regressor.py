@@ -98,6 +98,7 @@ if __name__ == '__main__':
                                            'Error count for Random Forest', args.save_figures, name_str)
 
     feature_importance = pd.Series(data=clf.feature_importances_, index=x_train_p.columns)
+    results['feature_importance'] = dict(feature_importance)
     print(f'{clf.get_params()}')
     utils.plot_feature_importance(feature_importance, 10, 'Variable', 'Importance', 'Random Forest features',
                                   args.save_figures, name_str)

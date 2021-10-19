@@ -13,8 +13,14 @@ Recapitulando los objetivos propuestos en \ref{sec:obj}-\nameref{sec:obj}:
 Con todo el análisis que se ha realizado en todas las secciones previas, se puede asegurar de que hay conocimiento en este conjunto de datos.\\
 El conjunto de datos proporcionado, tenia problemas de variables con una gran cantidad de valores perdidos (más de un 60 por ciento), variables redundantes, etc. A pesar de estos problemas, se ha podido comprobar existen relaciones entre las preguntas que se realizaron en la encuesta y que en función de estas relaciones se puede predecir cual es la intención emprendedora.
 \section{¿Cuales son las preguntas más importantes?}
-Gracias al hacer uso de modelos que son capaces de obtener la importancia de las distintas variables que forman un conjunto de datos, se puede obtener fácilmente cuales son estas preguntas.\\
-Se va a comenzar por comparar la importancia de variables de los enfoques \ref{sec:reg}-\nameref{sec:reg} y \ref{sec:ord}-\nameref{sec:ord}
+Gracias al hacer uso de modelos que son capaces de obtener la importancia de las distintas variables que forman un conjunto de datos, se puede obtener fácilmente cuales son estas preguntas. Hay que recordar que solo se va a poder obtener esta importancia únicamente en los modelos basados en Árboles de Decisión y Random Forest.\\
+\linebreak
+Se va a comenzar por comparar la importancia de variables de los enfoques \ref{sec:reg}-\nameref{sec:reg} y \ref{sec:ord}-\nameref{sec:class} (con los mejores resultados que se han obtenido).\\ 
+Para ello se van a generar una serie de gráficas para mostrar esta información de manera gráfica:
+
+
+
+
 Se va a comenzar comparando los valores medios obtenidos usando este enfoque y el enfoque propuesto en \nameref{sec:reg} y para árboles de decisión.
 La siguiente figura va a mostrar ambas gráficas que se obtuvieron para facilitar la lectura.
 Está claro que la variable \textit{AE5} (de esta variable, solo conocemos que es una pregunta sobre actitud financiera) es la que los algoritmos han encontrado que es más importante y con mucha diferencia del resto. La variable \textit{ACMedia} (mide la media de las respuestas de actitud emprendedora) ha sido una variable que los algoritmos también han encontrado que es relevante.\\
