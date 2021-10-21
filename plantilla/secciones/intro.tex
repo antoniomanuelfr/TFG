@@ -1,97 +1,44 @@
 \chapter{Introducción}
 Gracias a la evolución tecnológica que hemos experimentado estos últimos años, y sobre todo a la gigantesca expansión del Internet y a la cantidad de datos generados por dispositivos conectados a la red, ha provocado un enorme interés analizar los datos recogidos.\\
-Gracias a esta información es los que nos identifican como posibles compradores de un producto, los que hacen que los coches puedan conducir por si mismos o incluso, ayuden al personal médico detectar una patología a partir de ciertos datos del paciente.
+Gracias a esta información es los que nos identifican como posibles compradores de un producto, los que hacen que los coches puedan conducir por si mismos o incluso, ayuden al personal médico detectar una patología a partir de ciertos datos del paciente.\\
 \linebreak
-Se denomina \textbf{ciencia de datos} a la extracción del conocimiento de una gran cantidad datos mediante el uso del software y de técnicas estadísticas. Este conocimiento puede ser usado para \textbf{predecir} cierta salida en función de los datos, para \textbf{detectar grupos} de datos que tengan características similares, \textbf{explicar} el comportamiento de esos datos, entre otros muchos más casos de uso. \\
+Se denomina \textbf{ciencia de datos} a la extracción del conocimiento de una gran cantidad datos mediante el uso del software y de técnicas estadísticas. Este conocimiento puede ser usado para \textbf{predecir} cierta salida en función de los datos, para \textbf{detectar grupos} de datos que tengan características similares, \textbf{explicar} el comportamiento de esos datos, entre otros muchos más casos de uso. \\\linebreak
+\section{Motivación}
+Desde que descubrí el mundo de la inteligencia artificial y la gran cantidad de problemas usando otro tipos de técnicas no pueden ser resueltos o serían muy costosos en tiempo y recursos, mi interés por conocer este campo y el como funciona empezó a crecer.\\ Este interés que he tenido por este campo fue el por lo que terminar el grado afrontando un problema de este campo.\\
 \linebreak
-El \textbf{Machine Learning} es un campo dentro de la ciencia de datos que se centra en la creación y entrenamiento de modelos de predicción con el objetivo de minimizar el error de salida ante una nueva entrada que el modelo no ha usado en la fase de entrenamiento.
-\section{Machine Learning}
-El \textbf{Machine Learning} (aprendizaje automático) es un campo de la Inteligencia Artificial que se centra en el desarrollo de técnicas que permitan a las computadores extraer conocimiento a partir de unos datos.\\
+Podría haber buscado un trabajo más fácil, usando unos datos que ya han sido probados con algoritmos de aprendizaje automático y tener la certeza que de una forma u otra, iba a obtener unos resultados buenos siguiendo el mismo proceso que han seguido otras personas que se han enfrentado al problema previamente. Cuando se me propuso este trabajo, en el que podía enfrentarme a un problema nuevo, al que nunca me había enfrentado durante la época de formación en la universidad, la posibilidad de enfrentarme de una manera más "real" a un problema de este tipo, y sobre todo, la oportunidad de aprender nuevos conceptos y técnicas de este campo, fueron razones suficientes por las que decidí realizar este trabajo.\\
 \linebreak
-Estos datos pueden estar definidos de una gran número de formas, observaciones recogidas por sensores, imágenes, valoraciones de usuarios, etc. En el caso particular de este trabajo en el que se enfoca este proyecto, el \textbf{conjunto de datos} con el que se va a trabajar tiene una cantidad de \textbf{muestras} en la que cada muestra tiene un número fijo de \textbf{características} que identifican a cada muestra. Además, el conjunto de datos con el que se está trabajando, contiene una serie de \textbf{etiquetas} asignada a cada muestra.\\
+Este trabajo se ha realizado desde el principio con la idea en mente de crear un paquete software que agrupe utilidades para que en un futuro, cuando se afronte un problema distinto, tener una buena base general de la que partir, comprobando con  este problema de manera práctica en este trabajo el funcionamiento. Esto no va a quitar el hacer uso de ciertas utilidades que ya han sido probadas por una gran cantidad de personas expertas en el campo, porque uno de los objetivos principales que siempre hay que tener en cuenta a la hora de realizar un desarrollo software es el de hacer uso de los recursos existentes, que como mencionaba antes, han sido probados por la comunidad de desarrolladores.\\ 
 \linebreak
-Usando la naturaleza de los datos, se pueden dividir los distintos tipos de técnicas que se usan en ML.
-\subsection{Agrupamiento en función de los datos disponibles}
-Se puede usar la naturaleza de los datos para definir varios tipos de algoritmos, ya que la metodología a seguir cuando se trabaja con datos \textbf{etiquetados} o con datos sin etiquetar es distinta. Usando esta idea, las técnicas usadas en ML pueden ser agrupadas en \textbf{aprendizaje supervisado}, \textbf{no supervisado} ó \textbf{semi-supervisado}:
-\begin{itemize}
-	\item \textbf{Aprendizaje supervisado:} Este conjunto de técnicas se caracteriza debido a que cada muestra tiene una ó más \textbf{etiquetas}(variable/s objetivo) y tiene como finalidad hacer uso de las características de cada muestra para \textbf{predecir} las variables objetivo de nuevas muestras que no pertenecen al conjunto de datos inicial. Alguna de las tareas que entran dentro de este grupo son \textbf{Clasificación} ó \textbf{Regresión}
-	\item \textbf{Aprendizaje no supervisado:} A diferencia del anterior, las técnicas de aprendizaje no supervisado se diferencian en que las muestras \textbf{no están etiquetadas}, por lo que no se puede \textbf{predecir} ninguna variable. Estas técnicas se caracterizan por ser capaces de \textbf{reconocer patrones} dentro del conjunto de datos, etiquetando las nuevas entradas haciendo uso de ellos. La tarea más común es \textbf{Clustering}
-\end{itemize}
-Anteriormente se han mencionado tareas como \textbf{clasificación}, \textbf{regresión} o \textbf{clustering}, en la siguiente sección se va a profundizar más, explicando en que consiste cada una y que objetivos tienen.
-\subsection{Agrupamiento en función de la tarea}
-\begin{itemize}
-	\item \textbf{Clasificación:} Como se mencionó previamente, esta tarea tiene sentido cuando se usa un conjunto de datos que está etiquetado. El objetivo principal de clasificación consiste en dada una nueva muestra, \textbf{predecir} una o varias etiquetas en función del conjunto de datos que se ha usado. Estas etiquetas suelen ser variables \textbf{discretas}
-	\item \textbf{Regresión:} A diferencia de clasificación, donde las variables objetivo son discretas, en este caso las variables objetivo son continuas. El propósito de estas técnicas es el de predecir un \textbf{valor} para nuevas muestras.
-	\item \textbf{Clustering:} El objetivo es el de detección de patrones usando datos no etiquetados.
-\end{itemize}
-Dentro de las tareas de clasificación, se pueden dividir en varios grupos. En la siguiente sección se va a explicar los distintos tipos de clasificación, ya que ayudara a entender la naturaleza del problema que se esta tratando en este trabajo.
-\section{Tipos de clasificación}
-Como ya se ha mencionado previamente, clasificación usa un conjunto de datos para predecir un valor de una o mas variables de salida. Según el tipo de variable que se va a predecir, se pueden identificar los siguientes tipos de clasificación:
-\subsection*{Clasificación binaria}
-Este es el tipo de clasificación más sencilla, ya que la variable objetivo solo va a tener dos posibles valores. Estos valores se conocen como clase positiva (1) ó clase negativa (0). De aquí viene el nombre de clasificación \textbf{binaria}, ya que la variable objetivo es binaria.\\
-Ejemplos de este tipo de clasificación son detectar si un mensaje es spam, si en función de ciertos valores una bomba de agua puede fallar, o detectar si un cliente de un banco va a tener deudas usando ciertos parámetros.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{binary-class.png}
-	\caption{Ejemplo de clasificación binaria: Identificar si un correo electrónico es spam.}
-	\label{fig:bclass}
-\end{figure}
-\subsection*{Clasificación multi-clase}
-Los conjuntos de datos que se usan en clasificación multi-clase son una generalización del caso de clasificación binaria. Solo existe una única variable objetivo, siendo la principal diferencia que esta puede tener cualquier valor dentro de un conjunto valores. Es importante destacar que estos valores son \textbf{discretos} y \textbf{finitos}. El ejemplo más conocido de este tipo de clasificación es la \textbf{clasificación de la flor del Iris}, donde en función de la longitud y anchura del sépalo y del pétalo, se predice si la flor es setosa, virgínica o versicolor.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{multiclass-class.png}
-	\caption{Ejemplo de clasificación multi-clase: Clasificación de la flor del Iris}
-	\label{fig:mcclass}
-\end{figure}
-Muchos de los algoritmos que se usan en Aprendizaje Automático han sido diseñados para clasificación binaria. Con el objetivo de adaptar estos algoritmos existentes a este tipo de problema, existe una técnica llama \textbf{binarización de clase}.
-Dos de los enfoques más usados en la actualidad son \textbf{OVA} (\textit{one vs all}) y \textbf{OVO} (\textit{one vs one}). Ambos enfoques tratan de dividir el problema de clasificación multi-clase en varios problemas de clasificación binaria. La diferencia reside en la manera de dividir el problema:
-\subsubsection*{One VS All}
-Por cada clase, se entrena un clasificador binario donde todas las muestras que pertenecen a la clase seleccionada se selecciona como la clase positiva, el resto como la clase negativa. Una vez que se quiere predecir una nueva muestra, por cada modelo entrenado, se obtiene la probabilidad de que pertenezca a la clase positiva, seleccionando como clase predicha aquella con mayor probabilidad.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{ova.png}
-	\caption{Ejemplo de One vs All}
-	\label{fig:ova}
-\end{figure}
-\subsubsection*{One VS One}
-A diferencia de \textit{OVA}, por cada par distinto de clases, se entrena un clasificador binario usando una como positiva y otra como negativa. Una vez que llega una nueva muestra, se elige por votación la clase predicha.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{ovo}
-	\caption{Ejemplo de One vs One}
-	\label{fig:ovo}
-\end{figure}
-\subsection{Clasificación ordinal}
-Clasificación ordinal es un caso particular de clasificación multi-clase donde existe una relación de orden entre las clases.\\
-Un ejemplo de este tipo de clasificación es el de predecir la valoración de una película, predecir las preferencias de una persona (en desacuerdo, de acuerdo).
-\subsection{Clasificación multi-etiqueta}
-\label{sec:ml}
-A diferencia de los anteriores tipos de clasificación, cada muestra tiene un \textbf{conjunto de variables objetivo} en lugar de una única variable. En este caso, el número de variables objetivo es fijo, siendo estas de tipo binario. A cada combinación distinta de valores se conoce como \textit{labelset}.\\
-Los algoritmos que usados para este tipo de problema deben de ser capaces de realizar varias predicciones, ya sea modificando los datos originales o adaptando algoritmos de clasificación binaria o multi-clase.\\
+Finalmente, la posibilidad de hacer un buen uso de los conocimientos obtenidos tras el continuo esfuerzo que ha sido el de afrontar el grado, han sido las principales motivaciones que me han conducido a afrontar este trabajo.
+\pagebreak
+\section{Objetivos}
+\label{sec:obj}
+A continuación, se enumeran los distintos objetivos que se han puesto a la hora de realizar el trabajo. \\
 \linebreak
-Un ejemplo de este tipo de clasificación puede ser el de comprobar si una imagen contiene ciertos elementos.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{multilabel-class.png}
-	\caption{Ejemplo de clasificación multi-etiqueta: Clasificar si una imagen contiene ciertos elementos.}
-	\label{fig:mlclasss}
-\end{figure}
-\subsubsection*{Enfoques}
-A la hora de clasificar datos con múltiples etiquetas, se ha optado por dos enfoques: \textbf{transformar los datos} y \textbf{adaptar los métodos/algoritmos existentes}. \linebreak
-El primero de los enfoques se centra en aplicar técnicas de transformación sobre el conjunto de datos con el que se esta trabajando para obtener así uno o varios conjuntos de datos a los que se les puede aplicar clasificación multi-clase o binaria. \linebreak
-El segundo, se centra en modificar los algoritmos de clasificación para que sean capaces de manejar estos conjuntos de datos, produciendo así más de una salida.
-\subsubsection*{Transformación del conjunto de datos}
-Este tipo de clasificación es una tarea más compleja que la clasificación tradicional, y una de las primeras propuestas para resolver este problema es el de transformar los datos para obtener así uno (o varios) problemas más simples.
-Los enfoques que se han propuesto son:
-\begin{enumerate}
-	\item \textbf{Desplegar las muestras multi-etiqueta} Este enfoque descompone cada instancia en tantas instancias como etiquetas contiene, clonando los atributos asociados a cada muestra. La salida será un problema multi-clase, conteniendo más muestras que el conjunto de datos original.
-	\item \textbf{Usar el \textit{labelset} como identificador de clase}: Partimos de la idea de usar cada combinación de \textit{labelset} que se encuentre en el conjunto de datos. De esta manera, se obtiene un conjunto de datos multi-clase con el mismo número de instancias y con tantas clases como combinaciones de labelset se encuentren el conjunto de datos original. Este enfoque también se conoce como \textbf{\textit{Label PowerSet}}.
-	\item \textbf{Aplicar técnicas de binarización}: Al igual que para el problema multi-clase, se pueden adaptar estas técnicas. El método más común se llama \textbf{Binary Relevance}.
-\end{enumerate}
-\subsubsection*{Agrupación de algoritmos}
-El uso de conjunto de clasificadores junto con una estrategia para juntar sus predicciones se ha probado ser muy efectivos en problemas clásicos.
+El primer objetivo que se plantea es el de comprobar si hay conocimiento en el conjunto de datos que se nos ha proporcionado. Probablemente, este sea uno de los pasos más importante a la hora de afrontar este tipo de problemas, ya que puede ocurrir que se hayan cometido errores a la hora de recoger los datos, no se haya recogido una muestra suficientemente grande para resolver el problema o simplemente, no se pueda abordar con estas técnicas. Ejecutar correctamente este paso es clave, ya que detectando estos problemas (entre otros que pueden ocurrir) antes de seguir profundizando, puede evitar invertir tiempo y esfuerzo.\\
+\linebreak
+Siguiendo con la lista de objetivos de este trabajo era el de comprobar que preguntas (variables del conjunto de entrenamiento) son relevantes y cuales no. Las variables usadas en todo el proceso de KDD han sido recogidas mediante una encuesta. Estas encuestas pueden resultar tediosas cuando se añaden preguntas que son muy poco relevantes, por lo que la posibilidad de re-plantear ciertas preguntas que se han demostrado que no influyen o que los algoritmos no han encontrado puede ser una buena idea, siempre y cuando se analice el porqué esa pregunta es mala, ya que hay que tener en cuenta la posibilidad de que para un modelo una o varias preguntas no sea relevantes, pero en otro  sí que lo sean.\\
+\linebreak
+Otro punto de mejora sobre la redacción de estas encuestas es el detectar si un cierto campo ha tenido mucha relevancia, podría ser buena idea plantear la posibilidad de, en un futuro, añadir nuevas preguntas relacionadas con ese campo para comprobar si se puede mejorar el rendimiento de los modelos, teniendo en cuenta (obviamente) que se va a trabajar con conjunto de datos distinto, por lo que puede haber ciertas diferencias.\\
+\linebreak
+El ultimo objetivo que se ha planteado es el de ser capaces de predecir si una persona tiene una actitud emprendedora o no, obteniendo una información muy importante a la hora de mejorar la selección de posibles en una campaña de marketing especializando las ofertas según la intención emprendedora. \\ 
+\pagebreak
+\section{Estructura de la memoria}
+Esta memoria está organizada en distintos capítulos que irán guiando en el desarrollo del trabajo, enfoques usados y cualquier concepto que este relacionado.\\
+\linebreak
+Se va a comenzar explicando que es el \textit{Machine Learning} y de manera general, conceptos clave que se necesitan tener en cuenta para la comprensión del trabajo. Este capítulo aborda los distintos problemas que se pueden encontrar y como se agrupan los mismos.\\
+\linebreak
+Después de la explicación de estos conceptos básicos, se va a explicar el problema que se ha abordado en este trabajo, explicando de una forma más específica que tipo de problema es, de donde viene y que elementos lo forman.\\
+\linebreak
+Explicado los conceptos básicos del problema, se comienza por realizar un análisis de los datos que se han proporcionado. En este sección se explicaran como están formados los datos, y que procesamiento se ha necesitado hacer para que los algoritmos funcionen.
+\linebreak
+Una vez explicado el problema y el procesamiento previo que se ha realizado, se explican que algoritmos se han usado y cual es la metodología seguida para asegurar unos resultados correctos, evitando caer en las equivocaciones más comunes a la hora de enfrentarse a un problema de este tipo. Esta sección también explicará las distintas formas en las que se han usado para medir el rendimiento de los algoritmos.\\
+\linebreak
+A continuación, se encuentra un bloque compuesto por varias secciones donde se muestran resultados, análisis de los mismos y variaciones que se han probado y los resultados de las distintas opciones que se han barajado.\\
+\linebreak
+Mostrado ya los resultados, se continua explicando cual ha sido el proceso software que se ha seguido durante el desarrollo. En esta sección se explicará lenguajes de programación, pautas que se han seguido, herramientas usadas y el proceso de instalación y ejecución del proyecto.\\
+\linebreak
+Finalmente, se mostrara el bloque de conclusiones y trabajos futuros. Estas secciones finalizaran el proyecto respondiendo a las distintas preguntas que se han hecho durante el desarrollo y valorando si se han cumplido los objetivos propuestos en un inicio.
 
-\subsection{Clasificación multi-dimensional}
-Al igual que la clasificación multi-clase es una generalización del caso binario, la clasificación multi-dimensional es una generalización de la clasificación multi-etiqueta.\\
-En este caso, cada muestra tiene un conjunto fijo de variables objetivo que pueden tomar cualquier valor dentro de un conjunto de posibles valores.
+

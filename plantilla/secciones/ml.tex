@@ -1,0 +1,100 @@
+\chapter{Machine Learning}
+El \textbf{Machine Learning} es un campo dentro de la ciencia de datos que se centra en la creación y entrenamiento de modelos de predicción con el objetivo de minimizar el error de salida ante una nueva entrada que el modelo no ha usado en la fase de entrenamiento.
+
+El \textbf{Machine Learning} (aprendizaje automático) es un campo de la Inteligencia Artificial que se centra en el desarrollo de técnicas que permitan a las computadores extraer conocimiento a partir de unos datos.\\
+\linebreak
+Estos datos pueden estar definidos de una gran número de formas, observaciones recogidas por sensores, imágenes, valoraciones de usuarios, etc. En el caso particular de este trabajo en el que se enfoca este proyecto, el \textbf{conjunto de datos} con el que se va a trabajar tiene una cantidad de \textbf{muestras} en la que cada muestra tiene un número fijo de \textbf{características} que identifican a cada muestra. Además, el conjunto de datos con el que se está trabajando, contiene una serie de \textbf{etiquetas} asignada a cada muestra.\\
+\linebreak
+\section{Tipos de problemas}
+En esta sección se van a exponer algunos de los distintos tipos de problemas que podemos encontrarnos, agrupándolos siguiendo ciertos criterios. Como cualquier otro problema, existen una gran cantidad de criterios distintos que se pueden usar para clasificar el problema, en esta sección se han usado los criterios en función de los datos disponible ó en función de la tarea que se quiere conseguir.
+\subsection{Agrupamiento en función de los datos disponibles}
+Se puede usar la naturaleza de los datos para definir varios tipos de algoritmos, ya que la metodología a seguir cuando se trabaja con datos \textbf{etiquetados} o con datos sin etiquetar es distinta. Usando esta idea, las técnicas usadas en ML pueden ser agrupadas en \textbf{aprendizaje supervisado}, \textbf{no supervisado} ó \textbf{semi-supervisado}:
+\begin{itemize}
+	\item \textbf{Aprendizaje supervisado:} Este conjunto de técnicas se caracteriza debido a que cada muestra tiene una ó más \textbf{etiquetas}(variable/s objetivo) y tiene como finalidad hacer uso de las características de cada muestra para \textbf{predecir} las variables objetivo de nuevas muestras que no pertenecen al conjunto de datos inicial. Alguna de las tareas que entran dentro de este grupo son \textbf{Clasificación} ó \textbf{Regresión}
+	\item \textbf{Aprendizaje no supervisado:} A diferencia del anterior, las técnicas de aprendizaje no supervisado se diferencian en que las muestras \textbf{no están etiquetadas}, por lo que no se puede \textbf{predecir} ninguna variable. Estas técnicas se caracterizan por ser capaces de \textbf{reconocer patrones} dentro del conjunto de datos, etiquetando las nuevas entradas haciendo uso de ellos. La tarea más común es \textbf{Clustering}
+\end{itemize}
+Anteriormente se han mencionado tareas como \textbf{clasificación}, \textbf{regresión} o \textbf{clustering}, en la siguiente sección se va a profundizar más, explicando en que consiste cada una y que objetivos tienen.
+\subsection{Agrupamiento en función de la tarea}
+\begin{itemize}
+	\item \textbf{Clasificación:} Como se mencionó previamente, esta tarea tiene sentido cuando se usa un conjunto de datos que está etiquetado. El objetivo principal de clasificación consiste en dada una nueva muestra, \textbf{predecir} una o varias etiquetas en función del conjunto de datos que se ha usado. Estas etiquetas suelen ser variables \textbf{discretas}
+	\item \textbf{Regresión:} A diferencia de clasificación, donde las variables objetivo son discretas, en este caso las variables objetivo son continuas. El propósito de estas técnicas es el de predecir un \textbf{valor} para nuevas muestras.
+	\item \textbf{Clustering:} El objetivo es el de detección de patrones usando datos no etiquetados.
+\end{itemize}
+Dentro de las tareas de clasificación, se pueden dividir en varios grupos. En la siguiente sección se va a explicar los distintos tipos de clasificación, ya que ayudara a entender la naturaleza del problema que se esta tratando en este trabajo.
+\section{Tipos de clasificación}
+Como ya se ha mencionado previamente, clasificación usa un conjunto de datos para predecir un valor de una o mas variables de salida. Este tipo de problema puede clasificarse siguiendo muchos criterios, pero en nuestro caso, el criterio que se ha considerado más interesante en función del problema que se esta solucionando es usar el \textbf{tipo de variable} que se va a predecir. Siguiendo este criterio, se pueden encontrar clasificación binaria, multi-clase, multi-etiqueta y multi-dimensional.
+\subsection*{Clasificación binaria}
+Este es el tipo de clasificación más sencilla, ya que la variable objetivo solo va a tener dos posibles valores. Estos valores se conocen como clase positiva (1) ó clase negativa (0). De aquí viene el nombre de clasificación \textbf{binaria}, ya que la variable objetivo es binaria.\\
+Ejemplos de este tipo de clasificación son detectar si un mensaje es spam, si en función de ciertos valores una bomba de agua puede fallar, o detectar si un cliente de un banco va a tener deudas usando ciertos parámetros.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{binary-class.png}
+	\caption{Ejemplo de clasificación binaria}
+	\label{fig:bclass}
+\end{figure}
+En esta figura se puede observar un problema de clasificación binaria, donde se quiere identificar si un correo es spam o no. 
+\subsection*{Clasificación multi-clase}
+Los conjuntos de datos que se usan en clasificación multi-clase son una generalización del caso de clasificación binaria. Solo existe una única variable objetivo, siendo la principal diferencia que esta puede tener cualquier valor dentro de un conjunto valores. Es importante destacar que estos valores son \textbf{discretos} y \textbf{finitos}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{multiclass-class.png}
+	\caption{Ejemplo de clasificación multi-clase: Clasificación de la flor del Iris}
+	\label{fig:mcclass}
+\end{figure}
+La Figura \ref{fig:mcclass} representa el que es quizás el ejemplo más conocido de este tipo de clasificación: la \textbf{clasificación de la flor del Iris}, donde en función de la longitud y anchura del sépalo y del pétalo, se predice si la flor es setosa, virgínica o versicolor.\\\\
+\linebreak
+Muchos de los algoritmos que se usan en Aprendizaje Automático han sido diseñados para clasificación binaria. Con el objetivo de adaptar estos algoritmos existentes a este tipo de problema, existe una técnica llama \textbf{binarización de clase}.
+Dos de los enfoques más usados en la actualidad son \textbf{OVA} (\textit{one vs all}) y \textbf{OVO} (\textit{one vs one}). Ambos enfoques tratan de dividir el problema de clasificación multi-clase en varios problemas de clasificación binaria. La diferencia reside en la manera de dividir el problema:
+\subsubsection*{One VS All}
+Por cada clase, se entrena un clasificador binario donde todas las muestras que pertenecen a la clase seleccionada se selecciona como la clase positiva, el resto como la clase negativa. Una vez que se quiere predecir una nueva muestra, por cada modelo entrenado, se obtiene la probabilidad de que pertenezca a la clase positiva, seleccionando como clase predicha aquella con mayor probabilidad.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{ova.png}
+	\caption{Ejemplo de One vs All}
+	\label{fig:ova}
+\end{figure}
+Se puede ver un claro ejemplo de esta enfoque en la Figura \ref{fig:ova}. En este caso se escogería de todo el conjunto de datos una clase, y se clasifica contra el resto de clases que forman el problema, obteniendo así un problema de tipo binario.
+\subsubsection*{One VS One}
+A diferencia de \textit{OVA}, por cada par distinto de clases, se entrena un clasificador binario usando una como positiva y otra como negativa. Una vez que llega una nueva muestra, se elige por votación la clase predicha.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{ovo}
+	\caption{Ejemplo de One vs One}
+	\label{fig:ovo}
+\end{figure}
+En la Figura \ref{fig:ovo} se aprecia como dado el conjunto de datos, por cada par de clases (rojo-negro, negro-azul, rojo-azul), se entrena un clasificador binario, pudiendo así identificar a que clase pertenecería una muestra que no forme el conjunto de datos original.
+\subsection{Clasificación ordinal}
+Clasificación ordinal es un caso particular de clasificación multi-clase donde existe una relación de orden entre las clases.\\
+Un ejemplo de este tipo de clasificación es el de predecir la valoración de una película, predecir las preferencias de una persona (en desacuerdo, de acuerdo).
+\subsection{Clasificación multi-etiqueta}
+\label{sec:ml}
+A diferencia de los anteriores tipos de clasificación, cada muestra tiene un \textbf{conjunto de variables objetivo} en lugar de una única variable. En este caso, el número de variables objetivo es fijo, siendo estas de tipo binario. A cada combinación distinta de valores se conoce como \textit{labelset}.\\
+Los algoritmos que usados para este tipo de problema deben de ser capaces de realizar varias predicciones, ya sea modificando los datos originales o adaptando algoritmos de clasificación binaria o multi-clase.\\
+\linebreak
+Un ejemplo de este tipo de clasificación puede ser el de comprobar si una imagen contiene ciertos elementos.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{multilabel-class.png}
+	\caption{Ejemplo de clasificación multi-etiqueta}
+	\label{fig:mlclasss}
+\end{figure}
+Se puede observar en la Figura \ref{fig:mlclasss} que se está intentando clasificar si un paisaje es playa, campo, montaña o mar. Esta claro que una playa debería de dar positivo tanto en playa como en mar, por lo que en este tipo de problemas hay varias variables objetivo que se quieren predecir.\\
+\linebreak
+\subsubsection*{Enfoques}
+A la hora de clasificar datos con múltiples etiquetas, se ha optado por dos enfoques: \textbf{transformar los datos} y \textbf{adaptar los métodos/algoritmos existentes}. \linebreak
+El primero de los enfoques se centra en aplicar técnicas de transformación sobre el conjunto de datos con el que se esta trabajando para obtener así uno o varios conjuntos de datos a los que se les puede aplicar clasificación multi-clase o binaria. \linebreak
+El segundo, se centra en modificar los algoritmos de clasificación para que sean capaces de manejar estos conjuntos de datos, produciendo así más de una salida.
+\subsubsection*{Transformación del conjunto de datos}
+Este tipo de clasificación es una tarea más compleja que la clasificación tradicional, y una de las primeras propuestas para resolver este problema es el de transformar los datos para obtener así uno (o varios) problemas más simples.
+Los enfoques que se han propuesto son:
+\begin{enumerate}
+	\item \textbf{Desplegar las muestras multi-etiqueta} Este enfoque descompone cada instancia en tantas instancias como etiquetas contiene, clonando los atributos asociados a cada muestra. La salida será un problema multi-clase, conteniendo más muestras que el conjunto de datos original.
+	\item \textbf{Usar el \textit{labelset} como identificador de clase}: Partimos de la idea de usar cada combinación de \textit{labelset} que se encuentre en el conjunto de datos. De esta manera, se obtiene un conjunto de datos multi-clase con el mismo número de instancias y con tantas clases como combinaciones de labelset se encuentren el conjunto de datos original. Este enfoque también se conoce como \textbf{\textit{Label PowerSet}}.
+	\item \textbf{Aplicar técnicas de binarización}: Al igual que para el problema multi-clase, se pueden adaptar estas técnicas. El método más común se llama \textbf{Binary Relevance}.
+\end{enumerate}
+\subsubsection*{Agrupación de algoritmos}
+El uso de conjunto de clasificadores junto con una estrategia para juntar sus predicciones se ha probado ser muy efectivos en problemas clásicos.
+
+\subsection{Clasificación multi-dimensional}
+Al igual que la clasificación multi-clase es una generalización del caso binario, la clasificación multi-dimensional es una generalización de la clasificación multi-etiqueta.\\
+En este caso, cada muestra tiene un conjunto fijo de variables objetivo que pueden tomar cualquier valor dentro de un conjunto de posibles valores.
