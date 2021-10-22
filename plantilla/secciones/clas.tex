@@ -1,6 +1,6 @@
 \chapter{Clasificación}
 \label{sec:class}
-Se ha comprobado que usando regresión, se ha conseguido unos buenos modelos para predecir un valor \textbf{preciso} de la intención emprendedora media. El siguiente paso realizado ha sido el de \textbf{categorizar} el caso de regresión, obteniendo así clases del tipo \textit{intención emprendedora alta, baja o media}.\\
+Se ha comprobado que usando regresión, se ha conseguido unos buenos resultados a la hora de predecir un valor \textbf{preciso} de la intención emprendedora media. El siguiente paso realizado ha sido el de \textbf{categorizar} el caso de regresión, obteniendo así clases del tipo \textit{intención emprendedora alta, baja o media}.\\
 Hay que recordar que el resultado obtenido por el modelo de aprendizaje puede ser leído por personal no familiarizado con matemáticas o informática. Este enfoque lo que nos permite es usar una única variable como objetivo con los valores \textit{alto, bajo o alto}, siendo así más legible la salida del algoritmo.\\
 \linebreak
 Para categorizar los valores de predicción se ha establecido unos rangos y se van a transformar los valores de ese rango en las clases alta. media. y baja. Para establecer el rango, se ha ejecutado varias veces los algoritmos seleccionados y se han comparado las métricas obtenidas, usando unos rangos para establecer estas clases.\\
@@ -12,64 +12,49 @@ Los rangos que se han probado son:
 \end{itemize}
 Estas tuplas representan el valor usado para determinar el valor límite para clasificar una muestra como emprendimiento bajo, medio o alto (en ese orden).\\
 \linebreak
-\section{Rendimiento de modelos de clasificación}
-Al igual que en los modelos de regresión, en clasificación se hace uso de métricas para ver el comportamiento de los modelos entrenados. A continuación se explica qué métricas se han usado:
-\subsection{Accuracy}
-Esta métrica mide el porcentaje de casos que el modelo ha clasificado correctamente.
-\[
-	accuracy(y,\hat{y})=\frac{1}{n_{samples}}\sum_{i=1}^{n_{samples}}1(\hat{y_i}=y_i)
-\]
-
-\subsection{Matriz de confusión y métricas}
-Cada entrada $i.j$ de la matriz se define como el número de observaciones del grupo $i$ que han sido predichas como del grupo $j$. Un ejemplo de matriz de confusión para el problema que se esta tratando es:
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{conf_matrix.png}
-	\caption{Ejemplo de matriz de confusión}
-	\label{fig:conf_matrix}
-\end{figure}
-Aquí podemos ver cuantas muestras de una clase el modelo predijo como correctas (de la misma clase) y cuantas muestras de una clase predijo como erróneas (de distinta clase).\\
-\linebreak
-A partir de la matriz de confusión, se pueden sacar las siguiente métricas:
-\[Precision = \frac{TP} {TP + FP}\]
-\[Recall = \frac{TP}{TP + FN}\]
-\[FPR = \frac{FP}{FP + TN}\]
-\[ F1\_score = 2 \times \frac{Precision \times Recall}{Precision + Recall} \]
-Intuitivamente, \textbf{Precision} mide la habilidad del modelo de no clasificar como \textbf{positiva} una muestra que es \textbf{negativa}, mientras que \textbf{Recall} mide la habilidad del modelo para clasificar bien todas las muestras positivas.\\
-\linebreak
-Cabe destacar que se han explicado para el caso de clasificación binaria, pero estas métricas se pueden extender para la clasificación multi-clase y multi-etiqueta.
-\subsection{Curva ROC y AUC}
-Partiendo de lo explicado sobre la matriz de confusión, la curva ROC (Receiver Operating Characteristic Curve) es un gráfico donde se representa el \textbf{FPR} (False Positive Rate) en el eje \textbf{X} y el \textbf{TPR} (True Positive Rate o Recall) en el eje \textbf{Y}. Se escogen estas métricas debido a la siguiente hipótesis:\\
-A medida que incrementamos el ratio de verdaderos positivos, se va a incrementar el ratio de falsos positivos debido a que es más probable que el modelo clasifique como positivo una muestra que no es positiva.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{roc}
-	\caption{Ejemplo de curva ROC}
-	\label{fig:roc}
-\end{figure}
-Lo ideal, es que la figura se acerque a la esquina superior izquierda lo máximo posible, ya que implicaría que se esta clasificando como correctos todas las muestras positivas y ninguna muestra negativa se está clasificando como positiva.\\
-Se puede usar el área bajo la curva como una métrica para comprobar como de bueno es el modelo. Esta métrica se conoce como \textbf{AUC} (Area Under Curve).\\
-\linebreak
 Al igual que en regresión (\ref{sec:validation}-\nameref{sec:validation}), se ha usado la técnica de \textit{k-fold validation} para validar el rendimiento de los modelos entrenados.
+\clearpage
 \section{Modelos de clasificación}
 Para clasificación, se van a usar unicamente aquellos modelos que se ha demostrado empíricamente en la sección \ref{sec:algoritmos}-\nameref{sec:algoritmos} que han tenido un buen desempeño. Por tanto se van a usar Árboles de Decisión, Random Forest y SVM.
+\section{Métricas usadas}
+Para validar el rendimiento de los modelos seleccionados se van a usar las siguientes métricas:
+\begin{itemize}
+	 \item \textbf{Métrica F1}
+	 \item \textbf{Área bajo la curva (AUC)}
+	 \item \textbf{Precisión}
+\end{itemize}
+Se puede encontrar una explicación más exhaustiva de estas métricas en la Sección \ref{metric:class}.\\
+\linebreak
+En las secciones siguientes se podrá encontrar los resultados de estas métricas para los distintos modelos que se han seleccionado. Finalmente, se valorará si este enfoque es correcto o no, junto con posibles mejoras y correcciones.
+\clearpage
 \subsection{Árboles de Decisión}
+\label{class:dt1}
 En esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{Árboles de Decisión}.\\
-La siguiente tabla expone los resultados obtenidos:
+Se va a comenzar mostrando los valores de las 3 métricas seleccionadas para los conjuntos de validación en los 3 conjuntos de datos obtenidos:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{src/dt_cmp_val_metrics}
 	\caption{Comparación en conjunto de validación}
 	\label{fig:dtre_class_val}
 \end{figure}
+Se puede observar como aún eliminando cierta información del conjunto, ese conocimiento no se ha perdido, ya que se puede observar que en los conjuntos de validación se han obtenido unas valores muy buenos para los 3 conjuntos. \\
+\linebreak
+Se puede observar como parece que al usar los conjuntos $(3,5,7)$ y $(3.5,5.5,7)$ no existe una diferencia observable, ya que los valores de todas las métricas es el mismo. \\
+El único conjunto que parece que cambia de comportamiento es el $(4,6,7)$, donde se observa una ligera mejora en la métrica F1, una mínima reducción del AUC y una bajada en el accuracy. Hay que tener en cuenta que se está mostrando la \textbf{media} de las métricas calculadas en cada \textit{fold} de la validación cruzada. Puede ocurrir que en uno de los conjuntos, se haya obtenido un conjunto para el que el modelo ha rendido peor.
+\clearpage
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{src/dt_cmp_test_metrics}
 	\caption{Comparación en conjunto de test}
 	\label{fig:dtre_class_testl}
 \end{figure}
-A continuación, las tablas con los resultados de las métricas y las matrices de confusión obtenidas por los Árboles de decisión usando la categorización usando los rangos $(3.5,5.5,7)$ y $(4,6,7)$
-\subsubsection*{Rango $(3.5,5.5,7)$}
+Se puede observar que se han repetido \textbf{algunos} de los comportamientos observados en la validación: para los conjunto $(3,5,7)$ y $(3.5,5.5,7)$ no existe una diferencia observable en el valor de las medias calculadas. \\
+A diferencia que en validación, en test el modelo entrenado con el conjunto $(4,6,7)$ se ha comportado ligeramente mejor. Una hipótesis para explicar este comportamiento podría ser que al dar más margen para valores bajos e intermedios, estos valores disponen de más instancias y el modelo ha sido capaz de aprovecharlo.\\
+\linebreak
+Al observar que los conjuntos $(3,5,7)$ y $(3.5,5.5,7)$ no presentan diferencias observables, se va a descartar el modelo entrenado con uno de los conjuntos, ya que no esta aportando valor.\\
+\linebreak
+Para ampliar estos resultados, a continuación se va a mostrar unas tablas con los valores de las métricas obtenidas por cada conjunto.
+\subsubsection*{Tablas de métricas}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -86,14 +71,6 @@ A continuación, las tablas con los resultados de las métricas y las matrices d
 	\end{tabular}
 	\caption{Valores de métricas obtenidos usando rango $(3.5,5.5,7)$}
 \end{table}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{src/confusion_matrix_dtree_classification_3-5_5-5_7.png}
-	\caption{Matriz de confusión para Árboles de Decisión usando $(3.5,5.5,7)$}
-	\label{fig:confusion_matrix_dtree1}
-\end{figure}
-\subsubsection*{Rango $(4,6,7)$}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -110,32 +87,52 @@ A continuación, las tablas con los resultados de las métricas y las matrices d
 	\end{tabular}
 	\caption{Valores de métricas obtenidos usando rango $(4,6,7)$}
 \end{table}
-
+Por lo general, se han obtenido unos muy buenos resultados usando ambos rangos, extrayendo un conocimiento importante.
+\clearpage
+A continuación, las tablas con los resultados de las métricas y las matrices de confusión obtenidas por los Árboles de decisión usando la categorización usando los rangos $(3.5,5.5,7)$ y $(4,6,7)$
+\subsubsection*{Matrices de confusión}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/confusion_matrix_dtree_classification_3-5_5-5_7.png}
+	\caption{Matriz de confusión para Árboles de Decisión usando $(3.5,5.5,7)$}
+	\label{fig:confusion_matrix_dtree1}
+\end{figure}
+Se puede observar en la Figura \ref{fig:confusion_matrix_dtree1} como el modelo ha tenido complicaciones a la hora de predecir valores bajos, confundiendo más de la mitad de estos valores con valores que realmente son valores medios.\\
+En valores medios y valores altos, el rendimiento ha sido muy bueno, clasificando correctamente una buena porción de las muestras.
+\clearpage
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/confusion_matrix_dtree_classification_4_6_7}
 	\caption{Matriz de confusión para Árboles de Decisión usando $(4,6,7)$}
 	\label{fig:confusion_matrix_dtree2}
 \end{figure}
-\pagebreak
+A diferencia del modelo entrenado con el anterior conjunto, con este se puede observar una mejora en los valores bajos y se mantiene la cantidad de valores medios y altos que se han predicho correctamente en el anterior modelo.\\
+Tiene sentido este comportamiento, ya que la posibilidad de que valores bajos que antes se estaban prediciendo como medios es menor, al haber una mayor cantidad de valores bajos.\\
+\clearpage
 \subsection{Random Forest}
-En esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{Random Forest}.
-A continuación se muestran una serie de gráficos comparando las distintas métricas que se han seleccionado:
+En esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{Random Forest}.\\
+Al igual que para Árboles de decisión, se va a comenzar mostrando los valores obtenidos en validación y test.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/rf_class_cmp_val_metrics}
 	\caption{Comparación en conjunto de validación}
 	\label{fig:rf_class_cmp_val}
 \end{figure}
-
+Se puede observar un comportamiento similar al visto en la Sección \ref{class:dt1}, donde los conjuntos $(3,5,7)$ y $(3.5,5.5,7)$ han tenido el mismo comportamiento mientras que el los resultados del conjunto $(4,6,7)$ han sido ligeramente mejores. Esto podría validar las suposiciones que se hicieron previamente, donde los modelos entrenados con este conjunto va a funcionar mejor debido a que el margen de confusión para valores bajos y medios es menor.\\
+\clearpage
+A continuación se muestra los valores obtenidos en el conjunto de test.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/rf_class_cmp_test_metrics}
 	\caption{Comparación en conjunto de test}
 	\label{fig:rf_class_cmp_test}
 \end{figure}
+Al igual que antes, se ha podido observar el mismo comportamiento, por lo que al igual que en Árboles de decisión, se va a descartar uno de los rangos para los que los modelos han tenido el mismo rendimiento, centrando el análisis en los modelos que han demostrado ser distintos.\\
+\linebreak
+Para ampliar esta explicación, a continuación se muestran las tablas con los valores de las métricas seleccionadas y las matrices de confusión.
+\clearpage
+\subsubsection*{Tablas de métricas}
 En las secciones siguientes, se va a mostrar las tablas con los valores de métricas obtenidas por Random Forest y las matrices de confusión correspondientes.
-\subsubsection*{Rango $(3,5,7)$}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -147,19 +144,11 @@ En las secciones siguientes, se va a mostrar las tablas con los valores de métr
 		Fold 3 & 0.693    & 0.867     & 0.709    \\ \cline{1-4}
 		Fold 4 & 0.748    & 0.892     & 0.776    \\ \cline{1-4}
 		Fold 5 & 0.718    & 0.88      & 0.738    \\ \cline{1-4}
-		Train  & 0.993    & 1.0       & 0.994    \\\cline{1-4}
+		Train  & 0.993    & 1.0       & 0.994    \\ \cline{1-4}
 		Test   & 0.739    & 0.885     & 0.761    \\ \cline{1-4}
 	\end{tabular}
-	\caption{Valores de métricas obtenidos usando rango $(3,5,7)$}
+	\caption{Valores de métricas obtenidos usando rango $(3.5,5.5,7)$}
 \end{table}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{src/confusion_matrix_rf_class_3_5_7.png}
-	\caption{Matriz de confusión para Random Forest usando $(3,5,7)$}
-	\label{fig:confusion_matrix_rf1}
-\end{figure}
-
-\subsection*{Rango $(4,6,7)$}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -176,31 +165,56 @@ En las secciones siguientes, se va a mostrar las tablas con los valores de métr
 	\end{tabular}
 	\caption{Valores de métricas obtenidos usando rango $(4,6,7)$}
 \end{table}
+Se observa una mejora frente a Árboles de decisión (al igual que en regresión). Esto muestra que la hipótesis de que Random Forest podria obtener unos resultados mejores que Árboles de decisión (siempre que funcionase correctamente) se ha validado en estos dos enfoques.\\
+\clearpage
+Para finalizar con Random Forest, se va a exponer las matrices de confusión obtenidas.
+\subsubsection*{Matrices de confusión}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/confusion_matrix_rf_class_3_5_7.png}
+	\caption{Matriz de confusión para Random Forest usando $(3.5,5.5,7)$}
+	\label{fig:confusion_matrix_rf1}
+\end{figure}
+Se vuelve a repetir el comportamiento observado en Árboles de decisión. \\
+El modelo entrenado con este conjunto ha tenido problemas a la hora de clasificar valores bajos, confundiendo valores bajos con valores medios.\\
+Para valores altos el modelo si que ha mostrado un mejor rendimiento, clasificando correctamente más de un 80\% de esas muestras. \\
+\linebreak
+Como se ha mencionado, la observación de que Random Forest ha sido capaz de extraer más conocimiento que Árboles de decisión también se ve reflejado en las matrices de confusión, donde la cantidad de errores cometidos en valores bajos ha sido mejor.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/confusion_matrix_rf_class_4_6_7.png}
 	\caption{Matriz de confusión para Random Forest usando $(4,6,7)$}
 	\label{fig:confusion_matrix_rf2}
 \end{figure}
-\pagebreak
+Para este conjunto, si que se puede observar un comportamiento deseable, ya que se esta clasificando un porcentaje similar tanto para valores bajos, medios y altos.\\
+\linebreak
+Con los resultados obtenidos, cabe esperar que la mejor división del conjunto de datos es usando los rangos $(4,6,7)$, ya que tanto Random Forest como Árboles de decisión se han comportado mejor que en el resto de rangos que se han probado.
+\clearpage
 \subsection{Support Vector Machines}
-En esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{SVM}.
-A continuación se muestran una serie de gráficos comparando las distintas métricas que se han seleccionado:
+Finalmente, en esta sección se va a exponer los resultados obtenidos en clasificación usando \textbf{SVM}.\\
+\linebreak
+Siguiendo el mismo orden que en secciones anteriores, se va a comenzar comentando los resultados obtenidos en validación y test:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/svc_cmp_val_metrics.png}
 	\caption{Comparación en conjunto de validación}
 	\label{fig:svc_class_cmp_val}
 \end{figure}
-
+En la Figura \ref{fig:svc_class_cmp_val} se puede observar, al igual que en las secciones previas, resultados similares para los conjuntos $(3,5,7)$ y $(3.5,5.5,7)$. Al igual que antes, al no tener una diferencia entre estos conjuntos, el análisis se va a centrar en los modelos con más diferencia.\\
+La primera diferencia que se puede observar con el resto de modelos usados previamente, es que el conjunto $(4,6,7)$ se ha comportado ligeramente peor. \\
+SVM no es un modelo basado en árboles y los modelos usados previamente si lo eran, así que se podía esperar un cambio en el comportamiento.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/svc_cmp_test_metrics.png}
 	\caption{Comparación en conjunto de test}
 	\label{fig:svc_class_cmp_test}
 \end{figure}
-En las secciones siguientes, se va a mostrar las tablas con los valores de métricas obtenidas por SVM y las matrices de confusión correspondientes.
-\subsubsection*{Rango $(3.5,5.5,7)$}
+En test se sigue observando el cambio de comportamiento que se observó en el conjunto de validación.\\
+\linebreak
+Se observa también que la diferencia entre validación y test no es muy grande, lo que hace pensar que el elegir este modelo ha sido una elección correcta y que se han encontrado unos parámetros que han conseguido un modelo robusto y capaz de predecir muestras que no ha visto.
+\clearpage 
+Para ampliar la información se van a mostrar las tablas con las métricas obtenidos por SVM:
+\subsubsection*{Métricas obtenidas}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -217,14 +231,6 @@ En las secciones siguientes, se va a mostrar las tablas con los valores de métr
 	\end{tabular}
 	\caption{Valores de métricas obtenidos usando rango $(3.5,5.5,7)$}
 \end{table}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{src/confusion_matrix_svc_3-5_5-5_7.png}
-	\caption{ confusión para SVM usando $(3.5,5.5,7)$}
-	\label{fig:confusion_matrix_svm1}
-\end{figure}
-
-\subsubsection*{Rango $(4,6,7)$}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -241,16 +247,32 @@ En las secciones siguientes, se va a mostrar las tablas con los valores de métr
 	\end{tabular}
 	\caption{Valores de métricas obtenidos usando rango $(4,6,7)$}
 \end{table}
+Para finalizar con el análisis de resultados para SVM, a continuación se muestran las matrices de confusión
+\subsubsection*{Matrices de confusión}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/confusion_matrix_svc_3-5_5-5_7.png}
+	\caption{ confusión para SVM usando $(3.5,5.5,7)$}
+	\label{fig:confusion_matrix_svc1}
+\end{figure}
+Se puede observar en la Figura \ref{fig:confusion_matrix_svc1} el mismo comportamiento que para Random Forest y Árboles de decisión, donde se aprecia que los valores bajos y se están confundiendo con los valores medios. \\
+La principal diferencia en este caso es que los valores medios si se están confundiendo con valores altos.\\
+\linebreak
+Los valores altos se han clasificado excelentemente, clasificando correctamente un 90\%. 
+\clearpage
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/confusion_matrix_svc_4_6_7.png}
 	\caption{Matriz de confusión para SVM usando $(4,6,7)$}
 	\label{fig:confusion_matrix_svc2}
 \end{figure}
-
+Los resultados expuestos en la Figura \ref{fig:confusion_matrix_svc2} demuestran la importancia de elegir unas buenas métricas.\\
+\linebreak
+Esta claro que se ha mejorado la predicción en valores bajos y para los valores medios se han clasificado muy bien en este conjunto. El principal problema es que para valores altos, el modelo entrenado con este conjunto se ha comportado mucho peor que el anterior. Esto se ha visto reflejado en las métricas expuestas previamente, y es la razón por las que son más bajas en este conjunto.
+\clearpage
 \subsection{Análisis de resultados}
 Como se puede apreciar, ninguno de los algoritmos no han tenido problemas clasificando la clase \textbf{IEAlta}, clasificando correctamente más del $80\%$ de las instancias de esta clase.
-Los algoritmos han tenido más problemas a la hora de clasificar correctamente la clase \textbf{IEBaja}, clasificando correctamente solo el $50\%$. Volviendo a la figura \ref{tab:ocurrencia_valores} donde se mostraba el conteo de clases, se puede apreciar que la clase formada por los valores más bajos tiene una menor cantidad de muestras, explicando así que los algoritmos fallen más comúnmente en estas clases, clasificando una gran parte como \textbf{IEMedia} (tiene sentido ya que es la clase más 'cercana').
+Los algoritmos han tenido más problemas a la hora de clasificar correctamente la clase \textbf{IEBaja}, clasificando correctamente solo el $50\%$. Volviendo a la Figura \ref{tab:ocurrencia_valores} donde se mostraba el conteo de clases, se puede apreciar que la clase formada por los valores más bajos tiene una menor cantidad de muestras, explicando así que los algoritmos fallen más comúnmente en estas clases, clasificando una gran parte como \textbf{IEMedia} (tiene sentido ya que es la clase más 'cercana').
 \linebreak
 Respecto al rendimiento se puede observar como los modelos basados en árboles de decisión siguen comportándose correctamente, siendo Random Forest el que mejor resultados obtuvo. \\
 SVM siguió comportándose de manera correcta, obteniendo unos resultados ligeramente peores que Random Forest pero mejores que Árboles de decisión.
@@ -281,30 +303,25 @@ Mientras que para SVM ha sido:
 	\label{fig:class_cmp_test}
 \end{figure}
 Cabe destacar que estos resultados no son comparables, ya que el conjunto de datos sobre el que se ha entrenado los algoritmos es distinto.
-Una causa por la que  SVM rindió mejor en el conjunto $(3.5,5.5,7)$ es que como el conjunto de datos tiene una mayor cantidad de valores en el rango medio, SVM dispone de una mayor cantidad de vectores soporte y facilitando el encontrar un hiperplano que divida mejor los datos.
+Una causa por la que  SVM rindió mejor en el conjunto $(3.5,5.5,7)$ es que como el conjunto de datos tiene una mayor cantidad de valores en el rango medio, SVM dispone de una mayor cantidad de vectores soporte y facilitando el encontrar un hiper-plano que divida mejor los datos.
+\clearpage
 \section{Segunda iteración}
 \label{sec:ord}
 Como se puede observar, las resultados han sido buenos, teniendo la mayor parte de algoritmos un comportamiento similar al observado en regresión (Random Forest ha sido el modelo que mejor ha funcionado, mientras que Árboles de Decisión y SVM han tenido un comportamiento similar).\\
-La opción por la que se ha optado de \textbf{categorizar} el problema de regresión de la forma en la que se ha explicado tiene un inconveniente: No se está teniendo en cuenta el \textbf{orden} de las clases, ya que el algoritmo de clasificación trata las distintas clases como un conjunto de valores sin orden.
-Para mejorar este comportamiento, se va a optar por seguir el enfoque explicado en el artículo \textit{A Simple Approach to Ordinal Classification}. La propuesta es la siguiente:
-En lugar de clasificar $k$ clases, se van a entrenar $k-1$ clasificadores binarios donde la variable objetivo del modelo $M_i$ representa la \textbf{probabilidad} de que la clase sea mayor (según el orden) que la clase $K_i$. El siguiente ejemplo ayuda a explicar este enfoque:\\
+La opción por la que se ha optado de \textbf{categorizar} el problema de regresión de la forma en la que se ha explicado tiene un inconveniente: No se está teniendo en cuenta el \textbf{orden} de las clases, ya que el algoritmo de clasificación trata las distintas clases como un conjunto de valores sin orden.\\
 \linebreak
-Se quiere predecir el ranking (de 1 a 5) que un usuario le va a dar a una película. Para ello se van a entrenar los siguientes $4$ modelos:
-\begin{enumerate}
-	\item El primer modelo calcula la probabilidad de que el ranking predicho sea mayor que 1.
-	\item El segundo modelo calcula la probabilidad de que el ranking predicho sea mayor que 2.
-	\item El tercer modelo calcula la probabilidad de que el ranking predicho sea mayor que 3.
-	\item El cuarto modelo calcula la probabilidad de que el ranking predicho sea mayor que 4.
-\end{enumerate}
-Una vez que se han calculado las probabilidades, el modelo escoge aquella clase con mayor probabilidad. Obviamente, es muy importante optar por este enfoque que el modelo seleccionado sea capaz de obtener la \textbf{probabilidad} de que una muestra pertenezca a una clase. Los modelos seleccionados en este capítulo son capaces de obtener las probabilidades de clase.
-\linebreak
+Para mejorar este comportamiento, se va a optar por seguir el enfoque explicado en la Sección \ref{sec:ord_class}-\nameref{sec:ord_class}.\\
 Este tipo de algoritmo no esta implementado en la librería Scikit-Learn, pero esta provee de las herramientas necesarias para construir modelos personalizados y que sean compatibles con el resto de utilidades que la librería ofrece. Este proceso se va a explicar en la sección \ref{sec:sftw}-\nameref{sec:sftw}.\\
-\subsection{Resultados}
-En esta sección se van a presentar una comparativa entre los resultados obtenidos por los algoritmos de clasificación ordinal desarrollados y los resultados obtenidos por los algoritmos nativos que se han usado. Para facilitar la comparación, se han elegido unicamente los conjuntos de datos $(3.5,5.5,7)$  y $(4,6,7)$, puesto que han sido los conjuntos de datos en los que los algoritmos han mostrado diferencias en el rendimiento.
+\linebreak
 
-\subsubsection*{Árboles de decisión}
+En las secciones se van a presentar una comparativa entre los resultados obtenidos por los algoritmos de clasificación ordinal desarrollados y los resultados obtenidos por los algoritmos nativos que se han usado. Para facilitar la comparación, se han elegido unicamente los conjuntos de datos $(3.5,5.5,7)$  y $(4,6,7)$, puesto que han sido los conjuntos de datos en los que los algoritmos han mostrado diferencias en el rendimiento.\\
+Se va a mostrar por cada modelo seleccionado una sección \textbf{validación} donde se van a exponer los resultados obtenidos en los conjuntos de validación. Después de esta sección se mostrará una nueva sección exponiendo los resultados obtenidos en el conjunto de test.\\
+\linebreak
+Para mejorar la comparativa, solo se van a mostrar los valores en forma de gráfica.
+\clearpage
+\subsection{Resultados de Árboles de decisión}
 \label{sec:ord_cmp_dt}
-A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Árboles de Decisión) y el algoritmo de clasificación estándar:
+\subsubsection*{Validación}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/dt_ordinal_cmp_3_5_val_metrics.png}
@@ -313,29 +330,33 @@ A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre 
 \end{figure}
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/dt_ordinal_cmp_3_5_test_metrics.png}
-	\caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
-	\label{fig:dt_ordint_test_cmp_1}
-\end{figure}
-A
-Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Árboles de Decisión) y el algoritmo de clasificación estándar:
-\begin{figure}[H]
-	\centering
 	\includegraphics[scale=0.5]{src/dt_ordinal_cmp_4_6_val_metrics.png}
 	\caption{Comparación en validación para el conjunto $(4,6,7)$}
 	\label{fig:dt_ordin_val_cmp_2}
+\end{figure}
+En la Figura \ref{fig:dt_ordin_val_cmp_1} y \ref{fig:dt_ordin_val_cmp_2} se puede observar como el rendimiento en los conjuntos de validación ha sido similar. Las variaciones que se pueden observar pueden estar causadas debido a que puede haber un conjunto de validación que se haya comportado peor/mejor, pero estos resultados en validación nos indican que el enfoque usado no hace que el modelo funcione peor, por lo que se puede seguir con el conjunto de test.\\
+También se puede observar el comportamiento visto previamente, donde el modelo entrenado con el conjunto $(4,6,7)$ ha tenido un mejor rendimiento.
+\clearpage
+\subsubsection*{Test}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/dt_ordinal_cmp_3_5_test_metrics.png}
+	\caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
+	\label{fig:dt_ordin_test_cmp_1}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/dt_ordinal_cmp_4_6_test_metrics.png}
 	\caption{Comparación en test para el conjunto  $(4,6,7)$}
-	\label{fig:dt_ordint_test_cmp_2}
+	\label{fig:dt_ordin_test_cmp_2}
 \end{figure}
-
-Se puede observar que los resultados obtenidos usando una clasificación estándar ha sido ligeramente mejor que usando el algoritmo de clasificación ordinal. Parece que para árboles de decisión, en este caso, el orden de las clases no ha tenido una relevancia
-\subsubsection*{Random Forest}
+Como se puede observar en las Figuras \ref{fig:dt_ordin_test_cmp_1} y \ref{fig:dt_ordin_test_cmp_1}, los resultados obtenidos usando una clasificación estándar ha sido ligeramente mejor que usando el algoritmo de clasificación ordinal. Parece que para este modelo con este conjunto de datos, el orden de las clases no ha supuesto una mejora, aunque tampoco ha influido negativamente.\\
+\linebreak
+Viendo estos resultados, merece la pena seguir analizando como se comportan el resto de modelos, para comprobar si este comportamiento se repite o no.
+\clearpage
+\subsection{Resultados de Random Forest}
 \label{sec:ord_cmp_rf}
-A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest)  y el algoritmo de clasificación estándar:\\
+\subsubsection*{Validación}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/rf_ordinal_cmp_3_5_val_metrics.png}
@@ -344,28 +365,33 @@ A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre 
 \end{figure}
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/rf_ordinal_cmp_3_5_test_metrics.png}
-	\caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
-	\label{fig:rf_ordint_test_cmp_1}
-\end{figure}
-Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest) y el algoritmo de clasificación estándar:
-\begin{figure}[H]
-	\centering
 	\includegraphics[scale=0.5]{src/rf_ordinal_cmp_4_6_val_metrics.png}
 	\caption{Comparación en validación para el conjunto $(4,6,7)$}
 	\label{fig:rf_ordin_val_cmp_2}
+\end{figure}
+Observando los resultados expuestos en las figuras \ref{fig:rf_ordin_val_cmp_1} y \ref{fig:rf_ordin_val_cmp_2}, se aprecia lo ya visto en la Sección \ref{sec:ord_cmp_dt}: este enfoque no ha introducido peores considerables en el rendimiento del modelo.\\
+\linebreak
+La principal diferencia, es que parece que Random Forest si ha sido capaz de hacer uso del orden y los resultados han sido ligeramente superiores. Hay que comprobar si este comportamiento se ha repetido o no en el conjunto de test.
+\clearpage
+\subsubsection*{Test}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/rf_ordinal_cmp_3_5_test_metrics.png}
+	\caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
+	\label{fig:rf_ordin_test_cmp_1}
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/rf_ordinal_cmp_4_6_test_metrics.png}
 	\caption{Comparación en test para el conjunto  $(4,6,7)$}
-	\label{fig:rf_ordint_test_cmp_2}
+	\label{fig:rf_ordin_test_cmp_2}
 \end{figure}
-
-
-\subsubsection*{Support Vector Machine}
+Analizando los resultados observados en las Figuras \ref{fig:rf_ordin_test_cmp_1} se puede apreciar un comportamiento prácticamente idéntico, aunque se aprecia una muy ligera mejora en el caso ordinal.\\
+En cambio, en la Figura \ref{fig:rf_ordin_test_cmp_2}, se aprecia que si que hay una mayor mejora. Parece que este enfoque influye en Random Forest más que en Árboles de decisión.
+\clearpage
+\subsection{Resultados de Support Vector Machines}
 \label{sec:ord_cmp_svm}
-A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre el algoritmo de clasificación ordinal implementando  (usando Random Forest)  y el algoritmo de clasificación estándar:
+\subsubsection*{Validación}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/svc_ordinal_cmp_3_5_val_metrics.png}
@@ -374,16 +400,19 @@ A continuación se muestran la comparativa para el conjunto $(3.5,5.5,7)$ entre 
 \end{figure}
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/svc_ordinal_cmp_3_5_test_metrics.png}
-	\caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
-	\label{fig:svc_ordin_test_cmp_1}
-\end{figure}
-Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entre el algoritmo de clasificación ordinal implementando  (usando SVM) y el algoritmo de clasificación estándar:
-\begin{figure}[H]
-	\centering
 	\includegraphics[scale=0.5]{src/svc_ordinal_cmp_4_6_val_metrics.png}
 	\caption{Comparación en validación para el conjunto $(4,6,7)$}
 	\label{fig:svc_ordin_val_cmp_2}
+\end{figure}
+Se puede observar como se sigue repitiendo lo mismo que en las secciones anteriores, el añadir información sobre el orden de las clases no ha perjudicado al rendimiento de los modelos.\\
+Aunque en el caso $(3.5,5.5,7)$ no se aprecia una mejora, en el caso $(4,6,7)$ si que se ha mejorado ligeramente, pero esa mejora no ha sido tan grande como la mejora observada en Random Forest.
+\clearpage
+\subsubsection*{Test}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{src/svc_ordinal_cmp_3_5_test_metrics.png}
+	\caption{Comparación en test para el conjunto  $(3.5,5.5,7)$}
+	\label{fig:svc_ordin_test_cmp_1}
 \end{figure}
 \begin{figure}[H]
 	\centering
@@ -391,11 +420,15 @@ Las gráficas siguientes muestran la comparativa para el conjunto $(4,6,7)$ entr
 	\caption{Comparación en test para el conjunto  $(4,6,7)$}
 	\label{fig:svc_ordin_test_cmp_2}
 \end{figure}
+El mismo comportamiento observado en validación puede se puede apreciar en test. Se aprecia un ligero aumento de los valores de las métricas obtenidas por los modelos. 
+\clearpage
 \subsection{Análisis de resultados}
-Comenzando por \nameref{sec:ord_cmp_dt}, se puede apreciar como este algoritmo ha sido más robusto a la hora de clasificar de manera tradicional, ya que en este caso, el algoritmo de clasificación ordinal ha rendido ligeramente peor. Llama la atención que ha sido el \textbf{único} de los modelos seleccionados que ha rendido mejor el algoritmo de clasificación clásico. Este comportamiento puede darse a que debido que se está entrenando varios modelos para predecir la salida (explicado en \ref{sec:ord}-\nameref{sec:ord}) y siendo los árboles de decisión (como ya se ha visto en secciones anteriores) muy sensibles al ruido, la posibilidad de entrenar un modelo que induzca a error es alta,. Dado que el algoritmo implementado para la clasificación ordinal elige la salida que tenga una mayor probabilidad, es la causa probable de este comportamiento.\\
+Comenzando por \nameref{sec:ord_cmp_dt}, se puede apreciar como este algoritmo ha sido más robusto a la hora de clasificar de manera tradicional, ya que en este caso, el algoritmo de clasificación ordinal ha rendido ligeramente peor. Llama la atención que ha sido el \textbf{único} de los modelos seleccionados que ha rendido mejor el algoritmo de clasificación clásico.\\
+Este comportamiento puede darse a que debido que se está entrenando varios modelos para predecir la salida (explicado en \ref{sec:ord}-\nameref{sec:ord}) y los Árboles de Decisión muy sensibles al ruido. A diferencia de Random Forest, todos los árboles usados en el clasificador ordinal diseñado se han entrenado usando el \textbf{mismo} conjunto de datos, por lo que la posibilidad de entrenar un modelo que induzca a error más es alta que en Random Forest.\\
 \linebreak
-En cuanto a Random Forest, como se puede ver en las gráficas expuestas en \ref{sec:ord_cmp_rf}-\nameref{sec:ord_cmp_rf}, se ha conseguido una ligera mejora en las métricas usando el algoritmo de clasificación ordinal. A diferencia de Árboles de decisión, se ha podido apreciar en secciones anteriores como Random Forest es mas tolerante al ruido, eso hace que para usarlo como clasificador ordinal sea una buena opción.\\
+En cuanto a Random Forest, como se puede ver en las gráficas expuestas en \ref{sec:ord_cmp_rf}-\nameref{sec:ord_cmp_rf}, se ha conseguido una ligera mejora en las métricas usando el algoritmo de clasificación ordinal. Está claro que Random Forest, al ser un modelo más complejo que Árboles de decisión, es capaz de aprovechar esta información sobre el orden de las clases, aunque esta mejora nos hubiera gustado que fuese mayor que la que se ha observado.\\
 \linebreak
 Por ultimo, respecto a SVM, se ha apreciado una ligera mejora usando el algoritmo de clasificación ordinal. Al igual que Random Forest, se ha podido comprobar empíricamente que SVM ha sido tolerante con el ruido del conjunto de datos, por lo que hace que sea un algoritmo bueno a la hora de realizar la clasificación ordinal usando este conjunto de datos.\\
 \linebreak
 Generalmente, los algoritmos que han probado ser más sensibles al ruido han tenido un menor desempeño que algoritmos con mejor tolerancia a error. Random Forest en este caso, sigue siendo el algoritmo con mejores resultados, mientras que algoritmos más simples como Árboles de Decisión han tenido un rendimiento menor.
+\clearpage	

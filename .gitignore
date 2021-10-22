@@ -138,7 +138,6 @@ Resources
 data/*
 src/imgs/*
 # Latex aux files
-*.bib
 *.blg
 *.out
 *.aux

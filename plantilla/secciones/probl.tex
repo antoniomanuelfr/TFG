@@ -1,16 +1,38 @@
-\chapter{Introducción al problema}
+\chapter{Descripción del problema}
 \label{sec:problema}
 Pongámonos en situación de una persona dentro del departamento de marketing de una empresa que se centra en la creación de cursos. Determinar que variables son capaces de definir la intención emprendedora de una sección de la población podría ser beneficioso para la empresa, ya que podrían crear esos cursos enfocándose en aquellas variables más importantes (edad, estudios, ......) para que de una forma más eficiente captar a interesados, cambiar ciertas características de esos cursos para que sean accesibles a gente con más interés y, en definitiva, optimizar los recursos empleados en esos cursos para incrementar el beneficio.\\
 \linebreak
-Una vez que se ha planteado un objetivo (calcular la intención emprendedora de un conjunto de personas), el siguiente paso es el de elegir como se van a obtener los datos para llegar a ese objetivo. En el caso que se enfoca este trabajo, se ha usado una \textbf{encuesta anónima} sobre un conjunto de personas.
-Analizando las preguntas que se hacen en la encuesta. se pueden distinguir tres tipos de preguntas:
+Una vez que se ha planteado un objetivo (calcular la intención emprendedora de un conjunto de personas), el siguiente paso es el de elegir como se van a obtener los datos para llegar a ese objetivo. En el caso que se enfoca este trabajo, se ha usado una \textbf{encuesta anónima}. Esta encuesta se ha realizado a dos estudiantes españoles y ecuatorianos en los cursos 18-19 y 19-20.\\
+\linebreak
+Analizando las preguntas que se hacen en la encuesta. se pueden distinguir los siguientes tipos de preguntas:
 \begin{itemize}
-	\item \textbf{Variables de control:} Edad, género, estudios, país, etc.
-	\item \textbf{Variables de emprendimiento:} Son aquellas que vamos a usar como variables objetivo para los modelos que van a ser usados en las siguientes fases.
-	\item\textbf{Variables de competencias:} Estas son las más importantes de cara a los modelos, ya que son las que van a medir el comportamientos del conjunto de personas entrevistadas, dando así información al algoritmo para predecir las \textbf{variables de emprendimiento}.Algunos de estas variables miden \textbf{conocimientos financieros}, \textbf{experiencia}, \textbf{actitudes} que pueden favorecer el carácter emprendedor de un individuo, etc.
+	\item \textbf{Variables de control:} Este tipo está formado por:
+	\begin{itemize}
+		\item \textbf{Socio-demográficas:} Edad, género, lugar de nacimiento, país, etc.
+		\item \textbf{Estudios:} Curso, grado y nota.
+		\item \textbf{Experiencia laboral}
+	\end{itemize}
+	\item \textbf{Variables de emprendimiento} Este tipo está formado por varios grupos de preguntas. Estos grupos tienen en común la formulación de la pregunta, proponiendo una serie de afirmaciones y midiendo el grado de acuerdo, medido numéricamente (1=desacuerdo total y 7 acuerdo total):
+	\begin{itemize}
+		\item \textbf{Intención emprendedora:} Dentro de este grupo de preguntas aparece la siguiente afirmación: \quotes{Tengo la firme intención de crear una empresa algún día}.
+		\item \textbf{Auto-eficacia emprendedora:} Un ejemplo de las afirmaciones que se plantean en este grupo seria: \quotes{Estoy preparado para iniciar una empresa viable}.
+		\item \textbf{Actitud hacia el emprendimiento:} \quotes{Ser emprendedor es una salida profesional atractiva para mí} seria una de las afirmaciones que aparecen en este grupo de preguntas.
+		\item \textbf{Norma social:} Una de las afirmaciones que aparecen en este grupo seria: \quotes{Mi familia aprobaría el que yo decidiese crear una empresa}.
+	\end{itemize}
+	\item\textbf{Variables de competencia financiera:} A diferencia del anterior, este tipo es un poco mas heterogéneo formado por varios grupos de preguntas:
+	\begin{itemize}
+		\item \textbf{Conocimientos financieros:} Este grupo esta formado por una serie de preguntas abiertas y una columna binaria asociada que tomará valores positivos cuando esta pregunta fue respuesta de forma correcta. Un ejemplo seria: \quotes{Una tarde prestas 25€ aun amigo y él te devuelve 25€ al día siguiente. ¿Qué tipo de interés ha pagado tu amigo por este préstamo}.
+		\item \textbf{Auto-evaluación de conocimientos financieros:} Variable numérica que mide la percepción de los estudiantes de sus conocimientos financieros. Toma valores de 1 (muy bajos) a 5 (muy altos).
+		\item \textbf{Actitud financiera:} Se presenta una serie de afirmaciones y el encuestado debe contestar su grado de acuerdo. Toma valores de 1 (desacuerdo total) a 5 (acuerdo total). Un ejemplo seria \quotes{Tiendo a vivir en el presente sin pensar en el futuro}.
+		\item \textbf{Comportamientos financieros:} Se realiza una serie de preguntas a la persona encuestada y la variable asignada toma valores positivos si esa persona tiene un comportamiento y negativos en caso contrario.
+	\end{itemize}
+	\item \textbf{Variables de inclusión financiera:} Preguntas binarias que miden el acceso a diversos productos financieros y servicios financieros de calidad.
+	\item \textbf{Conocimientos financieros emprendedores:} Preguntas binarias donde se realizan preguntas sobre conocimientos financieros emprendedores (balance, rentabilidad ventas, etc.) Toman un valores positivos cuando la respuesta es correcta y negativa en caso contrario.
 \end{itemize}
-Con este conjunto de preguntas, se podría obtener un conjunto de datos suficientemente bueno para poder extraer información de los datos. Es importante tener en cuenta que no se está trabajando sobre un conjunto de datos teórico, si no que es un conjunto de datos real, y dependiendo de la forma en la que se haya recogido la información puede ocurrir que se obtengo un conjunto de datos del que no se pueda extraer ninguna información, debido a que tenga un gran nivel de ruido, los datos estén mal muestreados o incluso un mal diseño de la encuesta.\\
+Toda esta información se ha compartido con nosotros mediante un archivo \textit{Excel} con el siguiente formato:
+\begin{itemize}
+	\item En cada \textbf{columna} se encuentra la \textbf{respuesta} a cada una de las preguntas de la encuesta 
+	\item Por cada persona encuestada, se ha asignado una \textbf{fila}.
+\end{itemize}
+Junto con estos datos, se ha proporcionado una tabla en la que se encuentran variables, su explicación y que valores puede tomar.\\
 \linebreak
-La primera fase del proceso de extracción de conocimiento de un conjunto de datos va a ser precisamente esta, haciendo uso de una serie de modelos, se comprobará el rendimiento y se tomará la decisión de si el conjunto de datos es válido o no. En el caso de que todos los modelos seleccionados no funcionen correctamente, se debería de volver a la fase de recolección de datos, con las indicaciones necesarias para lograr un conjunto inicial lo suficientemente bueno. \\
-\linebreak
-En el caso de que los modelos se comporten bien, el paso seria analizar donde flaquean los algoritmos,  ajustarlos o realizar cambios en el conjunto inicial para incrementar el rendimiento del modelo. A todo este proceso se le conoce como \textbf{KDD} (\textit{Knowledge Discovery in Databases}).24

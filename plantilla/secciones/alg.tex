@@ -105,20 +105,4 @@ Para afrontar este problema, se propuso el usar una combinación de perceptrones
 	\label{fig:rnn}
 \end{figure}
 Un elemento fundamental de las Redes Neuronales es el algoritmo de \textit{back-propagation}. Este algoritmo usa el error obtenido en las capas de salida y este era propagado hacia cada neurona anterior (de ahí el nombre de \textit{back-propagation}), ajustando así el peso calculado por cada neurona en función del comportamiento del modelo en la iteración anterior.
-\section{Conjuntos de validación}
-\label{sec:validation}
-Finalmente en esta sección, se va a explicar que metodología se ha seguido para determinar el la capacidad de predicción del modelo seleccionado, ya que no basta con definir un conjunto de entrenamiento para entrenar el modelo y un conjunto de test para comprobar el rendimiento con datos que el algoritmo no conoce. Aunque a primera vista esta parece una técnica correcta, tiene varios inconvenientes:
-\begin{itemize}
-	\item Cuando se ajustan los hiper-parámetros de los modelos, se podría llegar a ajustar el modelo al conjunto de test, produciendo un sobre-ajuste.
-	\item Solo se esta usando una parte de los datos para validar el modelo, nada asegura que el conjunto de test sea representativo del conjunto de datos con el que se está trabajando.
-\end{itemize}
-Para solventar estas y algunos otros problemas que tiene esta metodología, se usa la \textbf{validación cruzada}.\\
-\linebreak
-En lugar de usar el conjunto de entrenamiento para entrenar un único modelo, se divide el conjunto de entrenamiento en $k$ partes, entrenando $k$ modelos usando $k-1$ subconjunto y el restante como de test. \\
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{grid_search_cross_validation.png}
-	\caption{Ejemplo de validación cruzada con $k=5$}
-	\label{fig:cross-validation}
-\end{figure}
-Como se aprecia en la figura \ref{fig:cross-validation}, se ha dividido el conjunto de datos en 5 conjuntos (folds), usando en cada iteración 4 para entrenar el modelo y uno para verificar con datos que el modelo no ha visto. Finalmente, se usa el conjunto de test (habiendo entrenado previamente el modelo con todo el conjunto de entrenamiento).
+

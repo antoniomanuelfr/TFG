@@ -4,66 +4,7 @@ El objetivo principal de esta sección es el de comprobar el comportamiento de u
 Como se ha comentado previamente, se está trabajando sobre un problema bastante peculiar, donde se intenta predecir distintas variables ordinales. Antes de comenzar con algoritmos más complejos, el primer enfoque para resolver el problema ha sido el de usar una media de cada variable a predecir. \\
 Es cierto que usando este enfoque, estamos perdiendo información muy importante: se está suponiendo que todas las variables son igualmente importantes, lo cual es una desventaja de esta aproximación al problema.
 Por el contrario, este enfoque tiene la ventaja de estar usando algoritmos clásicos de regresión, proporcionando una salida más general, además de que usando este enfoque primero, descartamos la posibilidad de tener un conjunto de datos con mucho ruido o con un mal muestreo de los datos.
-\section{Rendimiento de modelos de regresión}
-Para comprobar el comportamiento de los distintos modelos seleccionados, se han usado las siguientes \textbf{métricas de regresión}: \textit{\textbf{Coeficiente de determinación}} (se denota como $R^2$), \textit{\textbf{Desviación de Poisson}} y \textit{\textbf{Error cuadrático medio}}
-\subsection{Coeficiente de determinación}
-Se define como \textbf{coeficiente de determinación} como la proporción de la varianza total explicada por la variables independientes del modelo. Proporciona una indicación de como de bueno es un ajuste y por tanto, una medida de como de bueno es el modelo cuando predice nuevas muestras.\\
-\linebreak
-Matemáticamente, se define el coeficiente de determinación como:
-\[
-	R^2 (y, \hat{y}) = 1 - \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}    {\sum_{i=1}^{n} (y_i - \overline{y})^2}
-\]
 
-Donde:
-\begin{itemize}
-	\item $y$ es el conjunto de valores reales para las variables objetivo.
-	\item $\hat{y}$ es el valor predicho para los valores objetivo.
-	\item $\hat{y}_i$ es la predicción de la i-ésima muestra.
-	\item $y_i$ es el valor real de la i-ésima muestra.
-	\item $\overline{y} = \frac{1}{n} \sum_{i=1}^{n} y_i$.
-	\item $n$ es el numero de muestras del conjunto.
-\end{itemize}
-insertar graficos explicando varianza, etc
-\subsection{Desviación de Poisson}
-\subsection{Error cuadrático medio}
-El error cuadrático medio de un estimador mide el promedio de los errores al cuadrado.\\
-Matemáticamente, se define el error cuadrático medio como:
-\[
-	MSE(y,\hat{y}) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i) ^2
-\]
-Donde:
-\begin{itemize}
-	\item $y$ es el conjunto de valores reales para las variables objetivo.
-	\item $\hat{y}$ es el valor predicho para los valores objetivo.
-	\item $\hat{y}_i$ es la predicción de la i-ésima muestra.
-	\item $y_i$ es el valor real de la i-ésima muestra.
-	\item $n$ es el numero de muestras del conjunto.
-\end{itemize}
-
-\subsection{Gráficos}
-Además del uso de las métricas mencionadas previamente, se han creado las siguientes gráficas para visualizar los errores que esta haciendo un modelo en concreto. Esto ayuda a la toma de decisiones en fases siguientes.\\
-Las gráficas que se han desarrollado son las siguientes:
-\begin{itemize}
-	\item Gráfico de dispersión de errores.
-	\item Cantidad de errores por rango. (probablemente sea mejor cambiar este nombre, pero es el nombre que se me ocurrió)
-\end{itemize}
-El gráfico de dispersión de errores consiste en mostrar en la misma gráfica el valor real de las variables objetivo y el valor predicho por nuestro modelo. Esto nos permite ver como de juntos están las predicciones, identificando así en que zonas el algoritmo se está equivocando más frecuentemente.\\
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{scattered.png}
-	\caption{Ejemplo de gráfico de dispersión de errores}
-	\label{fig:scattered_example}
-\end{figure}
-
-El segundo gráfico consiste en lo siguiente:
-Los modelos que han sido entrenados están prediciendo valores medios. El proceso seguido para realizar estos gráficos ha sido el de obtener los valores redondeados tanto de la predicción como del valor real. Si el valor redondeado de la predicción y del dato real son distintos, se ha considerado como error. Sumando estos errores, se puede generar un gráfico de barras como el siguiente para tener una visión más clara de en que zonas de la predicción el algoritmo esta funcionando peor:
-\linebreak
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{error_hist.png}
-	\caption{Ejemplo de gráfico de errores por rango}
-	\label{fig:error_hist_example}
-\end{figure}
 \section{Modelos de regresión}
 En esta sección, se va a mostrar los resultados obtenidos por los modelos seleccionados en \ref{sec:algoritmos}-\nameref{sec:algoritmos}.
 \subsection{Árboles de decisión}
@@ -102,13 +43,18 @@ La siguiente tabla expone los resultados obtenidos en validación:
 	\caption{Árbol de decisión: Profundidad 8, número máximo de hojas 16}
 	\label{tab:tree_res}
 \end{table}
-La siguiente figura muestra el gráfico de dispersión de errores:\\
+\pagebreak
+La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/scattered_error_DT.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:tree_scattered}
 \end{figure}
+En la Figura \ref{fig:tree_scattered} se puede observar que los valores predichos por el Árbol de decisión siguen un patrón muy artificial, apareciendo muchos de ellos juntos y en la misma horizontal. El que estas horizontales aparezcan cerca de un valor concreto, no implica que estas estén bien clasificada.
+Con esta información podemos concluir que Árboles de decisión, aunque los resultados no han sido malos teniendo en cuenta que es un algoritmo más simple que el resto, no ha sido capaz de capturar todo el conocimiento que hay en el conjunto ya que no se puede observar la \quotes{dispersión} que aparece en el conjunto de datos real.\\
+También se puede apreciar que la mayoría de datos reales aparecen en la parte superior mientras que en la parte inferior se observan menos instancias. Cabe esperar que la cantidad de fallos que cometa el algoritmo en estos rangos sea menor, ya que la cantidad de muestras es menor.\\
+\linebreak
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
 \begin{figure}[H]
 	\centering
@@ -116,20 +62,24 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\caption{Conteo de errores}
 	\label{fig:tree_error_plot}
 \end{figure}
+En la Figura \ref{fig:tree_error_plot} se puede observar que tenemos una menor cantidad de errores en la parte baja de la variable objetivo. También se aprecia como para valores más altos, la tasa de error comienza a subir. \\Esto puede estar causado debido a que la dispersión en valores altos es muy baja (véase la Figura \ref{fig:tree_error_plot}). 
+Hay que analizar este comportamiento junto con el resto de modelos, para ver si el problema esta causado por los datos (en este caso el comportamiento se debería de repetir) o es causado por el propio modelo.
 \subsubsection*{Representación}
 Como se mencionó en la sección \textbf{\ref{alg:dec_tree}-\nameref{alg:dec_tree}}, los árboles de decisión tienen la ventaja de que pueden representarse fácilmente. \\
 En este caso, vamos a usar una representación gráfica del árbol, las reglas que ha obtenido el árbol y las variables más importantes.\\
 \linebreak
-La siguiente figura muestra la representación gráfica del árbol de decisión entrenado:\\
-
+La siguiente figura muestra la representación gráfica del árbol de decisión entrenado:
 \begin{figure}[H]
-	\centering
 	\includegraphics[scale=0.3]{src/dtree_plot.png}
 	\caption{Árbol de decisión}
 	\label{fig:decission_tree1}
 \end{figure}
-\pagebreak
-Por ultimo, estas son las 10 variables que el modelo consideró con más relevancia. El valor asociado a cada variable es la \textbf{importancia Gini}:
+Se puede observar que para el rendimiento que se ha obtenido, el árbol de salida no es excesivamente complejo y puede ser leído perfectamente por una persona que no tenga unos grandes conocimientos en como funciona el algoritmo, ya que se puede representar gráficamente el resultado obtenido. \\
+\linebreak
+Las variables variables en los niveles más altos son las que van a aparecer como más importantes (son las que mejor dividen el conjunto de datos) y a medida que se desciende por los niveles del árbol, estas variables cobran menos relevancia. \\
+\linebreak
+
+Gracias a esto, podemos representar gráficamente cuales son las variables que más contribuyeron a la hora de formar el modelo. A continuación se muestran un gráfico con las 10 variables que el modelo consideró con más relevancia. El valor asociado a cada variable es la \textbf{importancia Gini}:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/feature_importance_DT}
@@ -150,11 +100,11 @@ Volviendo a la documentación proporcionada para comprobar el significado de eso
 	\item \textbf{AE7:} Pregunta 7 sobre Actitudes financieras empresariales. Valor $0.006518$
 \end{itemize}
 De las columnas \textit{AEx} y \textit{CEFx} no hay información en la documentación, unicamente se menciona que son una serie de preguntas relacionadas con actitudes financieras empresariales y sobre conocimientos financieros empresariales respectivamente.
+\pagebreak
 \subsection{Random Forest}
 En esta sección se muestran los resultados obtenidos por el \textbf{Random Forest}, explicado en la sección \ref{alg:rf}-\nameref{alg:rf}.
 \subsubsection*{Procesado de datos}
 Al igual que los árboles de decisión, se ha hecho una imputación de valores perdidos y se ha transformado las variables categóricas a numéricas debido a limitación que hay en la librería usada.
-\pagebreak
 \subsubsection*{Resultados}
 Antes de mostrar los resultados, estos son los parámetros que se han usado al entrenar el modelo:
 \begin{itemize}
@@ -180,14 +130,16 @@ En la siguiente tabla, se muestra el resultado para obtenidos en validación y e
 	\caption{Random Forest}
 	\label{tab:res_random_forest}
 \end{table}
-La siguiente figura muestra el gráfico de dispersión de errores:\\
-\linebreak
+\pagebreak
+La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{src/scattered_error_rf.png}
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:rf_scattered}
 \end{figure}
+Se puede apreciar como a diferencia de Árboles de decisión (Figura \ref{fig:tree_scattered}) Random Forest si ha sido capaz de detectar esa dispersión que hay en el conjunto real y no se aprecia esas horizontales donde se estaban acumulando los valores predichos, si no que están repartidos por todo el espacio. Este comportamiento también se ve por un incremento considerable en los valores de métricas usados.
+\clearpage
 Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
 \begin{figure}[H]
 	\centering
@@ -195,10 +147,15 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\caption{Conteo de errores}
 	\label{fig:rf_error_plot}
 \end{figure}
-Para finalizar, esta es la lista de las 10 variables más importantes que ha obtenido Random Forest:
+Se puede observar una consistencia mayor en los valores predichos, ya que se sigue observando que la diferencia en los errores cometidos para valores bajos y valores altos es más uniforme. También se observa como Random Forest ha tenido un desempeño ligeramente peor para valores bajos, pero ha mejorado en mucho en los valores altos. El comportamiento que se observó en los resultados de Árboles de decisión se ha repetido también aquí. En este momento se debería de empezar a plantearse la opción de añadir una fase nueva a la fase de preprocesamiento para intentar mejorar este comportamiento.\\
+\linebreak
+A diferencia de Árboles de decisión, Random Forest es un modelo más complejo en el que es más complicado obtener una representación grafica. Se podrían mostrar todos los árboles que forman el bosque, pero hay que tener en cuenta que si el número de árboles que forman el bosque es muy alto, mostrar un gran número de árboles puede ser complicado. Esto demuestra que ha pesar de tener un modelo que rinde mejor, este es mucho más complejo de representar. \\
+Aún así, si se puede obtener las variables más importantes, calculando el promedio de la importancia de variables de todos los árboles que forman el bosque.
+\clearpage
+Las 10 variables más importantes que ha obtenido Random Forest:
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{src/feature_importance_rf}
+	\includegraphics[scale=0.4]{src/feature_importance_rf}
 	\caption{10 variables más importantes según Random Forest}
 	\label{fig:feature_rf}
 \end{figure}
@@ -215,13 +172,15 @@ Volviendo a la documentación, esta es la explicación para cada variable:
 	\item\textbf{NS1:} Mi familia aprobaría el que yo decidiese crear una empresa. Valor = $0.014467$
 	\item\textbf{Nota:} Nota media del expediente académico hasta la fecha de la encuesta sobre 10 puntos. Valor = $0.012254$
 \end{itemize}
+Como se puede apreciar, Random Forest ha encontrado un mayor número de variables. Tiene sentido, ya que si volvemos a \ref{alg:rf}-\nameref{alg:rf} se están entrenando varios árboles con conjuntos de datos distintos, lo que aumenta la probabilidad de obtener árboles distintos que probablemente difieran en la importancia que le dan a cada variable.\\
+Aún así, se puede observar como las variables \textbf{AE5} y \textbf{AcMedia} tienen una importancia alta en Random Forest y en Árboles de decisión.
+\pagebreak
 \subsection{KNN}
-En esta sección se muestran los resultados obtenidos por el \textbf{K-Nearest Neighbor}, explicado en la sección \ref{alg:knn}-\nameref{alg:knn}.
+En esta sección se muestran los resultados obtenidos por el \textbf{K-Nearest Neighbors}, explicado en la sección \ref{alg:knn}-\nameref{alg:knn}.
 \subsubsection*{Procesado de datos}
-KNN es un algoritmo que depende de la distancia entre dos muestras, esto implica que si una caracteristica del conjunto de datos que se esta usando tiene un rango \textbf{mayor} que otra, esa característica aportará más al cálculo de la distancia, cuando no necesariamente debe de ser así. Por ese motivo, este algoritmo necesita que el conjunto de datos esté \textbf{normalizado} en el momento de entrenar.\\
+KNN es un algoritmo que depende de la distancia entre dos muestras, esto implica que si una característica del conjunto de datos que se esta usando tiene un rango \textbf{mayor} que otra, esa característica aportará más al cálculo de la distancia, cuando no necesariamente debe de ser así. Por ese motivo, este algoritmo necesita que el conjunto de datos esté \textbf{normalizado} en el momento de entrenar.\\
 \linebreak
-Este algoritmo, a parte de necesitar que los datos estén normalizados, no admite valores perdidos y variables categóricas.
-
+Este algoritmo, a parte de necesitar que los datos estén normalizados, no admite valores perdidos ni variables categóricas.
 \subsubsection*{Resultados}
 Antes de mostrar los resultados, estos son los parámetros que se han usado al entrenar el algoritmo:
 \begin{itemize}
@@ -247,6 +206,7 @@ En la siguiente tabla, se muestra el resultado para obtenidos en validación y e
 	\caption{KNN: $K=5$, métrica Minkowski con $P=2$}
 	\label{tab:knn_res}
 \end{table}
+\clearpage
 La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
 	\centering
@@ -254,14 +214,17 @@ La siguiente figura muestra el gráfico de dispersión de errores:
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:knn_scattered}
 \end{figure}
-Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
-\linebreak
+Como se puede observar, este modelo empieza a mostrar un rendimiento mucho peor. Si observamos la Figura \ref{tab:knn_res}, se puede observar como la mayor parte de las predicciones aparecen en la parte central, justo donde se localizan la mayor parte de valores reales. Una posible explicación de este comportamiento puede ser debido a que KNN es un modelo que se basa en la distancia que hay entre dos muestras, puede ocurrir que haya la distancia a la zona donde esta localizada la mayor parte sea menor que la distancia al valor real.
+\clearpage
+A continuación se muestra una gráfica con el conteo de errores por clase:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/error_hist_knn.png}
 	\caption{Conteo de errores}
 	\label{fig:knn_error_plot}
 \end{figure}
+Se sigue observando el comportamiento explicado en secciones anteriores. Se aprecia como en valores altos, el modelo sigue teniendo una cantidad de errores más o menos igual que el resto de algoritmos mientras que en valores bajos, estos errores son menores.
+\clearpage
 \subsection{SVM}
 En esta sección se muestran los resultados obtenidos por el \textbf{Support Vector Machines}, explicado en la sección \ref{alg:svm}-\nameref{alg:svm}.
 \subsubsection*{Procesado de datos}
@@ -291,6 +254,7 @@ A continuación se muestra una tabla con los resultados obtenidos por SVM en el 
 	\caption{SVM: Tolerancia $1^{-3}$, Kernel RBF, $C=1$}
 	\label{tab:svm_res}
 \end{table}
+\clearpage
 La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
 	\centering
@@ -298,14 +262,18 @@ La siguiente figura muestra el gráfico de dispersión de errores:
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:svr_scattered}
 \end{figure}
-Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
-\linebreak
+Al igual que Random Forest, se puede observar que SVM ha logrado modelar la dispersión de los datos y no se observan esas predicciones que se observaron en Árboles de Decisión.\\
+Se puede observar también como una gran cantidad de predicciones se concentran entre los valores 5 y 6, pero este comportamiento también se puede observar en el resto de modelos. 
+\clearpage
+Finalizando con las gráficas obtenidas para el modelo SVM, a continuación se muestra el conteo de errores.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/error_hist_svr.png}
 	\caption{Conteo de errores}
 	\label{fig:svr_error_plot}
 \end{figure}
+Se vuelve a observar el mismo comportamiento que se ha visto antes, donde en rangos altos los algoritmos están teniendo problemas para predecir estos valores mientras que en valores más bajos no. Definitivamente, se puede confirmar la necesidad de realizar un tratamiento a los datos para intentar mejorar el rendimiento de los modelos seleccionados.
+\clearpage
 \subsection{XGBoost}
 En esta sección se muestran los resultados obtenidos por el \textbf{Xtreme Gradient Boosting}, explicado en la sección \ref{alg:xgb}-\nameref{alg:xgb}.
 \subsubsection*{Procesado de datos}
@@ -333,6 +301,7 @@ A continuación se muestra una tabla con los resultados obtenidos por \textbf{XG
 	\caption{Métricas de XGBoost con}
 	\label{tab:xgboost}
 \end{table}
+\clearpage
 La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
 	\centering
@@ -340,6 +309,8 @@ La siguiente figura muestra el gráfico de dispersión de errores:
 	\caption{Gráfico de dispersión de errores para XGBoost}
 	\label{fig:xgboost_scattered}
 \end{figure}
+Al igual que los resultados obtenidos por Random Forest, en la Figura \ref{fig:xgboost_scattered} se puede observar como el rendimiento del modelo ha sido bastante bueno, logrando capturar también esa dispersión que modelos más simples como Árboles de decisión no fueron capaces de modelar. 
+\clearpage
 Finalizando con las gráficas, a continuación se muestra una gráfica con el conteo de errores por clase:
 \begin{figure}[H]
 	\centering
@@ -347,6 +318,8 @@ Finalizando con las gráficas, a continuación se muestra una gráfica con el co
 	\caption{Conteo de errores}
 	\label{fig:xgboost_error_plot}
 \end{figure}
+En la Figura \ref{fig:xgboost_error_plot} se puede observar el mismo comportamiento que en resto de modelos que se han estudiado en secciones anteriores. Está bastante clara la necesidad de realizar un paso extra en la parte de preprocesamiento para intentar reducir la cantidad de errores que se están cometiendo en los valores más altos.
+\clearpage
 \subsection{Perceptrón multi-capa}
 En esta sección se muestran los resultados obtenidos por el \textbf{Perceptron multicapa}, explicado en la sección \ref{alg:mlp}-\nameref{alg:mlp}.
 \subsubsection*{Procesado de datos}
@@ -377,6 +350,7 @@ En esta tabla, se puede observar el rendimiento del modelo en los conjuntos de v
 	\caption{Perceptrón Multicapa: 1 capa oculta con 100 neuronas, 500 iteraciones max}
 	\label{tab:mlp_res}
 \end{table}
+\clearpage
 La siguiente figura muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
 	\centering
@@ -384,13 +358,16 @@ La siguiente figura muestra el gráfico de dispersión de errores:
 	\caption{Gráfico de dispersión de errores}
 	\label{fig:mlp_scattered}
 \end{figure}
-Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:\\
-\linebreak
+En la Figura \ref{fig:mlp_scattered} se puede observar un comportamiento que no se ha observado con el resto de modelos: El modelo entrenado esta prediciendo valores fuera del rango. Este comportamiento se puede explicar debido a que el modelo ha aprendido el ruido del conjunto de datos, sufriendo así de un sobre-aprendizaje. Observando las métricas se puede ver como en el conjunto de entrenamiento el resultado ha sido muy bueno, pero en el conjunto de test no. Este comportamiento también se repite en los conjuntos de validación.
+\clearpage
+Continuando con las gráficas, e continuación se muestra una gráfica con el conteo de errores por clase:
 \begin{figure}[H]
 	\centering	\includegraphics[scale=0.8]{src/error_hist_MLP.png}
 	\caption{Conteo de errores}
 	\label{fig:mlp_error_plot}
 \end{figure}
+Aunque el rendimiento de este modelo ha sido el peor, se sigue observando el mismo comportamiento que en los modelos previos, evidenciando una vez más la necesidad de ese procesamiento extra que es necesario para intentar mejorar los resultados.
+\clearpage
 \section{Análisis de resultados}
 Se ha observado que los modelos basados en Árboles de Decisión y Random Forest han tenido un buen comportamiento, por lo que se ha optado por seguir haciendo uso de ellos en secciones siguientes. XGBoost, tiene unos resultados ligeramente peores respecto a Random Forest pero con un comportamiento similar, fallando considerable en valores altos de intención emprendedora media). Como XGBoost no esta aportando nada nuevo, por ahora se va a descartar.\\
 \linebreak
@@ -399,7 +376,7 @@ SVR se ha comportado casi al nivel de modelos como XGBoost o Random Forest. Por 
 Los resultados obtenidos por  KNN demuestran que este algoritmo no funciona bien con el conjunto de datos que se está usando. La razón más probable por la que KNN obtuvo estos resultados, es que hay relaciones entre las variables que KNN no es capaz de detectar, al comparar únicamente la distancia característica por característica. Debido al bajo desempeño que se ha obtenido al usar KNN, va a ser descartado de las siguientes fases.\\
 \linebreak
 Respecto al Perceptrón Multicapa, ya que el rendimiento en comparación con otros modelos probados y debido al enorme coste de entrenamiento que pueden llegar a tener, se ha decidido no continuar haciendo uso de este modelo.\\
-\linebreak
+\clearpage
 Como ya se ha mencionado, los modelos basados en árboles de decisión son capaces de obtener la importancia de las características. A continuación se muestran las gráficas de nuevo para facilitar la comparación:
 \begin{figure}[H]
 	\centering
@@ -418,7 +395,7 @@ Como se ve en las figuras, vemos que hay dos variables que \textbf{ambos} algori
 	\item\textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales.
 	\item\textbf{AcMedia:} Variable global de Actitud emprendedora.
 \end{itemize}
-Repasando los resultados, se puede apreciar que a todos los algoritmos usados les está costando predecir correctamente los valores altos para la intención emprendedora media (véase figura \ref{fig:rf_error_plot}). Este comportamiento ha sido constante para cada algoritmo usado. La causa de este comportamiento puede ser que a medida que se incrementa el valor de intención emprendedora media, los datos son menos dispersos y a los algoritmos les está costando distinguir entre varios valores cercanos. Este comportamiento se puede apreciar en los gráficos de dispersión de errores que se han mostrado previamente.
+Repasando los resultados, se puede apreciar que a todos los algoritmos usados les está costando predecir correctamente los valores altos para la intención emprendedora media (véase Figura \ref{fig:rf_error_plot}). Este comportamiento ha sido constante para cada algoritmo usado. La causa de este comportamiento puede ser que a medida que se incrementa el valor de intención emprendedora media, los datos son menos dispersos y a los algoritmos les está costando distinguir entre varios valores cercanos. Este comportamiento se puede apreciar en los gráficos de dispersión de errores que se han mostrado previamente.
 \pagebreak
 \section{Muestreo de datos}
 Una vez se ha comprobado el rendimiento de los distintos modelos que se han seleccionado, se va a intentar mejorarlo añadiendo nuevas etapas extra al procesamiento de datos antes de entrenar los modelos.
@@ -427,7 +404,7 @@ Como se ha podido observar en la primera iteración, todos los algoritmos se est
 Under-Sampling (se podría traducir como \textit{muestreo}) es una técnica para reducir el ruido del conjunto de datos eliminando algunas muestras del conjunto de datos.\\
 \linebreak
 Como se puede ver en la \ref{tab:ocurrencia_valores} donde se muestra la ocurrencia de valores para las distintas variables a predecir,  aquellos con un valor alto son los más predominantes, siendo en estos valores donde los algoritmos más se están equivocando. El motivo puede ser que al estar prediciendo la media de las distintas variables, se está introduciendo una gran cantidad de ruido. \\
-En valores bajos, como se puede ver en la figura \ref{fig:rf_error_plot} donde se muestra el gráfico de errores para Random Forest, la cantidad de fallos en el algoritmo para estos valores es mucho menor. Esta tendencia se repite en todos los algoritmos.\\
+En valores bajos, como se puede ver en la Figura \ref{fig:rf_error_plot} donde se muestra el gráfico de errores para Random Forest, la cantidad de fallos en el algoritmo para estos valores es mucho menor. Esta tendencia se repite en todos los algoritmos.\\
 \subsection{Algoritmo}
 Para realizar el proceso de muestreo, se ha desarrollado el siguiente algoritmo:
 \begin{enumerate}
@@ -448,7 +425,7 @@ A continuación se muestra una serie de gráficos comparando los resultados obte
 	\caption{Comparación de errores usando under-sampling}
 	\label{fig:cmp_error_dtree}
 \end{figure}
-Como se aprecia en la figura \ref{fig:cmp_error_dtree}, usando el algoritmo de muestreo, se ha reducido la cantidad ruido en los rangos más altos de predicción, mejorando así el rendimiento del árbol de decisión para estos valores y estabilizando las zonas donde se estaba comportando peor.
+Como se aprecia en la Figura \ref{fig:cmp_error_dtree}, usando el algoritmo de muestreo, se ha reducido la cantidad ruido en los rangos más altos de predicción, mejorando así el rendimiento del árbol de decisión para estos valores y estabilizando las zonas donde se estaba comportando peor.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/dtree_undersamp_val_metrics.png}
@@ -474,7 +451,7 @@ En general, se aprecia una mejora en árboles de decisión reduciendo el ruido d
 	\label{fig:cmp_error_svr}
 \end{figure}
 Al contrario que los Árboles de Decisión, SVM han sido menos propicias al ruido del conjunto de datos. Al aplicar el muestreo se aprecia una bajada de rendimiento en todos los rangos de predicción. \\
-Como se explicaba en \nameref{sec:svm} - \ref{sec:svm}, SVM busca el hiperplano con más margen entre los clusters que forma el conjunto de datos, consiguiendo así un algoritmo robusto frente a ruido.
+Como se explicaba en \nameref{alg:svm}-\ref{alg:svm}, SVM busca el hiper-plano con más margen entre los clusters que forma el conjunto de datos, consiguiendo así un algoritmo robusto frente a ruido.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/svr_undersamp_val_metrics.png}
@@ -495,7 +472,7 @@ Las gráficas \ref{fig:cmp_val_svr} y \ref{fig:cmp_test_svr} complementan el res
 	\caption{Comparación de errores usando under-sampling}
 	\label{fig:cmp_error_rf}
 \end{figure}
-En la figura se puede apreciar como al igual que los Árboles de decisión, el eliminar ciertas instancias ruidosas del conjunto de datos implica una mejora en el rendimiento del algoritmo. En este caso, se ha conseguido reducir el porcentaje de fallos cuando se está prediciendo valores altos de intención emprendedora media.
+En la Figura \ref{fig:cmp_error_rf} se puede apreciar como al igual que los Árboles de decisión, el eliminar ciertas instancias ruidosas del conjunto de datos implica una mejora en el rendimiento del algoritmo. En este caso, se ha conseguido reducir el porcentaje de fallos cuando se está prediciendo valores altos de intención emprendedora media.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/rf_undersamp_val_metrics.png}

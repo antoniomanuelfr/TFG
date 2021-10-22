@@ -1,6 +1,5 @@
 \chapter{Clasificación multi-etiqueta}
 Debido a la naturaleza del problema con el que se está trabajando, resulta complejo usar los enfoques explicados en la sección \ref{sec:ml}-\nameref{sec:ml}. Estos enfoques están diseñados para el caso de clasificación multi-etiqueta de tipo binario, no de tipo ordinal. Un ejemplo de la complejidad añadida por este problema seria a la hora de calcular el \textbf{labelset} de una muestra. En este caso, como se conoce que los valores a predecir son $\{1,2,3,4,5,6,7\}$ y con un total de 6 etiquetas. El labelset que se va a usar queda definido como: $\{1,2,3,4,5,6,7\}^6$, dando lugar a una gran cantidad de clases ($7^6 = 117649$ clases).
-
 \section*{Soluciones propuestas}
 El proceso para obtener un modelo para este tipo de clasificación es similar al que se ha visto en secciones anteriores, donde la mayor parte de los algoritmos necesitas una fase de entrenamiento inicial y dependiendo de las etiquetas asignadas a cada muestra, se ajustan los parámetros del modelo.
 \section{Primera solución: Transformación a clasificación multi-etiqueta binaria}
@@ -39,15 +38,18 @@ A continuación se muestran unas gráficas donde se va a recopilar la siguiente 
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:dt_br_label}
 \end{figure}
-Esta figura representa la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/feature_importance_dt_br_mean.png}
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:dt_br_mean}
 \end{figure}
-En la siguiente figura se muestran las distintas matrices de confusión para cada una de las etiquetas que componen el conjunto de datos.
+La Figura \ref{fig:dt_br_label} representa la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados. Como se pudo ver en secciones anteriores, la importancia de la variable \textbf{AE5} es muy grande en todas las etiquetas que se están intentando clasificar.\\
+Aunque con una menor importancia en general, las variables \textbf{ACMedia} y \textbf{SEMedia} también han tenido un contribución a la hora de generar el modelo.\\
 \linebreak
+Completando esta sección de la importancia de las variables, la Figura \ref{fig:dt_br_mean} representa la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados. Como se pudo ver en secciones anteriores, la importancia de la variable \textbf{AE5} es muy grande en todas las etiquetas que se están intentando clasificar.\\
+\linebreak
+Continuando con el análisis de los resultados, se van a mostrar las matrices de confusión por cada una de las etiquetas que se están usando.
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}[b]{0.3\textwidth}
@@ -88,7 +90,9 @@ En la siguiente figura se muestran las distintas matrices de confusión para cad
 	\caption{Matrices de confusión para los distintos clasificadores entrenados (AD)}
 	\label{fig:ml_conf_matrix_dt}
 \end{figure}
-\pagebreak
+Se puede ver como para todas las etiquetas se han clasificado una gran cantidad de variables positivas, mientras que parece que al modelo le ha costado predecir los valores negativos. \\
+En general, los resultados son buenos y consistentes para todas las etiquetas.
+\clearpage
 \subsubsection*{Random Forest}
 Continuando con la muestra de resultados, a continuación se muestran los obtenidos por Random Forest
 \begin{table}[H]
@@ -114,14 +118,16 @@ A continuación se muestran unas gráficas donde se va a recopilar la siguiente 
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:rf_br_label}
 \end{figure}
-Esta figura representa la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/feature_importance_rf_br_mean.png}
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:rf_br_mean}
 \end{figure}
-En la siguiente figura se muestran las distintas matrices de confusión para cada una de las etiquetas que componen el conjunto de datos.\linebreak
+En la Figura \ref{fig:rf_br_label} se puede observar la importancia de cada variable separando por etiqueta que se esta clasificando. A diferencia de la vista en Árboles de Decisión, se observa una mayor cantidad de variables, aunque se puede ver que las variables \textbf{AE5} y \textbf{ACMedia} siguen siendo preguntas muy importantes, pero hay variables como el \textbf{curso}, \textbf{nota}, \textbf{AC1}, etc que no han estado presentes en la grafica de Árboles de Decisión.\\
+En la Figura \ref{fig:rf_br_mean} se puede observar  la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados.
+\clearpage
+En la siguiente figura se puede observar las matrices de confusión por cada una de las etiquetas que se está clasificando:
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}[b]{0.3\textwidth}
@@ -162,7 +168,10 @@ En la siguiente figura se muestran las distintas matrices de confusión para cad
 	\caption{Matrices de confusión para los distintos clasificadores entrenados (RF)}
 	\label{fig:ml_conf_matrix_rf}
 \end{figure}
-\pagebreak
+Se puede ver un comportamiento similar al visto en Árboles de decisión, donde se ha clasificado correctamente valores positivos, más dificultades a la hora de predecir valores negativos, pero no tantos problemas como los que se han observado en Árboles de Decisión, donde en muchos de los casos se podía apreciar una mayor cantidad de fallos en estos valores.\\
+\linebreak
+También se aprecia que los resultados son consistentes para todas las etiquetas clasificadas, por lo que podemos afirmar que este modelo ha sido capaz de extraer conocimiento del conjunto de datos.
+\clearpage
 \subsubsection*{Support Vector Machines}
 Finalmente, se muestran los resultados del uso de SVM en usando el método Binary Relevance:
 Como SVM no puede recuperar la importancia de cada característica, estas gráficas se han omitido:
@@ -218,7 +227,8 @@ En la siguiente figura se muestran las distintas matrices de confusión para cad
 	\caption{Matrices de confusión para los distintos clasificadores entrenados (SVM)}
 	\label{fig:ml_conf_matrix_svc}
 \end{figure}
-\pagebreak
+Se vuelve a repetir el comportamiento observado, para valores positivos se ha conseguido predecir correctamente una buena parte de las muestras pertenecientes a esta clase, y de manera consistente por todas las etiquetas que se están clasificando.\\
+También se aprecia como parece que para valores negativos, el modelo vuelve a algunas dificultades.
 \subsection{Conclusiones}
 Como se puede observar por los resultados obtenidos, usando este enfoque para resolver el problema que se afronta ha resultado en unos buenos resultados y en la obtención de bastante información que puede ser relevante para el análisis de este caso.\linebreak
 
@@ -234,7 +244,7 @@ Esta característica del conjunto de datos con el que se está trabajando se ref
 Revisando los resultados obtenidos por los algoritmos que han demostrado ser más robustos (SVM y Random Forest), se puede observar como se han obtenido mejores resultados clasificando un porcentaje mayor correctamente de la clase negativa de cada etiqueta.\\
 \linebreak
 La parte que más interés tiene (en mi opinión) es la importancia de características, ya que en este caso se ha obtenido que variables son las mas influyentes por cada una de las etiquetas que forman el conjunto de datos. Se va a añadir un análisis más exhaustivo sobre estos resultados en la sección \ref{sec:conclusiones}-\nameref{sec:conclusiones}
-
+\clearpage
 \section{Segunda solución: Entrenar clasificadores ordinales por etiqueta}
 se va a usar uno de los enfoques más simples. Se va a entrenar un clasificador ordinal por cada variable.
 Dado que puede existir relaciones entre etiquetas, la principal desventaja de este enfoque es que no se tiene en cuenta esta relación, perdiendo así información que puede ser importante.\\
@@ -251,83 +261,6 @@ Los parámetros que mejores resultados dieron para Árboles de decisión fueron 
 	\item 3 niveles de profundidad máxima.
 	\item Máximo de 2 hojas.
 \end{itemize}
-A continuación se muestra una tabla con las medias obtenidas en la validación cruzada por cada una de las etiquetas que se está clasificando:
-\begin{itemize}
-	\item \textbf{IE1}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.389    & 0.648     & 0.382    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.341    & 0.618     & 0.383    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE1}}
-	      \end{table}
-	\item  \textbf{IE2}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.347    & 0.617     & 0.356    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.378    & 0.64      & 0.397    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE2}}
-	      \end{table}
-
-	\item  \textbf{IE3}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.356    & 0.625     & 0.376    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.342    & 0.614     & 0.371    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE3}}
-	      \end{table}
-	\item  \textbf{IE4}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media validación & 0.341    & 0.616     & 0.357    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.345    & 0.614     & 0.385    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE4}}
-	      \end{table}
-	\item  \textbf{IE5}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.307    & 0.596     & 0.333    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.352    & 0.618     & 0.364    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE5}}
-	      \end{table}
-	\item  \textbf{IE6}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.333    & 0.614     & 0.371    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.381    & 0.638     & 0.404    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE6}}
-	      \end{table}
-\end{itemize}
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/dt_mlabel_compare.png}
@@ -339,82 +272,6 @@ Los parámetros que mejores resultados dieron para Random Forest fueron los sigu
 \begin{itemize}
 	\item 7 árboles de decisión formando el bosque.
 	\item Se consideran todas las variables para buscar la mejor división.
-\end{itemize}
-A continuación se muestra una tabla con las medias obtenidas en la validación cruzada por cada una de las etiquetas que se está clasificando:
-\begin{itemize}
-	\item \textbf{IE1}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.393    & 0.648     & 0.384    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.332    & 0.608     & 0.38     \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE1}}
-	      \end{table}
-	\item  \textbf{IE2}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.355    & 0.624     & 0.362    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.38     & 0.643     & 0.392    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE2}}
-	      \end{table}
-
-	\item  \textbf{IE3}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.356    & 0.628     & 0.378    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.38     & 0.636     & 0.39     \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE3}}
-	      \end{table}
-	\item  \textbf{IE4}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media validación & 0.34     & 0.616     & 0.359    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.368    & 0.63      & 0.407    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE4}}
-	      \end{table}
-	\item  \textbf{IE5}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.322    & 0.608     & 0.343    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.337    & 0.61      & 0.354    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE5}}
-	      \end{table}
-	\item  \textbf{IE6}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.316    & 0.605     & 0.362    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.36     & 0.629     & 0.385    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE6}}
-	      \end{table}
 \end{itemize}
 
 \begin{figure}[H]
@@ -428,83 +285,6 @@ Los parámetros que mejores resultados dieron para las Máquinas de Soporte de V
 \begin{itemize}
 	\item Grado del polinomio igual a 2.
 	\item Coeficiente de regularización igual 0.5.
-\end{itemize}
-A continuación se muestra una tabla con las medias obtenidas en la validación cruzada por cada una de las etiquetas que se está clasificando:
-
-\begin{itemize}
-	\item \textbf{IE1}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.385    & 0.643     & 0.371    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.34     & 0.613     & 0.378    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE1}}
-	      \end{table}
-	\item  \textbf{IE2}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.34     & 0.614     & 0.344    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.395    & 0.651     & 0.411    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE2}}
-	      \end{table}
-
-	\item  \textbf{IE3}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.365    & 0.631     & 0.385    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.33     & 0.607     & 0.359    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE3}}
-	      \end{table}
-	\item  \textbf{IE4}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media validación & 0.34     & 0.614     & 0.36     \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.374    & 0.63      & 0.4      \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE4}}
-	      \end{table}
-	\item  \textbf{IE5}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      Conjunto         & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validacion & 0.31     & 0.599     & 0.34     \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.346    & 0.616     & 0.361    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE5}}
-	      \end{table}
-	\item  \textbf{IE6}
-	      \begin{table}[H]
-		      \centering
-		      \begin{tabular}{|c|c|c|c|c}
-			      \cline{1-4}
-			      FOLD             & F1 Score & AUC Score & Accuracy \\ \cline{1-4}
-			      Media Validación & 0.336    & 0.614     & 0.372    \\ \cline{1-4}
-			      Train            & 1        & 1         & 1        \\ \cline{1-4}
-			      Test             & 0.372    & 0.631     & 0.395    \\ \cline{1-4}
-		      \end{tabular}
-		      \caption{Valores de métricas obtenidas en la etiqueta \textbf{IE6}}
-	      \end{table}
 \end{itemize}
 
 \begin{figure}[H]
