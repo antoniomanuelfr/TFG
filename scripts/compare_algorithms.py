@@ -140,6 +140,8 @@ if __name__ == '__main__':
                              'If None, the name will be a hash of the names of all the values')
     parser.add_argument('--plot_values', action='store_true', default=False,
                         help="Specify if the values will be added to the bar plots")
+    parser.add_argument('--only_feature', action='store_true', default=False,
+                        help="Calculate only the feature importance differece.")
 
     arguments = parser.parse_args()
 
@@ -163,6 +165,11 @@ if __name__ == '__main__':
 
         feature_importance_dict[alg_name] = json_results['feature_importance']
 
+    # plot feature importance
+    compare_feature_importance(feature_importance_dict, 'Features', 'Importance', 10, arguments.save_figures,
+                               f'{cmp_str}_features')
+    if arguments.only_feature:
+        exit(0)
 
     if histogram_dict:
         comp_error_ranges(histogram_dict, 'Class', 'Error count', arguments.save_figures,
@@ -175,6 +182,3 @@ if __name__ == '__main__':
 
     compare_metrics(test_dict, 'Metric', 'Metric value', arguments.save_figures, f'{cmp_str}_test_metrics',
                     arguments.plot_values)
-
-    compare_feature_importance(feature_importance_dict, 'Features', 'Importance', 10, arguments.save_figures,
-                               f'{cmp_str}_features')
