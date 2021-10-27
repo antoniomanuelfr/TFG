@@ -558,6 +558,7 @@ def ml_feature_importance(ml_classifier, columns_names, label_names, n, xlabel, 
             data.append([label, variable, label_importances[variable]])
 
     importance_acum = importance_acum / ml_classifier.model_count_
+    mean_feature_importance = pd.Series(data=importance_acum, index=columns_names)
 
     data_to_plot = pd.DataFrame(data, columns=['Label', 'Variable', 'Importance'])
     ax = sns.barplot(x='Variable', y='Importance', hue='Label', data=data_to_plot, palette=palette)
@@ -571,8 +572,10 @@ def ml_feature_importance(ml_classifier, columns_names, label_names, n, xlabel, 
     else:
         plt.show()
 
-    return plot_feature_importance(pd.Series(data=importance_acum, index=columns_names), n, xlabel, ylabel,
-                                   f"{title}_mean", save, f"{extra}_mean")
+    plot_feature_importance(mean_feature_importance, n, xlabel, ylabel, f"{title}_mean", save, f"{extra}_mean")
+
+    return mean_feature_importance.to_dict()
+
 
 
 def plot_multi_label_confusion_matrix(y_true: np.array, y_pred: np.array, labels, label_names, title='', save=None, extra=None):
