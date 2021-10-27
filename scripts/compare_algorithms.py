@@ -150,18 +150,18 @@ if __name__ == '__main__':
 
     cmp_str = arguments.output_name
     for res in arguments.algorithms:
-        alg_list.append(load_json(res))
-
-    for res in alg_list:
-        alg_name = res['name']
+        json_results = load_json(res)
+        ## Calculate histogram dict
+        alg_name = json_results['name']
         if 'hist' in res:
-            histogram_dict[alg_name] = res['hist']
-        validation_dict[alg_name] = res['cross_validation']['validation_mean']
-        test_dict[alg_name] = res['test']
+            histogram_dict[alg_name] = json_results['hist']
 
+        # Calculate validation metrics dict
+        validation_dict[alg_name] = json_results['cross_validation']['validation_mean']
+        # Calculate test metrics dict
+        test_dict[alg_name] = json_results['test']
 
-    for algorithm in alg_list:
-        feature_importance_dict[algorithm['name']] = algorithm['feature_importance']
+        feature_importance_dict[alg_name] = json_results['feature_importance']
 
 
     if histogram_dict:
