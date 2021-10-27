@@ -102,7 +102,7 @@ if __name__ == '__main__':
     results['test'] = utils.calculate_classification_metrics(y_test_p, y_pred, best.predict_proba(x_test_p))
 
     print(results)
-    results['feature_importances'] = utils.ml_feature_importance_ml(best, x_train_p.columns, classification_predictor,
+    results['feature_importances'] = utils.ml_feature_importance(best, x_train_p.columns, classification_predictor,
                                                                     10, 'Variable', 'Importance',
                                                                     'Decision Tree features', args.save_figures,
                                                                     name_str)

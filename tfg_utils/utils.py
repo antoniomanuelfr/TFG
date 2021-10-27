@@ -544,7 +544,7 @@ def plot_multilabel_class_metrics(metric_dict, plot_values=False, save_figures=N
         plt.show()
 
 
-def ml_feature_importance_ml(ml_classifier, columns_names, label_names, n, xlabel, ylabel, title, save=None, extra=None):
+def ml_feature_importance(ml_classifier, columns_names, label_names, n, xlabel, ylabel, title, save=None, extra=None):
     #calculate the feature importance for each classifier
     importance_acum = np.zeros(ml_classifier.classifiers_[0].feature_importances_.shape)
     result = {}
