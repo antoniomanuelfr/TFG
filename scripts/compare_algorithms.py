@@ -99,6 +99,7 @@ def compare_feature_importance(feature_importance_dict: dict, xlabel, ylabel, n=
     data =  []
     for algorithm_name in feature_importance_dict:
         important_features = pd.Series(feature_importance_dict[algorithm_name]).sort_values(ascending=False)[:n]
+        important_features = important_features[important_features > 0.01]
         for f_name in important_features.index:
             data.append([generate_label_str(algorithm_name), f_name, important_features[f_name]])
 
@@ -112,6 +113,9 @@ def compare_feature_importance(feature_importance_dict: dict, xlabel, ylabel, n=
     if plot_values:
         for container in ax.containers:
             ax.bar_label(container)
+
+    for item in ax.get_xticklabels():
+        item.set_rotation(45)
 
     if save:
         plt.savefig(os.path.join(save, f'{extra}.png'))

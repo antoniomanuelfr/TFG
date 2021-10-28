@@ -564,7 +564,7 @@ def ml_feature_importance(ml_classifier, columns_names, label_names, n, xlabel, 
     ax = sns.barplot(x='Variable', y='Importance', hue='Label', data=data_to_plot, palette=palette)
     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left', ncol=3, mode="expand", borderaxespad=0.)
     for item in ax.get_xticklabels():
-        item.set_rotation(90)
+        item.set_rotation(45)
 
     if save:
         plt.savefig(os.path.join(save, f"feature_importance_{extra}_compare.png"))

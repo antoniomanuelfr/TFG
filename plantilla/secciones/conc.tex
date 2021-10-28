@@ -14,29 +14,19 @@ El conjunto de datos proporcionado, tenia problemas de variables con una gran ca
 \section{¿Cuales son las preguntas más importantes?}
 Gracias al hacer uso de modelos que son capaces de obtener la importancia de las distintas variables que forman un conjunto de datos, se puede obtener fácilmente cuales son estas preguntas. Hay que recordar que solo se va a poder obtener esta importancia únicamente en los modelos basados en Árboles de Decisión y Random Forest.\\
 \linebreak
-Se va a comenzar por comparar la importancia de variables de los enfoques \ref{sec:reg}-\nameref{sec:reg} y \ref{sec:ord}-\nameref{sec:class} (con los mejores resultados que se han obtenido).\\ 
-Para ello se van a generar una serie de gráficas para mostrar esta información de manera gráfica:
-
-Se va a comenzar comparando los valores medios obtenidos usando este enfoque y el enfoque propuesto en \nameref{sec:reg} y para árboles de decisión.
-La siguiente figura va a mostrar ambas gráficas que se obtuvieron para facilitar la lectura.
-Está claro que la variable \textit{AE5} (de esta variable, solo conocemos que es una pregunta sobre actitud financiera) es la que los algoritmos han encontrado que es más importante y con mucha diferencia del resto. La variable \textit{ACMedia} (mide la media de las respuestas de actitud emprendedora) ha sido una variable que los algoritmos también han encontrado que es relevante.\\
+Para comenzar con esta sección, se han elegido comparar las variables más importantes que el modelo basado en Árboles de Decisión ha obtenido. \\
+\linebreak
+Para facilitar la explicación, a continuación se va a mostrar una gráfica donde se han recogido las distintas variables que se han encontrado importantes usando los distintos enfoques que se han visto en secciones previas.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{src/dt-br_dt_features}
+	\label{fig:dt_ft_cmp1}
+	\caption{Comparativa de la importancia de variables según Árboles de Decisión}
+\end{figure}
+Está claro que la variable \textit{AE5}Desafortunadamente, la única información que se ha proporcionado sobre esta variable, es que es una pregunta sobre actitud financiera. 
+Está claro que la variable \textit{AE5} (desafurtunadamente, de esta variable, solo conocemos que es una pregunta sobre actitud financiera, ya que desafortunadamente) es la que los algoritmos han encontrado que es más importante y con mucha diferencia del resto. La variable \textit{ACMedia} (mide la media de las respuestas de actitud emprendedora) ha sido una variable que los algoritmos también han encontrado que es relevante.\\
 La primera diferencia entre ambos enfoques, se observa en las variables \textit{SEx} y \textit{SEMedia} (Autoeficacia emprendedora).
 En el caso de regresión, se observa como estas variables tienen un ligero impacto, pero aparecen preguntas concretas, sin tener en cuenta el valor medio, a diferencia de los resultados obtenidos usando \textit{Binary Relevance}, donde este valor medio tiene una mayor relevancia. Aun así, la respuesta a la pregunta \textit{SE2} (Estoy preparado para iniciar una empresa viable) se puede observar que ha tenido una mayor influencia que el resto de preguntas de esta sección.
 En la figura \ref{fig:dt_ft_cmp1} se muestran la importancia de variables calculada usando ambos enfoques.
-\begin{figure}[H]
-	\centering
-	\begin{subfigure}[b]{\textwidth}
-		\centering
-		\includegraphics[scale=0.4]{src/feature_importance_DT}
-		\caption{Importancia calculada en regresión}
-	\end{subfigure}
-	
-	\begin{subfigure}[b]{\textwidth}
-		\centering
-		\includegraphics[scale=0.4]{src/feature_importance_dt_br_mean.png}
-		\caption{Importancia calculada usando BR}
-	\end{subfigure}
-	\caption{Importancia calculadas por Árbol de Decisión}
-	\label{fig:dt_ft_cmp1}
-\end{figure}
+
 \chapter{Trabajos Futuros}
