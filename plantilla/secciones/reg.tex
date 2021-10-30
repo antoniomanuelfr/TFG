@@ -376,25 +376,21 @@ SVR se ha comportado casi al nivel de modelos como XGBoost o Random Forest. Por 
 Los resultados obtenidos por  KNN demuestran que este algoritmo no funciona bien con el conjunto de datos que se está usando. La razón más probable por la que KNN obtuvo estos resultados, es que hay relaciones entre las variables que KNN no es capaz de detectar, al comparar únicamente la distancia característica por característica. Debido al bajo desempeño que se ha obtenido al usar KNN, va a ser descartado de las siguientes fases.\\
 \linebreak
 Respecto al Perceptrón Multicapa, ya que el rendimiento en comparación con otros modelos probados y debido al enorme coste de entrenamiento que pueden llegar a tener, se ha decidido no continuar haciendo uso de este modelo.\\
-\clearpage
-Como ya se ha mencionado, los modelos basados en árboles de decisión son capaces de obtener la importancia de las características. A continuación se muestran las gráficas de nuevo para facilitar la comparación:
+\linebreak
+Como ya se ha mencionado, los modelos basados en árboles de decisión son capaces de obtener la importancia de las características. A continuación se muestran una gráfica recogiendo los valores de importancia de variables para facilitar la comparación:
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/feature_importance_DT}
-	\caption{10 variables más importantes según árboles de decisión}
-	\label{fig:feature_dtree2}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{src/feature_importance_rf}
-	\caption{10 variables más importantes según RF}
+	\includegraphics[scale=0.7]{src/rf_dt_features}
+	\caption{Variables más importantes según Random Forest y Árboles de Decisión}
 	\label{fig:feature_rf2}
 \end{figure}
-Como se ve en las figuras, vemos que hay dos variables que \textbf{ambos} algoritmos han dado como más importantes:
+Como se ve en las Figura \ref{fig:feature_rf2}, vemos que hay dos variables que \textbf{ambos} algoritmos han dado como más importantes:
 \begin{itemize}
 	\item\textbf{AE5:} Pregunta  5 sobre Actitudes financieras empresariales.
 	\item\textbf{AcMedia:} Variable global de Actitud emprendedora.
 \end{itemize}
+También se puede observar como Random Forest ha encontrado importantes variables que Árboles de Decisión no ha marcado como importantes. Esto demuestra otra vez que Random Forest es un modelo mucho más robusto que Árboles de Decisión y que es capaz de extraer más conocimiento del conjunto de datos con el que se está trabajando.\\
+\linebreak
 Repasando los resultados, se puede apreciar que a todos los algoritmos usados les está costando predecir correctamente los valores altos para la intención emprendedora media (véase Figura \ref{fig:rf_error_plot}). Este comportamiento ha sido constante para cada algoritmo usado. La causa de este comportamiento puede ser que a medida que se incrementa el valor de intención emprendedora media, los datos son menos dispersos y a los algoritmos les está costando distinguir entre varios valores cercanos. Este comportamiento se puede apreciar en los gráficos de dispersión de errores que se han mostrado previamente.
 \pagebreak
 \section{Muestreo de datos}
@@ -413,27 +409,28 @@ Para realizar el proceso de muestreo, se ha desarrollado el siguiente algoritmo:
 	\item Se comprueba la diferencia entre valor real y el valor predicho.
 	\item Si la diferencia es mayor que un umbral, se elimina esa muestra del conjunto de entrenamiento.
 \end{enumerate}
-La función que ejecuta este simple algoritmo de muestreo se llama \textit{\textbf{regression\_under\_sampler}}.
+El modelo entrenado para hacer muestreo, es un árbol de decisión con un máximo de $4$ niveles, eliminando muestras de todo el rango de predicción.\\
 \linebreak
-El modelo entrenado para hacer muestreo, es un árbol de decisión con un máximo de $4$ niveles, eliminando muestras de todo el rango de predicción.
+Con este algoritmo, vamos a ver que impacto tiene el eliminar estas muestras ruidosas. En el mejor de los casos, deberíamos observar un incremento en los valores de las métricas que se han usado. En el peor de los casos, puede ocurrir que al eliminar estas muestras, perdamos información y que el rendimiento de los modelos sea peor. 
+\clearpage
 \subsection{Resultados}
-A continuación se muestra una serie de gráficos comparando los resultados obtenidos por los algoritmos seleccionados:
+A continuación se muestra una serie de gráficos comparando los resultados obtenidos por los algoritmos seleccionados.\\
+\linebreak
+Con el objetivo de ajustar lo mejor posible los parámetros que se están usando para el algoritmo explicado en la sección anterior, se ha optado por elegir distintos umbrales dentro del rango $\left[0.4,1\right)$, mostrando de forma gráfica una comparativa con las métricas obtenidas con los distintos umbrales.\\
+Los valores que se aprecian en las leyendas de las figuras equivalen al valor del umbral para el que se ha obtenido ese valor.\\
+\linebreak
+En los párrafos siguientes, se van a mostrar los resultados obtenidos por los modelos que han sido seleccionados: Árboles de Decisión, Random Forest y Máquinas de Soporte de Vectores.
 \subsubsection*{Árboles de Decisión}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{src/dtree_undersamp_error_hist.png }
-	\caption{Comparación de errores usando under-sampling}
-	\label{fig:cmp_error_dtree}
-\end{figure}
-Como se aprecia en la Figura \ref{fig:cmp_error_dtree}, usando el algoritmo de muestreo, se ha reducido la cantidad ruido en los rangos más altos de predicción, mejorando así el rendimiento del árbol de decisión para estos valores y estabilizando las zonas donde se estaba comportando peor.
+La gráfica que se muestra a continuación compara el rendimiento medio en el conjunto de validación.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/dtree_undersamp_val_metrics.png}
 	\caption{Media en validación usando under-sampling}
 	\label{fig:cmp_val_dtree}
 \end{figure}
-Esta gráfica compara el rendimiento medio en el conjunto de validación.
-Respecto a las métricas obtenidas en los conjuntos de validación, se puede apreciar que en cuanto al valor obtenido por $R2$ se ha mantenido, pero se ha mejorado drásticamente el valor en las métricas \textit{Desviación de Poisson} y \textit{MSE}. Esto indica que el modelo obtenido tras el procesamiento se ajusta mejor a los datos.
+Respecto a las métricas obtenidas en los conjuntos de validación, se puede apreciar que en cuanto al valor obtenido por $R2$ se ha mantenido, pero se ha mejorado drásticamente el valor en las métricas \textit{Desviación de Poisson} y \textit{MSE}. Esto indica que el modelo obtenido tras el procesamiento se ajusta mejor a los datos.\\
+\linebreak
+Continuando con las gráficas comparativas, se va a mostrar una gráfica comparando las métricas obtenidas en el conjunto de test.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/dtree_undersamp_test_metrics.png}
@@ -442,54 +439,104 @@ Respecto a las métricas obtenidas en los conjuntos de validación, se puede apr
 \end{figure}
 Como se puede ver en la imagen anterior, las métricas en test son ligeramente mejores tras reducir el ruido dentro del conjunto de entrenamiento.\\
 \linebreak
+\clearpage
+Finalmente, se va a mostrar el gráfico de comparación de errores cometidos.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/dtree_undersamp_error_hist.png }
+	\caption{Comparación de errores usando under-sampling}
+	\label{fig:cmp_error_dtree}
+\end{figure}
+Como se aprecia en la Figura \ref{fig:cmp_error_dtree}, usando el algoritmo de muestreo, se ha reducido la cantidad ruido en los rangos más altos de predicción, mejorando así el rendimiento del árbol de decisión para estos valores y estabilizando las zonas donde se estaba comportando peor.\\
+\linebreak
+También se puede observar como se ha incrementado por mucho el valor de errores entorno al valor $4$, pero no ha influido negativamente en los valores de las métricas. Hay que recordar que esta tabla es una \textbf{aproximación} y que las métricas usadas tienen en cuenta muchos más factores importantes.\\
+\linebreak
 En general, se aprecia una mejora en árboles de decisión reduciendo el ruido del conjunto de datos, ya que los árboles de decisión son algoritmos bastantes sensibles al ruido.
-\subsubsection*{SVR}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{src/svr_undersamp_error_hist.png }
-	\caption{Comparación de errores usando under-sampling}
-	\label{fig:cmp_error_svr}
-\end{figure}
-Al contrario que los Árboles de Decisión, SVM han sido menos propicias al ruido del conjunto de datos. Al aplicar el muestreo se aprecia una bajada de rendimiento en todos los rangos de predicción. \\
-Como se explicaba en \nameref{alg:svm}-\ref{alg:svm}, SVM busca el hiper-plano con más margen entre los clusters que forma el conjunto de datos, consiguiendo así un algoritmo robusto frente a ruido.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{src/svr_undersamp_val_metrics.png}
-	\caption{Media en validación usando under-sampling}
-	\label{fig:cmp_val_svr}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{src/svr_undersamp_test_metrics.png}
-	\caption{Métricas en test usando under-sampling}
-	\label{fig:cmp_test_svr}
-\end{figure}
-Las gráficas \ref{fig:cmp_val_svr} y \ref{fig:cmp_test_svr} complementan el resultado mostrado en la gráfica \ref{fig:cmp_error_svr}, las cuales demuestran que la mejora apreciada en Árboles de Decisión no ha aplicó en SVM y lejos de mejorar, ha empeorado el valor obtenido por algunas métricas de regresión.\\
+\clearpage
 \subsubsection*{Random Forest}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{src/rf_undersamp_error_hist.png }
-	\caption{Comparación de errores usando under-sampling}
-	\label{fig:cmp_error_rf}
-\end{figure}
-En la Figura \ref{fig:cmp_error_rf} se puede apreciar como al igual que los Árboles de decisión, el eliminar ciertas instancias ruidosas del conjunto de datos implica una mejora en el rendimiento del algoritmo. En este caso, se ha conseguido reducir el porcentaje de fallos cuando se está prediciendo valores altos de intención emprendedora media.
+Para finalizar, a continuación se va a mostrar los resultados obtenidos por Random Forest en el conjunto de validación.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/rf_undersamp_val_metrics.png}
 	\caption{Media en validación usando under-sampling}
 	\label{fig:cmp_val_rf}
 \end{figure}
-En cuanto a la media en validación, a medida que se reduce la cantidad de muestras eliminadas, se aprecia como se reduce la métrica $R2$ pero mejora las métricas MSE y Desviación Poisson.
+En cuanto a la media en validación, se puede apreciar como a medida que se reduce la cantidad de muestras eliminadas, los valores tienden a ser peores. Como se ha visto en la sección anterior, esta mejora en validación puede no implicar una mejora en los valores obtenidos en test, por lo que antes de valorar si hay mejora o no, hay que observar los valores obtenidos en test.\\
+\clearpage
+A continuación se muestran los resultados obtenidos en el conjunto de test.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/rf_undersamp_test_metrics.png}
 	\caption{Métricas en test usando under-sampling}
 	\label{fig:cmp_test_rf}
 \end{figure}
-En test se aprecia el mismo comportamiento que en los conjuntos de validación: el mejor valor para $R2$ ha sido el obtenido entrando el modelo sin aplicar el  muestreo, mientras que respecto al resto de métricas, ha obtenido los mejores resultados eliminando las muestras problemáticas.\\
+En el conjunto de test, Random Forest ha tenido un comportamiento similar que el observado en SVM, donde los mejores resultados se han obtenido usando el conjunto de datos original.\\
+\linebreak
+También se puede apreciar como usando umbrales entre $\left[0.5,0.9\right]$ no se ha observado un cambio relevante en los métricas. Esta mejora solo se ha observado usando umbrales muy altos, donde se han eliminado la menor cantidad de muestras.\\
+\linebreak
+Esto demuestra que para modelos que Random Forest es un modelo mucho más robusto frente al ruido que Árboles de Decisión, donde se pudo apreciar la mejora en el rendimiento en el momento que se eliminaron ciertas muestras del conjunto de entrenamiento. 
+\clearpage
+Para finalizar mostrando los resultados obtenidos por Random Forest, se va a mostrar la gráfica de errores cometidos por rango.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/rf_undersamp_error_hist.png }
+	\caption{Comparación de errores usando under-sampling}
+	\label{fig:cmp_error_rf}
+\end{figure}
+En la Figura \ref{fig:cmp_error_rf} se puede apreciar una mejora para los rangos más altos de Intención Emprendedora. Esta mejora también se aprecia en los rangos más bajos. \\
+Donde si que no se observa una mejora, o incluso se empeora los resultados, es en las zonas medias, donde el valor más bajo de errores se ha obtenido usando el conjunto de datos original.
+\clearpage
+\subsubsection*{SVR}
+Continuando con los modelos seleccionados, a continuación se muestran los resultados obtenidos usando Máquinas de Soporte de Vectores.\\
+\linebreak
+Para empezar analizando los resultados, se va a mostrar los valores obtenidos en el conjunto de validación.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/svr_undersamp_val_metrics.png}
+	\caption{Media en validación usando under-sampling}
+	\label{fig:cmp_val_svr}
+\end{figure}
+En la Figura \ref{fig:cmp_val_svr} se puede observar como en validación, SVM parece que ha mejorado ligeramente el rendimiento cuando se han eliminado esas muestras más ruidosas, por lo que es una indicación de que el modelo sigue siendo bueno a la hora de extraer el conocimiento del conjunto de datos.\\
+\clearpage
+Continuando con el análisis de resultados, se van a mostrar los valores obtenidos en el conjunto de test.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/svr_undersamp_test_metrics.png}
+	\caption{Métricas en test usando under-sampling}
+	\label{fig:cmp_test_svr}
+\end{figure}
+Al contrario que los Árboles de Decisión, SVM parece que no se ha visto tan beneficiado a la hora de eliminar estas muestras más ruidosas. Se puede observar como la cantidad de errores cometidos (en amarillo) es menor que en el resto de modelos entrenados.\\
+Como se explicó en la Sección \nameref{alg:dec_tree}, los Árboles de Decisión son modelos que son muy sensibles al ruido, por lo que es de esperar que la mejora observada a la hora de eliminar estas muestras sea mayor que en modelos más robustos como SVM.\\
+\clearpage
+Para finalizar, se va a mostrar la gráfica de errores cometidos por el modelo
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{src/svr_undersamp_error_hist.png }
+	\caption{Comparación de errores usando under-sampling}
+	\label{fig:cmp_error_svr}
+\end{figure}
+Se puede apreciar como esa bajada de rendimiento que se observó en la Figura \ref{fig:cmp_test_svr} se observa también en la Figura \ref{fig:cmp_error_svr}, donde la cantidad de errores cometidos es menor en los casos donde no se han eliminado muestras, incrementando la tasa de errores especialmente en valores altos.\\
+\linebreak
+Debido a que este modelo es mucho más robusto que Árboles de Decisión, la mejora observada no se ha aplicado a la hora de hacer uso de este modelo.\\
+Parece que el hiper-plano que encontró el modelo con el conjunto de datos completo se adapta mejor al conjunto de test.
+\clearpage
 \subsection{Análisis de resultados}
 Se ha apreciado una mejora en en los algoritmos basados en árboles de decisión. La principal mejora ha sido el obtener una menor cantidad de errores en aquellas zonas donde los algoritmos se están comportando peor. También se ha podido observar que Random Forest obtuvo mejores resultados con un umbral más alto que Árboles de Decisión. \\
 La causa más probable de que necesite un umbral más alto es que al usar varios árboles para predecir el resultado, la probabilidad de que varios árboles contradigan el valor predicho por un árbol que clasificó mal un valor es alta. Por eso, al eliminar aquellas muestras más problemáticas del conjunto, el propio Random Forest es capaz de lidiar con el ruido de muestras que son menos problemáticas y beneficiarse de tener un conjunto de entrenamiento más grande.\\
 \linebreak
 Respecto a SVM, observando los resultados obtenidos, se aprecia que ha medida que se reduce la cantidad de muestras que se eliminan, el rendimiento es mejor.
-Como se están eliminando muestras que pueden estar en la frontera (o incluso vectores soporte),, es posible que el hiper-plano calculado por el modelo de un menor margen o sea en general peor.
+Como se están eliminando muestras que pueden estar en la frontera (o incluso vectores soporte), es posible que el hiper-plano calculado por el modelo de un menor margen o sea en general peor.\\
+\linebreak
+Como el único cambio que se ha observado ha sido en Árboles de Decisión, se va a comparar la importancia de variables obtenida en el conjunto original y en el conjunto en el que se han eliminado las muestras más ruidosas.\\
+\linebreak
+A continuación se va a mostrar una gráfica con la comparativa entre el modelo entrenado en el conjunto de datos original y en el conjunto de datos muestreado.
+\clearpage
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{src/dt_dt_und_features}
+	\caption{Comparación de importancia de variables}
+	\label{fig:cmp_fi_dt}
+\end{figure}
+Se puede apreciar como las variables más importantes a la hora de realizar la predicción siguen presentes, pero la variable \textbf{AE5} es ligeramente menos importante una vez que se han eliminado las muestras más ruidosas. En cambio, para la variable \textbf{ACMedia}, se puede observar el comportamiento contrario, un incremento en la importancia de esta variable. \\
+\linebreak
+También se aprecia como, para variables que no han influido tanto en la predicción usando el conjunto de datos original, se ha reducido la influencia de las mismas, llegando incluso a tener muy poca o ninguna relevancia en el conjunto de datos muestreado.

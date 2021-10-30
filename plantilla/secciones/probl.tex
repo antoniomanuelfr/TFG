@@ -2,37 +2,68 @@
 \label{sec:problema}
 Pongámonos en situación de una persona dentro del departamento de marketing de una empresa que se centra en la creación de cursos. Determinar que variables son capaces de definir la intención emprendedora de una sección de la población podría ser beneficioso para la empresa, ya que podrían crear esos cursos enfocándose en aquellas variables más importantes (edad, estudios, ......) para que de una forma más eficiente captar a interesados, cambiar ciertas características de esos cursos para que sean accesibles a gente con más interés y, en definitiva, optimizar los recursos empleados en esos cursos para incrementar el beneficio.\\
 \linebreak
-Una vez que se ha planteado un objetivo (calcular la intención emprendedora de un conjunto de personas), el siguiente paso es el de elegir como se van a obtener los datos para llegar a ese objetivo. En el caso que se enfoca este trabajo, se ha usado una \textbf{encuesta anónima}. Esta encuesta se ha realizado a dos estudiantes españoles y ecuatorianos en los cursos 18-19 y 19-20.\\
+Una vez que se ha planteado un objetivo (calcular la intención emprendedora de un conjunto de personas), el siguiente paso es el de elegir como se van a obtener los datos para llegar a ese objetivo. En el caso que se enfoca este trabajo, se ha usado una \textbf{encuesta anónima}. Esta encuesta se ha realizado a estudiantes españoles y ecuatorianos en los cursos 18-19 y 19-20.\\
 \linebreak
 Analizando las preguntas que se hacen en la encuesta. se pueden distinguir los siguientes tipos de preguntas:
 \begin{itemize}
 	\item \textbf{Variables de control:} Este tipo está formado por:
-	\begin{itemize}
-		\item \textbf{Socio-demográficas:} Edad, género, lugar de nacimiento, país, etc.
-		\item \textbf{Estudios:} Curso, grado y nota.
-		\item \textbf{Experiencia laboral}
-	\end{itemize}
+	      \begin{itemize}
+		      \item \textbf{Socio-demográficas:} Edad, género, lugar de nacimiento, país, etc.
+		      \item \textbf{Estudios:} Curso, grado y nota.
+		      \item \textbf{Experiencia laboral}
+	      \end{itemize}
 	\item \textbf{Variables de emprendimiento} Este tipo está formado por varios grupos de preguntas. Estos grupos tienen en común la formulación de la pregunta, proponiendo una serie de afirmaciones y midiendo el grado de acuerdo, medido numéricamente (1=desacuerdo total y 7 acuerdo total):
-	\begin{itemize}
-		\item \textbf{Intención emprendedora:} Dentro de este grupo de preguntas aparece la siguiente afirmación: \quotes{Tengo la firme intención de crear una empresa algún día}.
-		\item \textbf{Auto-eficacia emprendedora:} Un ejemplo de las afirmaciones que se plantean en este grupo seria: \quotes{Estoy preparado para iniciar una empresa viable}.
-		\item \textbf{Actitud hacia el emprendimiento:} \quotes{Ser emprendedor es una salida profesional atractiva para mí} seria una de las afirmaciones que aparecen en este grupo de preguntas.
-		\item \textbf{Norma social:} Una de las afirmaciones que aparecen en este grupo seria: \quotes{Mi familia aprobaría el que yo decidiese crear una empresa}.
-	\end{itemize}
+	      \begin{itemize}
+		      \item \textbf{Intención emprendedora:} Un ejemplo de las afirmaciones que se pueden encontrar en este grupo seria la siguiente: \quotes{Tengo la firme intención de crear una empresa algún día}.
+		      \item \textbf{Auto-eficacia emprendedora:} Un ejemplo de las afirmaciones que se plantean en este grupo seria: \quotes{Estoy preparado para iniciar una empresa viable}.
+		      \item \textbf{Actitud hacia el emprendimiento:} \quotes{Ser emprendedor es una salida profesional atractiva para mí} seria una de las afirmaciones que aparecen en este grupo de preguntas.
+		      \item \textbf{Norma social:} Una de las afirmaciones que aparecen en este grupo seria: \quotes{Mi familia aprobaría el que yo decidiese crear una empresa}.
+	      \end{itemize}
 	\item\textbf{Variables de competencia financiera:} A diferencia del anterior, este tipo es un poco mas heterogéneo formado por varios grupos de preguntas:
-	\begin{itemize}
-		\item \textbf{Conocimientos financieros:} Este grupo esta formado por una serie de preguntas abiertas y una columna binaria asociada que tomará valores positivos cuando esta pregunta fue respuesta de forma correcta. Un ejemplo seria: \quotes{Una tarde prestas 25€ aun amigo y él te devuelve 25€ al día siguiente. ¿Qué tipo de interés ha pagado tu amigo por este préstamo}.
-		\item \textbf{Auto-evaluación de conocimientos financieros:} Variable numérica que mide la percepción de los estudiantes de sus conocimientos financieros. Toma valores de 1 (muy bajos) a 5 (muy altos).
-		\item \textbf{Actitud financiera:} Se presenta una serie de afirmaciones y el encuestado debe contestar su grado de acuerdo. Toma valores de 1 (desacuerdo total) a 5 (acuerdo total). Un ejemplo seria \quotes{Tiendo a vivir en el presente sin pensar en el futuro}.
-		\item \textbf{Comportamientos financieros:} Se realiza una serie de preguntas a la persona encuestada y la variable asignada toma valores positivos si esa persona tiene un comportamiento y negativos en caso contrario.
-	\end{itemize}
+	      \begin{itemize}
+		      \item \textbf{Conocimientos financieros:} Este grupo esta formado por una serie de preguntas abiertas y una columna binaria asociada que tomará valores positivos cuando esta pregunta fue respuesta de forma correcta. Un ejemplo seria: \quotes{Una tarde prestas 25€ aun amigo y él te devuelve 25€ al día siguiente. ¿Qué tipo de interés ha pagado tu amigo por este préstamo}.
+		      \item \textbf{Auto-evaluación de conocimientos financieros:} Variable numérica que mide la percepción de los estudiantes de sus conocimientos financieros. Toma valores de 1 (muy bajos) a 5 (muy altos).
+		      \item \textbf{Actitud financiera:} Se presenta una serie de afirmaciones y el encuestado debe contestar su grado de acuerdo. Toma valores de 1 (desacuerdo total) a 5 (acuerdo total). Un ejemplo seria \quotes{Tiendo a vivir en el presente sin pensar en el futuro}.
+		      \item \textbf{Comportamientos financieros:} Se realiza una serie de preguntas a la persona encuestada y la variable asignada toma valores positivos si esa persona tiene un comportamiento y negativos en caso contrario.
+	      \end{itemize}
 	\item \textbf{Variables de inclusión financiera:} Preguntas binarias que miden el acceso a diversos productos financieros y servicios financieros de calidad.
 	\item \textbf{Conocimientos financieros emprendedores:} Preguntas binarias donde se realizan preguntas sobre conocimientos financieros emprendedores (balance, rentabilidad ventas, etc.) Toman un valores positivos cuando la respuesta es correcta y negativa en caso contrario.
 \end{itemize}
+\clearpage
 Toda esta información se ha compartido con nosotros mediante un archivo \textit{Excel} con el siguiente formato:
 \begin{itemize}
-	\item En cada \textbf{columna} se encuentra la \textbf{respuesta} a cada una de las preguntas de la encuesta 
+	\item En cada \textbf{columna} se encuentra la \textbf{respuesta} a cada una de las preguntas de la encuesta
 	\item Por cada persona encuestada, se ha asignado una \textbf{fila}.
 \end{itemize}
-Junto con estos datos, se ha proporcionado una tabla en la que se encuentran variables, su explicación y que valores puede tomar.\\
+Junto con estos datos, se ha proporcionado una tabla en la que se encuentran algunas de las preguntas que forman la encuesta, una explicación de la variable y que valores puede tomar.\\
 \linebreak
+Una vez que se nos compartió la información en este formato, se separaron las columnas que miden la intención emprendedora, ya que son las que se van a usar como predictores para los modelos que van a ser entrenados en las secciones siguientes. Estas columnas son: 
+\begin{itemize}
+	\item \textbf{IE1:} Estoy dispuesto a hacer cualquier cosa para ser un emprendedor.
+	\item \textbf{IE2:} Mi objetivo profesional es ser emprendedor.
+	\item \textbf{IE3:} Haré todo lo posible para crear y dirigir mi propia empresa.
+	\item \textbf{IE4:} Estoy decidido a crear mi propia empresa.
+	\item \textbf{IE5:} He reflexionado seriamente sobre crear una empresa.
+	\item \textbf{IE6:} Tengo la firme intención de crear una empresa algún día.
+\end{itemize}
+
+El resto de columnas que se pueden encontrar en el Excel, se han usado como el conjunto de datos que va a ser usado para predecir la intención emprendedora, cumpliendo así los objetivos que se han planteado en la Sección \ref{sec:obj}.\\
+\clearpage
+Para finalizar con esta introducción, se va a mostrar una tabla donde se puede observar el número de muestras, media, desviación estándar, mínimo, máximo y los percentiles.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		\cline{1-7}
+		Variable            & IE1  & IE2  & IE3  & IE4  & IE5  & IE6  \\ \cline{1-7}
+		Numero de muestras  & 1251 & 1248 & 1251 & 1250 & 1249 & 1249 \\ \cline{1-7}
+		Media               & 4.8  & 4.8  & 5    & 4.9  & 4.95 & 5.1  \\ \cline{1-7}
+		Desviación Estándar & 1.7  & 1.8  & 1.7  & 1.9  & 1.75 & 1.78 \\ \cline{1-7}
+		Mínimo              & 1    & 1    & 1    & 1    & 1    & 1    \\ \cline{1-7}
+		Máximo              & 7    & 7    & 7    & 7    & 7    & 7    \\ \cline{1-7}
+		$P_{25}$            & 4    & 4    & 4    & 4    & 4    & 4    \\ \cline{1-7}
+		$P_{50}$            & 5    & 5    & 5    & 5    & 5    & 5    \\ \cline{1-7}
+		$P_{75}$            & 6    & 6    & 7    & 6    & 6    & 7    \\ \cline{1-7}
+	\end{tabular}
+	\caption{Tabla con información sobre las columnas que se van a usar como predictores}
+\end{table}
+Se puede observar como hay columnas en las que existen valores perdidos, esto se tendrá en cuenta en la sección siguiente. También se puede observar que el valor de todas las variables están en el rango $\left[1,7\right]$ y la mediana se sitúa en el valor 5.

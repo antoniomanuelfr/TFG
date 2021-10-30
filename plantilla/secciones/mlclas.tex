@@ -230,13 +230,11 @@ En la siguiente figura se muestran las distintas matrices de confusión para cad
 Se vuelve a repetir el comportamiento observado, para valores positivos se ha conseguido predecir correctamente una buena parte de las muestras pertenecientes a esta clase, y de manera consistente por todas las etiquetas que se están clasificando.\\
 También se aprecia como parece que para valores negativos, el modelo vuelve a algunas dificultades.
 \subsection{Conclusiones}
-Como se puede observar por los resultados obtenidos, usando este enfoque para resolver el problema que se afronta ha resultado en unos buenos resultados y en la obtención de bastante información que puede ser relevante para el análisis de este caso.\linebreak
-
-Comentando los resultados, se puede observar como en las medidas de F1 Score y AUC se han obtenido unos resultados constantes para todos los algoritmos que se han probado y buenos en las métricas F1 y AUC.\\
+Como se puede observar por los resultados obtenidos, usando este enfoque para resolver el problema que se afronta ha resultado en unos buenos resultados y en la obtención de bastante información que puede ser relevante para el análisis de este caso.\\
 \linebreak
+Comentando los resultados, se puede observar como en las medidas de F1 Score y AUC se han obtenido unos resultados constantes y con valores buenos, mostrando un buen rendimiento en general.\\
 Respecto a Accuracy, a primera vista, los resultados obtenidos han sido peores obteniendo un resultado (para todos los algoritmos) alrededor de 60\%.\\
 Este comportamiento llama mucho la atención, y tiene la siguiente explicación: Cuando se considera esta métrica en el caso de multi-etiqueta, el número de casos favorables se va a obtener obteniendo el número de muestras para las que el algoritmo ha clasificado correctamente \textbf{TODAS} las etiquetas de cada muestra.\\ Este es un reflejo del aumento de complejidad en este tipo de problemas.\\
-\linebreak
 En mi opinión, esta métrica no refleja realmente el rendimiento de los algoritmo, puesto que si el algoritmo se equivoca en una única etiqueta de todas las posibles, esa muestra se va a considerar como mal clasificada y va reducir bastante el valor de la métrica.\\
 \linebreak
 Revisando las matrices de confusión, se puede observar la misma tendencia en los distintos modelos que se han entrenado: Se ha clasificado correctamente los casos en los que la variable es positiva y se ha encontrado más problemas en los casos en los que la variable es negativa. Revisando la figura 	\ref{tab:ocurrencia_valores}-\nameref{tab:ocurrencia_valores} y teniendo en cuenta la división que se ha realizado sobre el conjunto, se puede observar que la mayor parte de datos esta localizada en los valores más altos mientras que los más bajos tienen un menor número de muestras.\\
@@ -273,7 +271,6 @@ Los parámetros que mejores resultados dieron para Random Forest fueron los sigu
 	\item 7 árboles de decisión formando el bosque.
 	\item Se consideran todas las variables para buscar la mejor división.
 \end{itemize}
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/rf_mlabel_compare.png}
@@ -286,7 +283,6 @@ Los parámetros que mejores resultados dieron para las Máquinas de Soporte de V
 	\item Grado del polinomio igual a 2.
 	\item Coeficiente de regularización igual 0.5.
 \end{itemize}
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/svc_mlabel_compare.png}

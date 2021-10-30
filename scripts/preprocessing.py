@@ -58,9 +58,12 @@ if __name__ == '__main__':
 
     predictor_data = predictor_data.drop(columns=['IEMedia'])
     x_train, x_test, y_train, y_test = train_test_split(dataset, predictor_data, random_state=2342)
+    print(x_train.describe())
+    print(y_train.describe())
+
+    exit(0)
     x_train.to_csv(os.path.join(data_path, 'x_train.csv'), index=False)
     x_test.to_csv(os.path.join(data_path, 'x_test.csv'), index=False)
     y_train.to_csv(os.path.join(data_path, 'y_train.csv'), index=False)
     y_test.to_csv(os.path.join(data_path, 'y_test.csv'), index=False)
-
     print(f'train size {x_train.shape} test_size {x_test.shape}')

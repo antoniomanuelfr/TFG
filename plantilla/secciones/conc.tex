@@ -1,6 +1,6 @@
 \chapter{Conclusiones}
 \label{sec:conclusiones}
-En esta sección se van a exponer de manera resumida si el objetivo principal de este trabajo se ha completado y cuales son las conclusiones a las que se ha llegado.\\
+En esta sección se van a exponer una serie de apartados valorando si los objetivos principales que se fijaron al comienzo de este trabajo se han conseguido.\\
 \linebreak
 Recapitulando los objetivos propuestos en \ref{sec:obj}-\nameref{sec:obj}:
 \begin{enumerate}[1.]
@@ -8,25 +8,69 @@ Recapitulando los objetivos propuestos en \ref{sec:obj}-\nameref{sec:obj}:
 	\item Encontrar cuales son las variables más importantes.
 	\item Predecir la intención emprendedora de una persona mediante su respuesta a ciertas preguntas
 \end{enumerate}
+Teniendo en mente estos objetivos, a continuación se va a valorar si estos se han completado exitosamente.
 \section{¿Hay conocimiento en el conjunto de datos?}
-Con todo el análisis que se ha realizado en todas las secciones previas, se puede asegurar de que hay conocimiento en este conjunto de datos.\\
-El conjunto de datos proporcionado, tenia problemas de variables con una gran cantidad de valores perdidos (más de un 60 por ciento), variables redundantes, etc. A pesar de estos problemas, se ha podido comprobar existen relaciones entre las preguntas que se realizaron en la encuesta y que en función de estas relaciones se puede predecir cual es la intención emprendedora.
+Con el análisis que se ha realizado en todas las secciones previas, donde se han usado distintos enfoques y modelos de aprendizaje automático sobre el conjunto de datos proporcionado, Podemos asegurar de que hay conocimiento en este conjunto de datos.\\
+\linebreak
+A pesar de la cantidad de problemas que inicialmente tenía el conjunto de datos, donde nos hemos encontrado variables con una gran cantidad de valores perdidos, variables redundantes, etc, se ha podido predecir exitosamente cual es la intención emprendedora de una persona en función de los parámetros recogidos en la encuesta.\\
+Es un objetivo bastante importante, ya que como se mencionó en la Sección \ref{sec:obj}, puede darse el caso de que no se haya redactado preguntas que influyan directamente en la intención emprendedora, los encuestados hubieran respondido aleatoriamente (lo cual introduciría ruido en el conjunto de datos) o simplemente, el número de personas encuestadas no fuese suficiente.\\
 \section{¿Cuales son las preguntas más importantes?}
-Gracias al hacer uso de modelos que son capaces de obtener la importancia de las distintas variables que forman un conjunto de datos, se puede obtener fácilmente cuales son estas preguntas. Hay que recordar que solo se va a poder obtener esta importancia únicamente en los modelos basados en Árboles de Decisión y Random Forest.\\
+Una vez que se puede asegurar que hay conocimiento y gracias al hacer uso de modelos que son capaces de obtener la importancia de las distintas variables que forman un conjunto de datos, se puede obtener fácilmente cuales son las variables/preguntas que han sido más influyentes a la hora de predecir cual es la intención emprendedora de una persona.\\
+Hay que recordar que solo se va a poder obtener esta importancia únicamente en los modelos basados en Árboles de Decisión y Random Forest, ya que son los modelos que hemos seleccionado que son capaces de extraer esta información.\\
 \linebreak
-Para comenzar con esta sección, se han elegido comparar las variables más importantes que el modelo basado en Árboles de Decisión ha obtenido. \\
-\linebreak
-Para facilitar la explicación, a continuación se va a mostrar una gráfica donde se han recogido las distintas variables que se han encontrado importantes usando los distintos enfoques que se han visto en secciones previas.
+Para facilitar la explicación, a continuación se va a mostrar una gráfica donde se han recogido las distintas variables que se han encontrado importantes usando los distintos enfoques que se han visto en secciones previas. Los resultados escogidos han sido los siguientes:
+\begin{enumerate}
+	\item Árboles de Decisión en regresión con eliminación de ruido usando $0.8$ de umbral (DT Reg).
+	\item Árboles de Decisión usando el algoritmo de clasificación (no ordinal) (DT Class).
+	\item Árboles de Decisión usando Binary Relevance, calculada como la media de las importancias de los clasificadores entrenados (DT BR).
+	\item Random Forest en regresión con el conjunto de datos original (RF Reg).
+	\item Random Forest usando el algoritmo de clasificación (no ordinal) (RF Class).
+	\item Random forest usando Binary Relevance, calculada como la media de las importancias de los clasificadores entrenados (RF BR).
+\end{enumerate}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{src/dt-br_dt_features}
 	\label{fig:dt_ft_cmp1}
-	\caption{Comparativa de la importancia de variables según Árboles de Decisión}
+	\caption{Comparativa de la importancia de variables}
 \end{figure}
-Está claro que la variable \textit{AE5}Desafortunadamente, la única información que se ha proporcionado sobre esta variable, es que es una pregunta sobre actitud financiera. 
-Está claro que la variable \textit{AE5} (desafurtunadamente, de esta variable, solo conocemos que es una pregunta sobre actitud financiera, ya que desafortunadamente) es la que los algoritmos han encontrado que es más importante y con mucha diferencia del resto. La variable \textit{ACMedia} (mide la media de las respuestas de actitud emprendedora) ha sido una variable que los algoritmos también han encontrado que es relevante.\\
-La primera diferencia entre ambos enfoques, se observa en las variables \textit{SEx} y \textit{SEMedia} (Autoeficacia emprendedora).
-En el caso de regresión, se observa como estas variables tienen un ligero impacto, pero aparecen preguntas concretas, sin tener en cuenta el valor medio, a diferencia de los resultados obtenidos usando \textit{Binary Relevance}, donde este valor medio tiene una mayor relevancia. Aun así, la respuesta a la pregunta \textit{SE2} (Estoy preparado para iniciar una empresa viable) se puede observar que ha tenido una mayor influencia que el resto de preguntas de esta sección.
-En la figura \ref{fig:dt_ft_cmp1} se muestran la importancia de variables calculada usando ambos enfoques.
-
+A continuación se van a enumerar el significado de a que preguntas de la encuesta corresponden las variables más importantes,
+\begin{itemize}
+	\item \textbf{AE5:} Pregunta 5 sobre Actitudes financieras empresariales. 
+	\item \textbf{ACM:} (ACMedia) Variable global de Actitud emprendedora.
+	\item \textbf{SE2:} Estoy preparado para iniciar una empresa viable.
+	\item \textbf{SEM:} (SEMedia) Variable global de Auto-eficacia emprendedora.
+	\item \textbf{NS1:} Mi familia aprobaría el que yo decidiese crear una empresa. 
+	\item \textbf{AE1:} Iniciar una empresa y mantenerla sería fácil para mí
+	\item \textbf{Beca:} Tiene beca el encuestado.
+	\item \textbf{Nota:} Nota media del expediente académico hasta la fecha de la encuesta sobre 10 puntos.
+	\item \textbf{HCE6:} Preguntas sobre Habilidades financieras empresariales
+	\item \textbf{CEF14:} Pregunta sobre Conocimientos financieros empresariales.
+	\item \textbf{AC2:} Ser emprendedor es una salida profesional atractiva para mí
+	\item \textbf{CEF18:} Pregunta sobre Conocimientos financieros empresariales.
+	\item \textbf{AC4:} Ser emprendedor supondría una gran satisfacción para mí
+	\item \textbf{AC3:} Si tuviera la oportunidad y los recursos, me gustaría iniciar una empresa
+	\item \textbf{AC1:} Ser emprendedor implica más ventajas que desventajas para mí
+	\item \textbf{SE6:} Si intentara iniciar una empresa, tendría una alta probabilidad de éxito
+	\item \textbf{finLit total:} Puntuación de Competencia financiera global (conocimientos, actitud, comportamientos)
+\end{itemize}
+Está claro que las variable \textbf{AE5} y \textbf{ACMedia} han sido las variables que los algoritmos han encontrado que es más importantes a la hora de realizar una predicción.\\
+Desafortunadamente, la única información que se ha proporcionado sobre esta variable, es que es una pregunta sobre actitud financiera, ya que esta no aparece en la tabla que se ha proporcionado con la explicación de cada una de las variables.\\
+\linebreak
+Llama la atención que dentro de las variables con más importancia, aparecen las variables \textbf{ACMedia} y \textbf{SEMedia}. \\
+Esto está indicando que los factores de Actitud Emprendedora y Auto-eficacia emprendedora, son muy importantes de cara a predecir la Intención emprendedora. Esto nos indica que quizás seria buena idea añadir o mejorar las preguntas relacionadas con estos temas en futuras encuestas. \\
+También se puede observar como para el caso de la auto-eficacia emprendedora, está apareciendo la variable global, pero no aparecen muchas de las variables que la forman.\\
+Esto podría indicar que un factor importante para predecir la variable objetivo puede no estar aprovechándose completamente.\\
+\linebreak
+Todas estas mejoras propuestas podrían servir para mejorar la información que se pueda extraer en futuras encuestas relacionadas con el tema que se ha trabajado.
+\clearpage
+\section{¿Se puede predecir la Intención Emprendedora de una persona con estos datos?}
+La respuesta a esta pregunta, es que si, estos datos contienen información importante para predecir cual va a ser la intención emprendedora de una persona.\\
+\linebreak
+De hecho, haciendo uso de la clasificación multi-etiqueta, se puede incluso predecir cual va a ser la respuesta de una persona a una determinada pregunta, obteniendo así una predicción más especifica para las variables que se han usado para calcular la Intención Emprendedora Media.\\
+\linebreak
+Respecto al uso de regresión para predecir un \textbf{valor exacto }de Intención Emprendedora Media, puede no ser fácil para gente que no este totalmente familiarizada con las matemáticas, y teniendo este factor en mente, la propuesta de realizar una clasificación ordinal es un enfoque más universal para el resto de gente, ya que es más complicado hablar de que cierta persona tiene una Intención Emprendedora de $6.566$ que decir que una persona tiene una Intención Emprendedora \textbf{Alta}. \\
+Por este motivo, pienso que el enfoque de la clasificación ordinal (en este problema) es más correcta que el de regresión.\\
+\linebreak
+Respecto al uso de la clasificación multi-etiqueta, hemos logrado predecir si una persona va a tener una tendencia a contestar ciertas preguntas de una forma u otra. Realmente es una información importante, ya que un experto en este campo podría valorar cuales son las etiquetas/preguntas que son más influyentes, y crear modelos de predicción para que se use esta información de cara a predecir la Intención emprendedora de esa persona.\\
+\clearpage 
 \chapter{Trabajos Futuros}

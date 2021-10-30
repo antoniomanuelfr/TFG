@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     feature_importance = pd.Series(data=clf.feature_importances_, index=x_train_p.columns)
     print(f'{clf.get_params()}')
-
+    results['feature_importance'] = feature_importance.to_dict()
     utils.plot_feature_importance(feature_importance, 10, 'Variable', 'Importance', 'Random Forest features',
                                   args.save_figures, name_str)
 

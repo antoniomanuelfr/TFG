@@ -104,7 +104,7 @@ Los enfoques que se han propuesto son:
 \begin{enumerate}
 	\item \textbf{Desplegar las muestras multi-etiqueta} Este enfoque descompone cada instancia en tantas instancias como etiquetas contiene, clonando los atributos asociados a cada muestra. La salida será un problema multi-clase, conteniendo más muestras que el conjunto de datos original.
 	\item \textbf{Usar el \textit{labelset} como identificador de clase}: Partimos de la idea de usar cada combinación de \textit{labelset} que se encuentre en el conjunto de datos. De esta manera, se obtiene un conjunto de datos multi-clase con el mismo número de instancias y con tantas clases como combinaciones de labelset se encuentren el conjunto de datos original. Este enfoque también se conoce como \textbf{\textit{Label PowerSet}}.
-	\item \textbf{Aplicar técnicas de binarización}: Al igual que para el problema multi-clase, se pueden adaptar estas técnicas. El método más común se llama \textbf{Binary Relevance}.
+	\item \textbf{Aplicar técnicas de binarización}: Al igual que para el problema multi-clase, se pueden adaptar estas técnicas. El método más común se llama \textbf{Binary Relevance}. En este enfoque se van a entrenar un clasificador por cada etiqueta, clasificando si la etiqueta asociada es positiva o negativa. 
 \end{enumerate}
 \subsection{Clasificación multi-dimensional}
 Al igual que la clasificación multi-clase es una generalización del caso binario, la clasificación multi-dimensional es una generalización de la clasificación multi-etiqueta.\\
