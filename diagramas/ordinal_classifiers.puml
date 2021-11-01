@@ -1,0 +1,55 @@
+@startuml OrdinalClassification
+
+package "OrdinalClassification" #DDDDDD {
+    abstract BaseOrdinalClassifier {
+        + binary_classifiers_: set
+        + classes_: list
+        + fit(X, y): BaseOrdinalClassifier
+        + predict_proba(X,y): array
+        + predict(X,y): array
+    }
+
+    class DecisionTreeOrdinalClassifier {
+        + max_depth : int
+        + random_state: int
+        + max_leaf_nodes: int
+        + fit(X,y): DecisionTreeClassifier
+    }
+
+    class SVCOrdinalClassifier {
+        + C : double
+        + kernel: string
+        + degree: int
+        + max_iter: int
+        + random_state; int
+        + fit(X,y): SVCOrdinalClassifier
+    }
+
+    class RandomForestOrdinalClassifier {
+        + n_estimators : int
+        + max_features: double
+        + random_state: int
+        + fit(X,y): DecisionTreeOrdinalClassifier
+    }
+
+}
+
+package "sklearn.base" #DDDDDD {
+    class BaseEstimator {
+        + get_params(bool deep): dict
+        + set_params(dict params): void
+    }
+
+    class ClassifierMixin {
+        + score(array X, array y, array sample_weight): double
+    }
+
+}
+
+BaseEstimator <|-- BaseOrdinalClassifier
+ClassifierMixin <|-- BaseOrdinalClassifier
+
+BaseOrdinalClassifier <|-- DecisionTreeOrdinalClassifier
+BaseOrdinalClassifier <|-- SVCOrdinalClassifier
+BaseOrdinalClassifier <|-- RandomForestOrdinalClassifier
+@enduml

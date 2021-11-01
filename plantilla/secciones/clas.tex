@@ -214,7 +214,7 @@ SVM no es un modelo basado en árboles y los modelos usados previamente si lo er
 En test se sigue observando el cambio de comportamiento que se observó en el conjunto de validación.\\
 \linebreak
 Se observa también que la diferencia entre validación y test no es muy grande, lo que hace pensar que el elegir este modelo ha sido una elección correcta y que se han encontrado unos parámetros que han conseguido un modelo robusto y capaz de predecir muestras que no ha visto.
-\clearpage 
+\clearpage
 Para ampliar la información se van a mostrar las tablas con las métricas obtenidos por SVM:
 \subsubsection*{Métricas obtenidas}
 \begin{table}[H]
@@ -260,7 +260,7 @@ Para finalizar con el análisis de resultados para SVM, a continuación se muest
 Se puede observar en la Figura \ref{fig:confusion_matrix_svc1} el mismo comportamiento que para Random Forest y Árboles de decisión, donde se aprecia que los valores bajos y se están confundiendo con los valores medios. \\
 La principal diferencia en este caso es que los valores medios si se están confundiendo con valores altos.\\
 \linebreak
-Los valores altos se han clasificado excelentemente, clasificando correctamente un 90\%. 
+Los valores altos se han clasificado excelentemente, clasificando correctamente un 90\%.
 \clearpage
 \begin{figure}[H]
 	\centering
@@ -371,7 +371,7 @@ Viendo estos resultados, merece la pena seguir analizando como se comportan el r
 	\caption{Comparación en validación para el conjunto $(4,6,7)$}
 	\label{fig:rf_ordin_val_cmp_2}
 \end{figure}
-Observando los resultados expuestos en las figuras \ref{fig:rf_ordin_val_cmp_1} y \ref{fig:rf_ordin_val_cmp_2}, se aprecia lo ya visto en la Sección \ref{sec:ord_cmp_dt}: este enfoque no ha introducido peores considerables en el rendimiento del modelo.\\
+Observando los resultados expuestos en las Figuras \ref{fig:rf_ordin_val_cmp_1} y \ref{fig:rf_ordin_val_cmp_2}, se aprecia lo ya visto en la Sección \ref{sec:ord_cmp_dt}: este enfoque no ha introducido peores considerables en el rendimiento del modelo.\\
 \linebreak
 La principal diferencia, es que parece que Random Forest si ha sido capaz de hacer uso del orden y los resultados han sido ligeramente superiores. Hay que comprobar si este comportamiento se ha repetido o no en el conjunto de test.
 \clearpage
@@ -422,7 +422,7 @@ Aunque en el caso $(3.5,5.5,7)$ no se aprecia una mejora, en el caso $(4,6,7)$ s
 	\caption{Comparación en test para el conjunto  $(4,6,7)$}
 	\label{fig:svc_ordin_test_cmp_2}
 \end{figure}
-El mismo comportamiento observado en validación puede se puede apreciar en test. Se aprecia un ligero aumento de los valores de las métricas obtenidas por los modelos. 
+El mismo comportamiento observado en validación puede se puede apreciar en test. Se aprecia un ligero aumento de los valores de las métricas obtenidas por los modelos.
 \clearpage
 \subsection{Análisis de resultados}
 Comenzando por \nameref{sec:ord_cmp_dt}, se puede apreciar como este algoritmo ha sido más robusto a la hora de clasificar de manera tradicional, ya que en este caso, el algoritmo de clasificación ordinal ha rendido ligeramente peor. Llama la atención que ha sido el \textbf{único} de los modelos seleccionados que ha rendido mejor el algoritmo de clasificación clásico.\\
@@ -433,4 +433,4 @@ En cuanto a Random Forest, como se puede ver en las gráficas expuestas en \ref{
 Por ultimo, respecto a SVM, se ha apreciado una ligera mejora usando el algoritmo de clasificación ordinal. Al igual que Random Forest, se ha podido comprobar empíricamente que SVM ha sido tolerante con el ruido del conjunto de datos, por lo que hace que sea un algoritmo bueno a la hora de realizar la clasificación ordinal usando este conjunto de datos.\\
 \linebreak
 Generalmente, los algoritmos que han probado ser más sensibles al ruido han tenido un menor desempeño que algoritmos con mejor tolerancia a error. Random Forest en este caso, sigue siendo el algoritmo con mejores resultados, mientras que algoritmos más simples como Árboles de Decisión han tenido un rendimiento menor.
-\clearpage	
+\clearpage

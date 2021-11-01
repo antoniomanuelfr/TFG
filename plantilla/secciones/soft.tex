@@ -2,9 +2,15 @@
 \label{sec:sftw}
 Todo el desarrollo de este trabajo se ha realizado en Python. Python es un lenguaje de programación de alto nivel diseñado por Guido van Rossum y aparece en 1991. Este lenguaje está centrado en la legibilidad del código, siendo un lenguaje interpretado. \linebreak
 Python también provee un gestor de paquetes llamado \textit{pip} que permite crear e instalar librerías externas, proporcionando así una mayor comodidad para hacer uso de librerías externas que lenguajes como C no tienen. \\
-\linebreak
 Uno de los mayores inconvenientes que tiene Python es que es un \textit{lenguaje interpretado} donde un interprete lee y ejecuta las instrucciones escritas en un \textit{script}, haciendo que el rendimiento sea menor que el de un programa que haya sido compilado.\\
+\linebreak 
+Además de hacer uso de este lenguaje, se ha usado \textbf{git} y \textbf{GitHub}.\\
+\textbf{Git} es un Sistema de Control de Versiones de Software Libre diseñado por Linus Torvalds. Su propósito es registrar todos los cambios que se realizan sobre el código fuente.\\
 \linebreak
+\textbf{GitHub} es una plataforma que permite alojar proyectos software usando el Sistema de Control de Versiones \textbf{git}. Fue desarrollado por Chris Wanstrath, P. J. Hyett, Tom Preston-Werner y Scott Chacon usando Ruby on Rails en 2008.\\
+\linebreak
+Finalmente, para crear los diagramas que se verán en las secciones siguientes, se ha usado \textbf{PlantUML}. PlantUML es una herramienta de código abierto que permite crear diagramas a partir de archivos de texto, de forma similar a Latex. El autor es Arnaud Rosques y la primera versión de esta herramienta fue liberada en 2009.
+\clearpage
 \section{Biblioteca usadas}
 Para realizar este trabajo, se ha hecho uso de una serie de \textbf{bibliotecas externas} que incrementan las capacidades ofrecidas por el lenguaje de manera nativa, ya que la gran mayoría de herramientas que han sido usadas no vienen instaladas por defecto.\\
 A continuación, se listan las librerías usadas y una breve descripción de las herramientas/características que ofrecen:
@@ -31,20 +37,39 @@ A continuación se va a mostrar un diagrama de paquetes para explicar como se ha
 \begin{itemize}
     \item \textbf{manual\_preprocessing} contiene una serie de funciones usadas en la fase de pre-procesamiento.
     \item \textbf{OrdinalClassification} contiene un paquete con la implementación del algoritmo de clasificación ordinal explicado en \ref{sec:ord}-\nameref{sec:ord}.
+    \item \textbf{MultiLabelClassification} contiene un paquete con la implementación del algoritmo de clasificación muti-etiqueta ordinal que se ha propuesto en \ref{sec:cml}-\nameref{sec:cml}.
     \item \textbf{utils} contiene una serie de funciones que se han usado para todos los scripts. Contiene funciones para calcular las métricas, hacer la validación cruzada, etc.
 \end{itemize}
+A continuación se va a explicar las distintas clases que forman los paquetes \textbf{OrdinalClassification} y \textbf{MultiLabelClassification}. 
+\clearpage
 \subsection{Paquete para clasificación ordinal}
+\label{sec:sftw-ocl}
 A continuación se va a mostrar un diagrama explicando las clases que contiene el paquete \textbf{OrdinalClassification}:
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{diagrama_od}
+    \includegraphics[scale=0.4]{diagrama_od}
     \caption{Diagrama para paquete \textbf{OrdinalClassification}}
     \label{dig:paquetes_od}
 \end{figure}
-Las funciones \textbf{\textit{predict}} (predice una clase dada una entrada) y \textbf{\textit{predict\_proba}} (dada una entrada predice la probabilidad de que una muestra pertenezca a cada clase)  son iguales para todos los modelos, se ha optado por crear una clase abstracta que va a implementar estas funciones. El resto de clases implementará el método \textbf{\textit{fit}} con el modelo seleccionado. \\
-Cabe destacar que la implementación de estos modelos es compatible con todas las utilidades que proporciona \textit{scikit-learn}, facilitando mucho el proceso de validación cruzada, optimización de parámetros, etc.\\
+Se puede observar como existe una clase abstracta \textbf{BaseOrdinalClassifier} que contiene el algoritmo que se ha usado para realizar la clasificación ordinal de forma genérica. \\
+Todas las clases que heredan de esta clase, especializan el algoritmo implementando en la clase base, usando un clasificador en especifico dependiendo del modelo que se quiera utilizar.\\
+Dado que las funciones \textbf{\textit{predict}} (predice una clase dada una entrada) y \textbf{\textit{predict\_proba}} (dada una entrada predice la probabilidad de que una muestra pertenezca a cada clase) son iguales para todos los modelos, se ha optado por añadir estos métodos en la clase abstracta.\\
+El resto de clases implementará el método \textbf{\textit{fit}} con el modelo seleccionado. \\
+\linebreak
+Cabe destacar que la implementación de estos modelos es compatible con todas las utilidades que proporciona \textit{scikit-learn}, ya que la clase base de donde están heredando las clases que implementan los modelos planteados (\textit{BaseOrdinalClassifier}) hereda a su vez de las clases \textit{ClassifierMixin} y \textit{BaseEstimator}, facilitando mucho el proceso de validación cruzada, optimización de parámetros y siguiendo la misma sintaxis que el resto de funcionalidades que proporciona \textit{scikit-learn}.
 \subsection{Paquete para clasificación multi-etiqueta simple}
 \label{sec:sftw-mlc}
+Al igual que para crear las clases que implementan los modelos de clasificación ordinal, se ha seguido la misma metodología que la explicada previamente.\\
+A continuación se muestra un diagrama explicando las clases que contiene el paquete \textbf{MultipleLabelClassification}:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{diagrama_ml}
+	\caption{Diagrama para paquete \textbf{MultipleLabelClassification}}
+	\label{dig:paquetes_ml}
+\end{figure}
+Como se observa en la Figura \ref{dig:paquetes_ml}, se observa como se ha creado una clase abstracta (\textbf{BaseMultipleLabelCC}) que implementa el algoritmo que se ha usado de manera general y el resto de clases que heredan de esta, especializan la imlementación de ese algoritmo usando un clasificador distinto, dependiendo del modelo que se quiera usar.\\
+\linebreak
+Al igual que lo el paquete explicado en la Sección \ref{MultipleLabelClassification}, el que la clase base herede de las clases \textit{ClassifierMixin} y \textit{BaseEstimator} permite que las clases implementadas sean completamente compatibles con el resto de utilidades de \textit{Scikit-Learn}.
 \section{Scripts}
 Finalmente, la carpeta \textbf{\textit{scripts}} contiene todos los scripts usados para entrenar y mostrar resultados. Estos scripts son capaces de guardar la información obtenida en formato JSON y guardarlos en disco, facilitando así la integración con otras aplicaciones.\\
 \linebreak

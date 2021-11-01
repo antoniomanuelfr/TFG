@@ -1,0 +1,12 @@
+@startuml tfg_utils
+package "tfg_utils" #DDDDDD {
+    [utils] as utils
+    [manual_preprocessing] as mp
+    [OrdinalClassification] as od
+    [MultiLabelClassification] as ml
+}
+
+mp ..> utils : uses
+od ..> utils: uses
+ml ..> utils: uses
+@enduml

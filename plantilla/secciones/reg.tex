@@ -44,7 +44,7 @@ La siguiente tabla expone los resultados obtenidos en validación:
 	\label{tab:tree_res}
 \end{table}
 \pagebreak
-La siguiente figura muestra el gráfico de dispersión de errores:
+A continuación se muestra el gráfico de dispersión de errores:
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{src/scattered_error_DT.png}
@@ -62,7 +62,7 @@ Continuando con las gráficas, e continuación se muestra una gráfica con el co
 	\caption{Conteo de errores}
 	\label{fig:tree_error_plot}
 \end{figure}
-En la Figura \ref{fig:tree_error_plot} se puede observar que tenemos una menor cantidad de errores en la parte baja de la variable objetivo. También se aprecia como para valores más altos, la tasa de error comienza a subir. \\Esto puede estar causado debido a que la dispersión en valores altos es muy baja (véase la Figura \ref{fig:tree_error_plot}). 
+En la Figura \ref{fig:tree_error_plot} se puede observar que tenemos una menor cantidad de errores en la parte baja de la variable objetivo. También se aprecia como para valores más altos, la tasa de error comienza a subir. \\Esto puede estar causado debido a que la dispersión en valores altos es muy baja (véase la Figura \ref{fig:tree_error_plot}).
 Hay que analizar este comportamiento junto con el resto de modelos, para ver si el problema esta causado por los datos (en este caso el comportamiento se debería de repetir) o es causado por el propio modelo.
 \subsubsection*{Representación}
 Como se mencionó en la sección \textbf{\ref{alg:dec_tree}-\nameref{alg:dec_tree}}, los árboles de decisión tienen la ventaja de que pueden representarse fácilmente. \\
@@ -263,7 +263,7 @@ La siguiente figura muestra el gráfico de dispersión de errores:
 	\label{fig:svr_scattered}
 \end{figure}
 Al igual que Random Forest, se puede observar que SVM ha logrado modelar la dispersión de los datos y no se observan esas predicciones que se observaron en Árboles de Decisión.\\
-Se puede observar también como una gran cantidad de predicciones se concentran entre los valores 5 y 6, pero este comportamiento también se puede observar en el resto de modelos. 
+Se puede observar también como una gran cantidad de predicciones se concentran entre los valores 5 y 6, pero este comportamiento también se puede observar en el resto de modelos.
 \clearpage
 Finalizando con las gráficas obtenidas para el modelo SVM, a continuación se muestra el conteo de errores.
 \begin{figure}[H]
@@ -309,7 +309,7 @@ La siguiente figura muestra el gráfico de dispersión de errores:
 	\caption{Gráfico de dispersión de errores para XGBoost}
 	\label{fig:xgboost_scattered}
 \end{figure}
-Al igual que los resultados obtenidos por Random Forest, en la Figura \ref{fig:xgboost_scattered} se puede observar como el rendimiento del modelo ha sido bastante bueno, logrando capturar también esa dispersión que modelos más simples como Árboles de decisión no fueron capaces de modelar. 
+Al igual que los resultados obtenidos por Random Forest, en la Figura \ref{fig:xgboost_scattered} se puede observar como el rendimiento del modelo ha sido bastante bueno, logrando capturar también esa dispersión que modelos más simples como Árboles de decisión no fueron capaces de modelar.
 \clearpage
 Finalizando con las gráficas, a continuación se muestra una gráfica con el conteo de errores por clase:
 \begin{figure}[H]
@@ -411,7 +411,7 @@ Para realizar el proceso de muestreo, se ha desarrollado el siguiente algoritmo:
 \end{enumerate}
 El modelo entrenado para hacer muestreo, es un árbol de decisión con un máximo de $4$ niveles, eliminando muestras de todo el rango de predicción.\\
 \linebreak
-Con este algoritmo, vamos a ver que impacto tiene el eliminar estas muestras ruidosas. En el mejor de los casos, deberíamos observar un incremento en los valores de las métricas que se han usado. En el peor de los casos, puede ocurrir que al eliminar estas muestras, perdamos información y que el rendimiento de los modelos sea peor. 
+Con este algoritmo, vamos a ver que impacto tiene el eliminar estas muestras ruidosas. En el mejor de los casos, deberíamos observar un incremento en los valores de las métricas que se han usado. En el peor de los casos, puede ocurrir que al eliminar estas muestras, perdamos información y que el rendimiento de los modelos sea peor.
 \clearpage
 \subsection{Resultados}
 A continuación se muestra una serie de gráficos comparando los resultados obtenidos por los algoritmos seleccionados.\\
@@ -474,7 +474,7 @@ En el conjunto de test, Random Forest ha tenido un comportamiento similar que el
 \linebreak
 También se puede apreciar como usando umbrales entre $\left[0.5,0.9\right]$ no se ha observado un cambio relevante en los métricas. Esta mejora solo se ha observado usando umbrales muy altos, donde se han eliminado la menor cantidad de muestras.\\
 \linebreak
-Esto demuestra que para modelos que Random Forest es un modelo mucho más robusto frente al ruido que Árboles de Decisión, donde se pudo apreciar la mejora en el rendimiento en el momento que se eliminaron ciertas muestras del conjunto de entrenamiento. 
+Esto demuestra que para modelos que Random Forest es un modelo mucho más robusto frente al ruido que Árboles de Decisión, donde se pudo apreciar la mejora en el rendimiento en el momento que se eliminaron ciertas muestras del conjunto de entrenamiento.
 \clearpage
 Para finalizar mostrando los resultados obtenidos por Random Forest, se va a mostrar la gráfica de errores cometidos por rango.
 \begin{figure}[H]

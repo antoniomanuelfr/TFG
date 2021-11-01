@@ -1,0 +1,57 @@
+@startuml MultipleLabelClassification
+
+package "MultipleLabelClassification" #DDDDDD {
+    abstract BaseMultipleLabelCC {
+        - classes: array
+        - clf: BaseOrdinalClassifier
+        + classes_: list
+        + classifiers: set
+        + fit(X, y): BaseOrdinalClassifier
+        + predict_proba(X,y): array
+        + predict(X,y): array
+    }
+
+    class DTMultipleLabelCC {
+        + max_depth : int
+        + random_state: int
+        + max_leaf_nodes: int
+        + fit(X,y): DTMultipleLabelCC
+    }
+
+    class SVCMultipleLabelCC {
+        + C : double
+        + kernel: string
+        + degree: int
+        + max_iter: int
+        + random_state; int
+        + fit(X,y): SVCMultipleLabelCC
+    }
+
+    class RFMultipleLabelCC {
+        + n_estimators : int
+        + max_features: double
+        + random_state: int
+        + fit(X,y): RFMultipleLabelCC
+    }
+
+}
+
+package "sklearn.base" #DDDDDD {
+    class BaseEstimator {
+        + get_params(bool deep): dict
+        + set_params(dict params): void
+    }
+
+    class ClassifierMixin {
+        + score(array X, array y, array sample_weight): double
+    }
+
+}
+
+BaseEstimator <|-- BaseMultipleLabelCC
+ClassifierMixin <|-- BaseMultipleLabelCC
+
+BaseMultipleLabelCC <|-- DTMultipleLabelCC
+BaseMultipleLabelCC <|-- RFMultipleLabelCC
+BaseMultipleLabelCC <|-- SVCMultipleLabelCC
+@enduml
