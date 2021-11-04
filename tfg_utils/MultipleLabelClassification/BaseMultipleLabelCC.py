@@ -12,7 +12,21 @@ from sklearn.tree import DecisionTreeClassifier
 
 
 class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
+    """Abstract class to implement a simple Multible Label Classifier. It will train a given classifier per label.
+
+    Attributes:
+        classifiers (dict): Dictionay where each key will be the label and it's value will be the trained classifier.
+        clf_ (BaseEstimator): Classifier to use.
+        classes_ (Array): Array holding the labels to predict
+    """
     def fit(self, X, y):
+        """Fit method that will train each classifier.
+        Args:
+            X (array): Array holding the train dataset.
+            y (array): Array holding the true values of the dataset.
+        Returns:
+            A `BaseMultipleLabelCC` trained model.
+        """
         self.classifiers = {}
         self.classes_ = np.arange(y.shape[1])
         self.clf_ = DecisionTreeClassifier()
@@ -27,6 +41,12 @@ class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
         return self
 
     def predict(self, X):
+        """Method that will predict the values for a dataset.
+        Args:
+            X (array): Set to predict.
+        Returns:
+            Array with the predicted values.
+        """
         X = check_array(X)
         check_is_fitted(self, ['classes_', 'clf_', 'classifiers'])
         labels_prediction = []
@@ -37,6 +57,12 @@ class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
         return np.array(labels_prediction).transpose()
 
     def predict_proba(self, X):
+    """Method that will predict the probability of each label of having a given valuew.
+        Args:
+            X (array): Set to predict.
+        Returns:
+            Array with the predicted values.
+    """
         X = check_array(X)
         check_is_fitted(self, ['classes_', 'clf_', 'classifiers'])
         labels_prediction = []

@@ -312,7 +312,7 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
     """Function to perform the cross validation process.
         Args:
             x_train (Numpy array): Training data.
-            y_tain (Numpy array): Training data labels.
+            y_train (Numpy array): Training data labels.
             model: Model to train.
             splits: Number of splits in cross validation. Defaults to 5.
             custom_seed: seed to use. Defaults to `seed`.
@@ -389,6 +389,10 @@ def cross_validation(x_train: np.array, y_train: np.array, model, splits=5, cust
 
 
 def json_metrics_to_latex(res_dic: dict):
+    """Function to plot the metric dict as a Latex table
+    Args:
+        res_dict (dict): Dictionary holding the metrics.
+    """
     metrics = list(res_dic['train'].keys())
     for i in range(len(metrics)):
         metrics[i] = metric_name_parser[metrics[i]]
@@ -430,7 +434,16 @@ def save_dict_as_json(path: str, name_str: str, dict_to_save: dict):
         json.dump(dict_to_save, fd)
 
 
-def feature_selection(x_train, x_test, y_train, predictor_t):
+def feature_selection(x_train, x_test, y_train, predictor_t=None):
+    """Function to perform a feature selection process.
+    Args:
+        x_train (numpy array): Train dataset.
+        x_test (numpy array): Test dataset
+        y_train (numpy array): Predictor array for the train set.
+        predictor_t (str): Type of algorithm to use in the feature selection. Only 'SVR' or 'DT' avaliable.
+    returns:
+        Tuple with the train and test set with the feature selection applied.
+    """
     from sklearn.svm import LinearSVR
     from sklearn.tree import DecisionTreeRegressor
     clf = DecisionTreeRegressor(max_depth=4, random_state=seed)
@@ -455,6 +468,9 @@ def categorize_regression(y_train: np.array, y_test: np.array, ranges=(2.5, 5)):
     Args:
         y_train (Numpy Array): Numpy array with the train values of y.
         y_test (Numpy Array): Numpy array with the test values of y.
+        ranges (tuple): Range to categorize the regression problem. Defaults to (2.5, 5).
+    returns:
+        Two arrays holding the new train and test predictors.
     """
     max_value = int(max(max(y_train), max(y_test)))
 
@@ -470,6 +486,15 @@ def categorize_regression(y_train: np.array, y_test: np.array, ranges=(2.5, 5)):
 
 
 def plot_confusion_matrix(y_true: np.array, y_pred: np.array, labels, title='', save=None, extra=None):
+    """Function to plot and save a confusion matrix.
+    Args:
+        y_true (array): Array with the true values.
+        y_pred (array): Array with the predicted values.
+        labels (list): Labels that will be used as class names.
+        title (str): Title of the figure.
+        save (str): Folder where the images will be saved. If None, the image will be shown.
+        extra (str): Extra name to append at the end of the file name if save is not none.
+    """
     matrix = confusion_matrix(y_true, y_pred, normalize='true')
     sns.heatmap(matrix, xticklabels=labels, yticklabels=labels, annot=True)
     plt.title(title)
@@ -515,6 +540,14 @@ def calculate_ml_classification_metrics(y_true, y_pred, proba, decimals=3):
 
 
 def f1_multilabel_mean(y_true, y_pred, average='macro'):
+    """Function to perform a F1 score over a multi-label set.
+    Args:
+        y_true (Numpy array): Array with the true value of the sample.
+        y_pred (Numpy array): Array with the predicted value of the sample.
+        average (str): Type of averaging performed on the data. Defaults to 'macro'
+    Returns:
+        float holding the global score (mean F1 per label).
+    """
     score = 0
     for y_true_column, y_pred_column in zip(y_true.transpose(), y_pred.transpose()):
         score += f1_score(y_true_column, y_pred_column, average=average)
@@ -522,6 +555,14 @@ def f1_multilabel_mean(y_true, y_pred, average='macro'):
 
 
 def plot_multilabel_class_metrics(metric_dict, plot_values=False, save_figures=None, metric_names=None, name=None):
+    """Plots a figure with the metrics of multilabel problem
+    Args:
+        metric_dict (dict): Dictionary holding the metrics.
+        plot_values (bool): Plot the metric value on top of the bar. Defaults to false.
+        save_figures (str): Folder where the images will be saved. If None, the image will be shown.
+        metric_names (list): List with the names of each label. If None, the key of the label will be used as the name.
+        name (str): Extra name to append at the end of the file name if save is not none.
+    """
     data = []
     for label in metric_dict.keys():
         test_metrict_dict = metric_dict[label]
@@ -545,13 +586,30 @@ def plot_multilabel_class_metrics(metric_dict, plot_values=False, save_figures=N
 
 
 def ml_feature_importance(ml_classifier, columns_names, label_names, n, xlabel, ylabel, title, save=None, extra=None):
+    """Calculates and plots the feature importance of using a multi-label predictor.
+    Args:
+        ml_classifier (BaseEstimator): Predictor that will be used to get the importance. Must have a `classifiers_`
+                                       variable holding the different classifiers and those classifiers must have a
+                                       `feature_importances_` variable.
+        column_names (list): List with the names of the variables.
+        label_names (list): List with the names of the labels.
+        n (int): Max number of variables that will be calculated.
+        xlabel (str): Label used for the x axis.
+        ylabel (str): Label used for the y axis.
+        title (str): Title of the figure.
+        save (str): Folder where the images will be saved. If None, the image will be shown.
+        extra (str): Extra name to append at the end of the file name if save is not none.
+    Returns:
+        A dictionary holding the `n` most important variables using the mean feature importance of all the classifiers.
+    """
     #calculate the feature importance for each classifier
     importance_acum = np.zeros(ml_classifier.classifiers_[0].feature_importances_.shape)
     result = {}
     data = []
     for classifier, label in zip(ml_classifier.classifiers_, label_names):
         importance_acum += classifier.feature_importances_
-        label_importances = pd.Series(data=classifier.feature_importances_, index=columns_names).sort_values(ascending=False)[:n]
+        label_importances = pd.Series(data=classifier.feature_importances_,
+                                      index=columns_names).sort_values(ascending=False)[:n]
         label_importances = label_importances[label_importances > 0]
 
         for variable in label_importances.index:
@@ -578,8 +636,16 @@ def ml_feature_importance(ml_classifier, columns_names, label_names, n, xlabel, 
 
 
 
-def plot_multi_label_confusion_matrix(y_true: np.array, y_pred: np.array, labels, label_names, title='', save=None, extra=None):
-
+def plot_multi_label_confusion_matrix(y_true: np.array, y_pred: np.array, labels, label_names, title='', save=None,
+                                      extra=None):
+    """Plots the multi-label confusion matrixes (one per label).
+        y_true (Numpy array): Array with the true value of the sample.
+        y_pred (Numpy array): Array with the predicted value of the sample.
+        labels (list): List with the name of the labels.
+        title (str): Title of the figure.
+        save (str): Folder where the images will be saved. If None, the image will be shown.
+        extra (str): Extra name to append at the end of the file name if save is not none.
+    """
     matrixes = multilabel_confusion_matrix(y_true, y_pred)/y_pred.shape[0]
     for (label_matrix, label) in zip(matrixes, label_names):
         sns.heatmap(label_matrix, xticklabels=labels, yticklabels=labels, annot=True)
