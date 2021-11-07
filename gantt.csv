@@ -1,0 +1,21 @@
+Fase,Proceso,Fecha Inicio,Duración (Días),Fecha Fin
+Pre-Proces,Análisis del problema de clasificación ordinal e investigación,2021-03-01,6,2021-03-07
+Pre-Proces,Análisis manual de datos,2021-03-08,13,2021-03-21
+Pre-Proces,Desarrollo de notebooks/scripts para realizar el preprocesamiento,2021-04-01,17,2021-04-18
+Regresión,Investigación de métodos a usar en regresión,2021-04-19,8,2021-04-27
+Regresión,Selección y desarrollo de métodos a usar en regresión,2021-04-28,18,2021-05-16
+Regresión,Modificación para adaptar un algoritmo de reducción de ruido,2021-05-18,9,2021-05-27
+Regresión,Análisis de resultados de regresión,2021-05-27,11,2021-06-07
+Clasificación,Creación del conjunto de de datos para usar clasificación,2021-06-08,3,2021-06-11
+Clasificación,Creación de scripts con los modelos seleccionados para clasificación,2021-06-12,6,2021-06-18
+Clasificación,Análisis de resultados de clasificación,2021-06-19,10,2021-06-29
+Ordinal,Investigación de métodos de clasificación ordinal,2021-06-30,14,2021-07-14
+Ordinal,Implementación de clases base para el algoritmo,2021-07-15,4,2021-07-19
+Ordinal,Creación de scripts con los modelos de clasificación ordinal,2021-07-21,9,2021-07-30
+Ordinal,Análisis de resultados de ordinal,2021-08-01,15,2021-08-16
+Multi-etiqueta,Investigación sobre clasificación multi-etiqueta,2021-09-01,16,2021-09-17
+Multi-etiqueta,Creación de scripts usando enfoque BR,2021-09-18,7,2021-09-25
+Multi-etiqueta,Propuesta para clasificación multi-etiqueta ordinal,2021-09-25,3,2021-09-28
+Multi-etiqueta,Implementación de clases base para el algoritmo de clasificación multi-etiqueta,2021-09-28,6,2021-10-04
+Multi-etiqueta,Creación de scripts usando enfoque propuesto,2021-10-05,4,2021-10-09
+Multi-etiqueta,Análisis de resultados multi-etiqueta,2021-10-10,15,2021-10-25
