@@ -15,7 +15,7 @@ Tras realizar esta simplificación, se va a optar por usar \textbf{Binary Releva
 \subsection{Resultados}
 A continuación, se muestran los resultados obtenidos siguiendo este enfoque por cada uno de los algoritmos seleccionados:
 \subsubsection*{Árboles de decisión}
-A continuación se muestra una tabla que recoge el valor de las métricas obtenidas por Árboles de decisión en los conjuntos de entrenamiento y de test, junto con el valor medio en validación:
+A continuación, en la Tabla \ref{tab:ml_tab_dt}, se muestra una tabla que recoge el valor de las métricas obtenidas por Árboles de decisión en los conjuntos de entrenamiento y de test, junto con el valor medio en validación:
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -26,6 +26,7 @@ A continuación se muestra una tabla que recoge el valor de las métricas obteni
 		Test             & 0.86     & 0.85      & 0.593    \\ \cline{1-4}
 	\end{tabular}
 	\caption{Valores de métricas obtenidas usando BR y Árboles de decisión}
+	\label{tab:ml_tab_dt}
 \end{table}
 Como se ha visto en secciones anteriores, se puede obtener la aportación que ha tenido cada una de las variables que conforma el conjunto de datos a la hora de realizar una predicción. En el caso de BR, se puede obtener recuperando esta información de cada clasificador que ha sido entrenando, obteniendo así la importancia de cada variable por etiqueta clasificada.
 A continuación se muestran unas gráficas donde se va a recopilar la siguiente información:
@@ -39,15 +40,16 @@ A continuación se muestran unas gráficas donde se va a recopilar la siguiente 
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:dt_br_label}
 \end{figure}
+La Figura \ref{fig:dt_br_label} representa la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados. Como se pudo ver en secciones anteriores, la importancia de la variable \textbf{AE5} es muy grande en todas las etiquetas que se están intentando clasificar.\\
+\linebreak
+Aunque con una menor importancia en general, las variables \textbf{ACMedia} y \textbf{SEMedia} también han tenido un contribución a la hora de generar el modelo.\\
+\clearpage
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/feature_importance_dt_br_mean.png}
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:dt_br_mean}
 \end{figure}
-La Figura \ref{fig:dt_br_label} representa la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados. Como se pudo ver en secciones anteriores, la importancia de la variable \textbf{AE5} es muy grande en todas las etiquetas que se están intentando clasificar.\\
-Aunque con una menor importancia en general, las variables \textbf{ACMedia} y \textbf{SEMedia} también han tenido un contribución a la hora de generar el modelo.\\
-\linebreak
 Completando esta sección de la importancia de las variables, la Figura \ref{fig:dt_br_mean} representa la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados. Como se pudo ver en secciones anteriores, la importancia de la variable \textbf{AE5} es muy grande en todas las etiquetas que se están intentando clasificar.\\
 \linebreak
 Continuando con el análisis de los resultados, se van a mostrar las matrices de confusión por cada una de las etiquetas que se están usando.
@@ -91,11 +93,11 @@ Continuando con el análisis de los resultados, se van a mostrar las matrices de
 	\caption{Matrices de confusión para los distintos clasificadores entrenados (AD)}
 	\label{fig:ml_conf_matrix_dt}
 \end{figure}
-Se puede ver como para todas las etiquetas se han clasificado una gran cantidad de variables positivas, mientras que parece que al modelo le ha costado predecir los valores negativos. \\
+En las Figura \ref{fig:ml_conf_matrix_dt}, se puede ver como para todas las etiquetas se han clasificado una gran cantidad de variables positivas, mientras que parece que al modelo le ha costado predecir los valores negativos. \\
 En general, los resultados son buenos y consistentes para todas las etiquetas.
 \clearpage
 \subsubsection*{Random Forest}
-Continuando con la muestra de resultados, a continuación se muestran los obtenidos por Random Forest
+Continuando con el análisis de resultados usando el enfoque de Binary Relavance, en la Tabla \ref{tab:ml_tab_rf} se muestran los obtenidos por Random Forest.
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -106,6 +108,7 @@ Continuando con la muestra de resultados, a continuación se muestran los obteni
 		Test             & 0.876    & 0.9       & 0.61     \\ \cline{1-4}
 	\end{tabular}
 	\caption{Valores de métricas obtenidas usando BR y Random Forest}
+	\label{tab:ml_tab_rf}
 \end{table}
 Como se ha visto en secciones anteriores, se puede obtener la aportación que ha tenido cada una de las variables que conforma el conjunto de datos a la hora de realizar una predicción. En el caso de BR, se puede obtener recuperando esta información de cada clasificador que ha sido entrenando, obteniendo así la importancia de cada variable por etiqueta clasificada.
 A continuación se muestran unas gráficas donde se va a recopilar la siguiente información: \linebreak
@@ -119,14 +122,15 @@ A continuación se muestran unas gráficas donde se va a recopilar la siguiente 
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:rf_br_label}
 \end{figure}
+En la Figura \ref{fig:rf_br_label} se puede observar la importancia de cada variable separando por etiqueta que se esta clasificando. A diferencia de la vista en Árboles de Decisión, se observa una mayor cantidad de variables, aunque se puede ver que las variables \textbf{AE5} y \textbf{ACMedia} siguen siendo preguntas muy importantes, pero hay variables como el \textbf{curso}, \textbf{nota}, \textbf{AC1}, etc que no han estado presentes en la grafica de Árboles de Decisión.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{src/feature_importance_rf_br_mean.png}
 	\caption{Importancia por etiqueta clasificada.}
 	\label{fig:rf_br_mean}
 \end{figure}
-En la Figura \ref{fig:rf_br_label} se puede observar la importancia de cada variable separando por etiqueta que se esta clasificando. A diferencia de la vista en Árboles de Decisión, se observa una mayor cantidad de variables, aunque se puede ver que las variables \textbf{AE5} y \textbf{ACMedia} siguen siendo preguntas muy importantes, pero hay variables como el \textbf{curso}, \textbf{nota}, \textbf{AC1}, etc que no han estado presentes en la grafica de Árboles de Decisión.\\
-En la Figura \ref{fig:rf_br_mean} se puede observar  la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados.
+Completando el análisis sobre la importancia de las variables que forman el problema, en la Figura \ref{fig:rf_br_mean} se puede observar la importancia media calculada obteniendo la media de la importancia calculada por los modelos entrenados.\\
+Se puede observar como las variables \textbf{AE5} y \textbf{ACMedia} son las variables que han sido más relevantes a la hora de que el modelo Random Forest prediga las múltiples etiquetas.
 \clearpage
 A continuación se puede observar las matrices de confusión por cada una de las etiquetas que se está clasificando:
 \begin{figure}[H]
@@ -169,13 +173,15 @@ A continuación se puede observar las matrices de confusión por cada una de las
 	\caption{Matrices de confusión para los distintos clasificadores entrenados (RF)}
 	\label{fig:ml_conf_matrix_rf}
 \end{figure}
-Se puede ver un comportamiento similar al visto en Árboles de decisión, donde se ha clasificado correctamente valores positivos, más dificultades a la hora de predecir valores negativos, pero no tantos problemas como los que se han observado en Árboles de Decisión, donde en muchos de los casos se podía apreciar una mayor cantidad de fallos en estos valores.\\
+En la Figura \ref{fig:ml_conf_matrix_rf}, se puede ver un comportamiento similar al visto en Árboles de decisión, donde se ha clasificado correctamente valores positivos, más dificultades a la hora de predecir valores negativos, pero no tantos problemas como los que se han observado en Árboles de Decisión, donde en muchos de los casos se podía apreciar una mayor cantidad de fallos en estos valores.\\
 \linebreak
 También se aprecia que los resultados son consistentes para todas las etiquetas clasificadas, por lo que podemos afirmar que este modelo ha sido capaz de extraer conocimiento del conjunto de datos.
 \clearpage
 \subsubsection*{Support Vector Machines}
 Finalmente, se muestran los resultados del uso de SVM en usando el método Binary Relevance:
-Como SVM no puede recuperar la importancia de cada característica, estas gráficas se han omitido:
+Como SVM no puede recuperar la importancia de cada característica, estas gráficas se han omitido.\\
+\linebreak
+En la Tabla \ref{tab:ml_tab_svc} se muestran los resultados obtenidos usando las métricas seleccionadas.
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|c|c|c}
@@ -186,8 +192,9 @@ Como SVM no puede recuperar la importancia de cada característica, estas gráfi
 		Test             & 0.866    & 0.896     & 0.605    \\ \cline{1-4}
 	\end{tabular}
 	\caption{Valores de métricas obtenidas usando BR y SVM}
+	\label{tab:ml_tab_svc}
 \end{table}
-En la siguiente figura se muestran las distintas matrices de confusión para cada una de las etiquetas que componen el conjunto de datos.\linebreak
+En la siguiente figura se muestran las distintas matrices de confusión para cada una de las etiquetas que componen el conjunto de datos.
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}[b]{0.3\textwidth}
@@ -228,7 +235,7 @@ En la siguiente figura se muestran las distintas matrices de confusión para cad
 	\caption{Matrices de confusión para los distintos clasificadores entrenados (SVM)}
 	\label{fig:ml_conf_matrix_svc}
 \end{figure}
-Se vuelve a repetir el comportamiento observado, para valores positivos se ha conseguido predecir correctamente una buena parte de las muestras pertenecientes a esta clase, y de manera consistente por todas las etiquetas que se están clasificando.\\
+En la Figura \ref{fig:ml_conf_matrix_svc} se vuelve a repetir el comportamiento observado, para valores positivos se ha conseguido predecir correctamente una buena parte de las muestras pertenecientes a esta clase, y de manera consistente por todas las etiquetas que se están clasificando.\\
 También se aprecia como parece que para valores negativos, el modelo vuelve a algunas dificultades.
 \subsection{Conclusiones}
 Como se puede observar por los resultados obtenidos, usando este enfoque para resolver el problema que se afronta ha resultado en unos buenos resultados y en la obtención de bastante información que puede ser relevante para el análisis de este caso.\\

@@ -70,16 +70,20 @@ Pueden existir muchos hiper-planos que separen los puntos del espacios en distin
 	\caption{Ejemplo de SVM en dos dimensiones}
 	\label{fig:svm}
 \end{figure}
+En la Figura \ref{fig:svm} se muestran dos ejemplos de hiper-planos que dividen un conjunto de datos. Se puede observar como el de la izquierda tiene un menor margen, incrementando así la probabilidad de clasificar erróneamente aquellas muestras más cercanas a la frontera.\\
+En el de la derecha, a diferencia del anterior, este hiperplano tiene un mayor margen, por lo que el hiper-plano de la derecha es capaz de clasificar mejor aquellas muestras cercanas a la frontera, mejorando así la capacidad predictiva de modelo.
+\clearpage 
 \section{XGBoost}
 \label{alg:xgb}
 Extreme Gradient Boosting es un método de aprendizaje combinado basado en árboles de decisión.\\
-A diferencia de Random Forest (que también es un método combinado basado en árboles de decisión), XGBoost hace uso de técnicas de \textit{Gradient Boosting} frente a Random Forest que hace uso de \textit{Bagging} para entrenar los modelos que lo forman. (\ref{sec:rf}-\nameref{sec:rf}).\\
+A diferencia de Random Forest (que también es un método combinado basado en árboles de decisión), XGBoost hace uso de técnicas de \textit{Gradient Boosting} frente a Random Forest que hace uso de \textit{Bagging} para entrenar los modelos que lo forman. (\ref{alg:rf}-\nameref{alg:rf}).\\
 \linebreak
 \textit{Boosting} se basa en la unión de varios modelos débiles para formar un modelo que en conjunto. Estos modelos débiles se van entrenando de forma iterativa, adaptando los parámetros del modelo en cada iteración, teniendo en cuenta que estos modelos no deben aumentar en complejidad y deben mantener un rendimiento mínimo (idealmente, mejor que un clasificador aleatorio).\\
 \linebreak
 \textit{Grandient Boosting} es un caso especial de \textit{Boosting} en el que se hace uso del algoritmo \textbf{Gradiente Descendente} para minimizar los errores de los modelos simples.\\
 \linebreak
 Finalmente, XGBoost funciona añadiendo secuencialmente Árboles de Decisión, de tal manera que cada árbol reduzca el error de los previos aprendiendo de los errores que han cometido los árboles anteriores.
+\clearpage
 \section{Perceptrón multi-capa}
 \label{alg:mlp}
 El Perceptrón Multicapa es un modelo de aprendizaje supervisado basada en red neuronales artificiales y haciendo uso del algoritmo \textbf{Perceptrón}.\\
@@ -104,5 +108,7 @@ Para afrontar este problema, se propuso el usar una combinación de perceptrones
 	\caption{Ejemplo de Red Neuronal con 1 capa oculta}
 	\label{fig:rnn}
 \end{figure}
+En la Figura \ref{fig:rnn} se muestra un ejemplo de Red Neuronal de 3 capas. En la capa de entrada se puede observar 3 neuronas, que están conectadas a una capa oculta con un total de 4 neuronas. Como salida, la Red Neuronal dispone de dos neuronas.\\
+\linebreak
 Un elemento fundamental de las Redes Neuronales es el algoritmo de \textit{back-propagation}. Este algoritmo usa el error obtenido en las capas de salida y este era propagado hacia cada neurona anterior (de ahí el nombre de \textit{back-propagation}), ajustando así el peso calculado por cada neurona en función del comportamiento del modelo en la iteración anterior.
 

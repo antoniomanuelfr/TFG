@@ -22,7 +22,7 @@ Esta información es muy útil, ya que aparte de darnos un poco más de conocimi
 	\label{tab:columnas_iguales}
 	\caption{Comparación de dos características redundantes.}
 \end{table}
-Como podemos ver, estas dos columnas contienen información redundante, ya que siendo una respuesta de tipo verdadero o falso, tenemos dos columnas con la misma información. Este caso se repite en varios casos, y en todos ellos se ha optado por dejar unicamente la que tiene los valores numéricos.\\
+Como podemos ver en la Tabla \ref{tab:columnas_iguales}, estas dos columnas contienen información redundante, ya que siendo una respuesta de tipo verdadero o falso, tenemos dos columnas con la misma información. Este caso se repite en varios casos, y en todos ellos se ha optado por dejar unicamente la que tiene los valores numéricos.\\
 \linebreak
 El siguiente paso ha sido el de obtener las columnas que se van a usar como predictores.
 La peculiaridad de este conjunto de datos tenemos 7 columnas que van a ser las que los algoritmos tienen que intentar predecir. De estas 7 columnas tenemos 6 de ellas que son de tipo ordinal, almacenando la opinión (en escala Likert) que ha tenido el entrevistado sobre la pregunta en concreto. La ultima de estas columnas es la media de las 6 columnas.\\
@@ -34,6 +34,8 @@ A continuación se muestra una tabla con la ocurrencia de cada valor para las co
 	\caption{Conteo de valores para las columnas usadas como predictores}
 	\label{tab:ocurrencia_valores}
 \end{figure}
+La Figura \ref{tab:ocurrencia_valores} muestra por cada etiqueta, el número de muestras que pertenecen a cada posible clase. Se puede observar como la mayor parte de las muestras, se encuentran en el rango $\left[4,7\right]$.\\
+\linebreak
 Una vez leída esta documentación y detectados algunos casos de columnas con información redundante, se cargaron los datos y se sacaron una serie de métricas. Estamos ante un conjunto de datos formados por un total de 1672 ejemplos y con 246 características (antes de realizar cualquier tipo de procesamiento), las cuales pueden ser de tipo entero, flotante o categóricas.
 \pagebreak
 \section{Pre-procesado de datos}
@@ -48,7 +50,7 @@ El siguiente paso, ha sido analizar los valores únicos de cada variable, esto n
 	\item \textbf{Valores inválidos en la columna "\textit{género}":} Según la documentación, los únicos valores que forman esta columna son \textit{hombre} y \textit{mujer}, pero dentro del conjunto de datos se detectan valores como \textit{si} y \textit{no}. No podemos saber si la persona que contestó la encuesta se equivocó ó le llegó una versión distinta de la encuesta, así que, estos valores dentro de la columna \textit{género} se reemplazaron por \textit{NaN}.
 	\item \textbf{Valores binarios codificados como strings:} Este caso no es necesariamente un valor no válido, pero se decidió cambiar estos valores binarios codificados como \textit{sí} o \textit{no} por \textit{1} y \textit{0} respectivamente. Con este cambio no vamos a perder información y vamos a ahorrarnos el codificar ciertas columnas en fases posteriores.
 \end{itemize}
-
+\clearpage
 El siguiente paso ha sido el de obtener las columnas con una alta correlación. Hemos considerado como alta correlación, aquellas columnas cuya correlación sea mayor que 0.9\\
 El resultado ha sido: \\
 \begin{table}[H]
@@ -61,9 +63,10 @@ El resultado ha sido: \\
 		ConFin(1\_7)          & ConFin(1\_8)           & 0.987110    \\ \cline{1-3}
 		FinBehSinBorrow (1-6) & FinBeh con borrow(1-7) & 0.948779    \\ \cline{1-3}
 	\end{tabular}
-	\label{tab:correlacion}
 	\caption{Matriz de correlación}
+	\label{tab:correlacion}
 \end{table}
+En la Tabla \ref{tab:correlacion} se muestra cuales son las variables del conjunto de datos con una mayor correlación.\\
 Volviendo a revisar la documentación, tenemos las siguientes descripciones:
 \linebreak
 \begin{itemize}
@@ -104,8 +107,9 @@ Existen dos opciones para la codificación:
 
 La codificación por etiqueta tiene la ventaja que es la más natural para los humanos y podría parecer suficiente, pero tiene una gran desventaja: Los valores enteros tienen una \textbf{relación de orden} entre cada valor. Los algoritmos de machine learning son capaces de entender esta relación de orden y perjudicar la eficacia del modelo.\\
 \linebreak
-La codificación \textit{one-hot} crea una variable por cada valor único de la variable a codificar. Cada nueva variable se asocia con un valor único y tendrá el valor $1$ cuando el valor para esa muestra sea el asociado, fijando el valor a $0$ para el resto de nuevas variables. Un ejemplo sería el siguiente:\\
-Dada el siguiente conjunto de datos de ejemplo:\\
+La codificación \textit{one-hot} crea una variable por cada valor único de la variable a codificar. Cada nueva variable se asocia con un valor único y tendrá el valor $1$ cuando el valor para esa muestra sea el asociado, fijando el valor a $0$ para el resto de nuevas variables. \\
+\linebreak
+A continuación se va a mostrar un ejemplo práctico de este algoritmo de codificación usando el conjunto de datos expuesto en la Tabla \ref{tab:conjunto_ejemplo}:
 \begin{table}[H]
 	\centering
 	\begin{tabular}{|c|c|}
@@ -134,6 +138,6 @@ Si usamos codificamos la variable \textit{vehículo} usando la etiqueta, estarí
 	\caption{Conjunto de datos de ejemplo tras codificar}
 	\label{tab:conjunto_ejemplo_cod}
 \end{table}
-Como se ve en la tabla \ref{tab:conjunto_ejemplo_cod}, se ha transformado la columna \textit{vehículo} en tres columnas distintas, tomando el valor 1 cuando el valor de la variable sin codificar coincide con la variable asignada para ese valor. \\
+Como se ve en la Tabla \ref{tab:conjunto_ejemplo_cod}, se ha transformado la columna \textit{vehículo} en tres columnas distintas, tomando el valor 1 cuando el valor de la variable sin codificar coincide con la variable asignada para ese valor. \\
 \linebreak
 Este modelo tiene una desventaja clara, y es se van a crear tantas columnas como valores único tenga la variable a codificar, esto puede incrementar significativamente el tamaño del conjunto de datos, pudiendo impactar en el rendimiento de los modelos.
