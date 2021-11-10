@@ -9,7 +9,6 @@ from pathlib import Path
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
-from sklearn.svm import SVR
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
@@ -56,15 +55,16 @@ def preprocessing(undersampling_thr=None, feature_selection=None):
 
 if __name__ == '__main__':
     name_str = 'SVC_mlabelcc'
-    args = utils.argument_parser().parse_args()
 
-    param_grid = {'kernel': ['poly', 'rbf'],
-                  'degree': [2, 3, 4, 5],
-                  'C': [0.5, 0.75, 1]
+    args = utils.argument_parser().parse_args()
+    param_grid = {'kernel': ['poly'],
+                  'degree': [2, 3],
+                  'C': [0.5, 0.75, 1],
+                  'max_iter': [100]
                   }
     x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(args.undersampling)
     results = {'name': name_str}
-    clf = SVCMultipleLabelCC(random_state=utils.seed)
+    clf = SVCMultipleLabelCC(random_state=utils.seed, max_iter=100)
 
     custom_scorer = make_scorer(utils.f1_multilabel_mean, greater_is_better=True)
     g_search = GridSearchCV(clf, param_grid=param_grid, scoring=custom_scorer, n_jobs=-1)
@@ -80,11 +80,13 @@ if __name__ == '__main__':
     clf.fit(x_train_p, y_train_p)
     y_pred = clf.predict(x_train_p)
 
-    results['train'] = utils.calculate_ml_classification_metrics(y_train_p, y_pred, clf.predict_proba(x_train_p))
-    utils.plot_multilabel_class_metrics(results['train'], False, args.save_figures, classification_predictor, name_str)
+    results['train'] = utils.calculate_ml_classification_metrics(y_train_p, y_pred)
+    utils.plot_multilabel_class_metrics(results['train'], False, args.save_figures, classification_predictor,
+                                        f'{name_str}_train')
 
     y_pred = clf.predict(x_test_p)
-    results['test'] = utils.calculate_ml_classification_metrics(y_test_p, y_pred, clf.predict_proba(x_test_p))
-    utils.plot_multilabel_class_metrics(results['test'], False, args.save_figures, classification_predictor, name_str)
+    results['test'] = utils.calculate_ml_classification_metrics(y_test_p, y_pred)
+    utils.plot_multilabel_class_metrics(results['test'], False, args.save_figures, classification_predictor,
+                                        f'{name_str}_test')
 
     utils.save_dict_as_json(args.json_output, name_str, results)

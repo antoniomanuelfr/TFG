@@ -48,6 +48,7 @@ A continuación se va a mostrar un diagrama de paquetes para explicar como se ha
     \caption{Diagrama para paquete \textbf{tfg\_utils}}
     \label{dig:paquetes_tfg}
 \end{figure}
+En la Figura \ref{dig:paquetes_tfg} se muestra un gráfico que explica como se ha organizado el paquete de \textbf{tfg\_utils} que se ha desarrollado durante este trabajo.
 \begin{itemize}
     \item \textbf{manual\_preprocessing} contiene una serie de funciones usadas en la fase de pre-procesamiento.
     \item \textbf{OrdinalClassification} contiene un paquete con la implementación del algoritmo de clasificación ordinal explicado en \ref{sec:ord}-\nameref{sec:ord}.
@@ -65,7 +66,7 @@ A continuación se va a mostrar un diagrama explicando las clases que contiene e
     \caption{Diagrama para paquete \textbf{OrdinalClassification}}
     \label{dig:paquetes_od}
 \end{figure}
-Se puede observar como existe una clase abstracta \textbf{BaseOrdinalClassifier} que contiene el algoritmo que se ha usado para realizar la clasificación ordinal de forma genérica. \\
+En el diagrama mostrado en la Figura \ref{dig:paquetes_od}, se puede observar como existe una clase abstracta \textbf{BaseOrdinalClassifier} que contiene el algoritmo que se ha usado para realizar la clasificación ordinal de forma genérica. \\
 Todas las clases que heredan de esta clase, especializan el algoritmo implementando en la clase base, usando un clasificador en especifico dependiendo del modelo que se quiera utilizar.\\
 Dado que las funciones \textbf{\textit{predict}} (predice una clase dada una entrada) y \textbf{\textit{predict\_proba}} (dada una entrada predice la probabilidad de que una muestra pertenezca a cada clase) son iguales para todos los modelos, se ha optado por añadir estos métodos en la clase abstracta.\\
 El resto de clases implementará el método \textbf{\textit{fit}} con el modelo seleccionado. \\
@@ -91,12 +92,14 @@ Se ha añadido también un script para comparar los resultados obtenidos por dos
 \linebreak
 Todos estos scripts, si se ejecutan con la opción \textbf{\textit{-h}} se mostrará una ayuda con todos los parámetros aceptados y una explicación de cada uno de ellos.
 \section{Instalación del software}
-Para instalar el software se necesita una versión 3.x de Python (durante el desarrollo se ha usado la versión 3.9.6) y el gestor de paquetes \textbf{pip}. Una vez descargado el repositorio(https://github.com/antoniomanuelfr/TFG.git), simplemente ejecutando el comando \textit{pip3 install .} en la carpeta padre del repositorio, se instalará el paquete junto con todas las dependencias.
-A continuación se muestra una captura de pantalla del proceso completo para ejecutar el algoritmo \nameref{alg:knn}:
+Para instalar el software se necesita una versión 3.x de Python (durante el desarrollo se ha usado la versión 3.9.6) y el gestor de paquetes \textbf{pip}. Una vez descargado el repositorio(\href{https://github.com/antoniomanuelfr/TFG.git}{repositorio GitHub}), simplemente ejecutando el comando \textit{pip3 install .} en la carpeta padre del repositorio, se instalará el paquete junto con todas las dependencias.\\
+A continuación, en la Figura \ref{cap:ex}, se muestra una captura de pantalla del proceso completo para ejecutar el algoritmo \nameref{alg:knn}:
 \begin{figure}[H]
     \includegraphics[scale=0.3]{ejemplo_ex}
     \caption{Ejemplo de ejecución completa para KNN}
     \label{cap:ex}
 \end{figure}
-
-
+En la Figura \ref{cap:ex} se observa como cuando se instala el paquete desarrollado, \textbf{pip} recupera todas las dependencias necesarias y se encarga de instalarlas previamente. \\
+Una vez que se han instalado todas las dependencias necesarias, se puede ejecutar correctamente el script que ejecuta el modelo KNN para regresión sin ningún problema.\\
+\linebreak
+Aquí se muestra la principal ventaja de hacer uso de este tipo de paquetes que gestionan funciones comunes, ya que se facilita mucho la gestión de versiones y la gestión de dependencias.

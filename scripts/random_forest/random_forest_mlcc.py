@@ -12,7 +12,6 @@ from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer
 
-
 import tfg_utils.utils as utils
 from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder, get_missing_values, classification_predictor
 from tfg_utils.MultipleLabelClassification.MultipleLabelCCClassifiers import RFMultipleLabelCC
@@ -77,11 +76,13 @@ if __name__ == '__main__':
     clf.fit(x_train_p, y_train_p)
     y_pred = clf.predict(x_train_p)
 
-    results['train'] = utils.calculate_ml_classification_metrics(y_train_p, y_pred, clf.predict_proba(x_train_p))
-    utils.plot_multilabel_class_metrics(results['train'], False, args.save_figures, classification_predictor, name_str)
+    results['train'] = utils.calculate_ml_classification_metrics(y_train_p, y_pred)
+    utils.plot_multilabel_class_metrics(results['train'], False, args.save_figures, classification_predictor,
+                                        f'{name_str}_train')
 
     y_pred = clf.predict(x_test_p)
-    results['test'] = utils.calculate_ml_classification_metrics(y_test_p, y_pred, clf.predict_proba(x_test_p))
-    utils.plot_multilabel_class_metrics(results['test'], False, args.save_figures, classification_predictor, name_str)
+    results['test'] = utils.calculate_ml_classification_metrics(y_test_p, y_pred)
+    utils.plot_multilabel_class_metrics(results['test'], False, args.save_figures, classification_predictor,
+                                        f'{name_str}_test')
 
     utils.save_dict_as_json(args.json_output, name_str, results)

@@ -260,48 +260,105 @@ Respecto al pre-procesamiento, se va a usar el mismo proceso explicado en \ref{s
 
 Para realizar este enfoque, se ha optado por crear una nueva serie de clasificadores multi-etiqueta que sean compatible con la funcionalidad que incluye Scikit-Learn. Este proceso se explicará en la sección \ref{sec:sftw-mlc}-\nameref{sec:sftw-mlc}. Para ello se han usados los algoritmos con los que se ha trabajado en las secciones anteriores para modelar esta posible solución.
 \subsection{Resultados}
-A continuación, se van a mostrar los resultados obtenidos por los clasificadores que se han usado:
+Al igual que en los enfoques que se han presentado en secciones anteriores, se han seleccionado los siguientes modelos:
+\begin{itemize}
+	\item \textbf{Árboles de Decisión.}
+	\item \textbf{Random Forest.}
+	\item \textbf{SVM.}
+\end{itemize}
+En las secciones que se muestran a continuación se van a mostrar los resultados obtenidos por cada modelo seleccionado.
+\clearpage
 \subsubsection*{Árboles de decisión}
-Los parámetros que mejores resultados dieron para Árboles de decisión fueron los siguientes:
+Antes de comenzar a mostrar los resultados obtenidos por este modelo, se va a mencionar cuales han sido los parámetros que mejores resultados dieron:
 \begin{itemize}
 	\item 3 niveles de profundidad máxima.
 	\item Máximo de 2 hojas.
 \end{itemize}
+Como se puede apreciar, se está trabajando con árboles mucho más simples que en el resto de secciones.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/dt_mlabel_compare.png}
-	\caption{Rendimiento de Árboles de decisión en multi-etiqueta}
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{src/dt_mlabelcc_train_compare}
+		\caption{Métricas obtenidas en conjunto de entrenamiento}
+	\end{subfigure}
+	\vfill
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{src/dt_mlabelcc_test_compare}
+		\caption{Métricas obtenidas en conjunto de test}
+	\end{subfigure}
+	\vfill
+	\caption{Metricas obtenidas usando Árboles de Decsión}
 	\label{fig:dtml_cmp}
-\end{figure}
+\end{figure} 
+En la Figura  \ref{fig:dtml_cmp} se puede observar el comportamiento del modelo en el conjunto de test. Se aprecia como el rendimiento usando este modelo ha sido bastante peor que en el resto de enfoques seleccionados. Se aprecia como en ninguno de los casos se ha superado un valor de $0.25$ para las métricas \textit{F1} y \textit{accuracy}. Podría parecer que el modelo no es lo suficientemente complejo para poder extraer el conocimiento, pero ha medida que se ha incrementado la complejidad del modelo, se ha podido apreciar como el rendimiento ha sido peor.
+\clearpage
 \subsubsection*{Random Forest}
-Los parámetros que mejores resultados dieron para Random Forest fueron los siguientes:
+Continuando con el análisis de los modelos usando este enfoque, a continuación se van a mostrar los resultados obtenidos usando Random Forest.\\
+Los parámetros que mejor rendimiento dieron fueron los siguientes:
 \begin{itemize}
 	\item 7 árboles de decisión formando el bosque.
 	\item Se consideran todas las variables para buscar la mejor división.
 \end{itemize}
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/rf_mlabel_compare.png}
-	\caption{Rendimiento de Random Forest en multi-etiqueta}
-	\label{fig:rfml_cmp}
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{src/rf_mlabelcc_train_compare}
+		\caption{Métricas obtenidas en conjunto de entrenamiento}
+	\end{subfigure}
+	\vfill
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{src/rf_mlabelcc_test_compare}
+		\caption{Métricas obtenidas en conjunto de test}
+	\end{subfigure}
+	\vfill
+	\caption{Metricas obtenidas usando Random Forest}
+	\label{fig:rford_ml_cmp}
 \end{figure}
+En la Figura \ref{fig:rford_ml_cmp} podemos observar el mismo comportamiento que el observado con Árboles de Decisión. El rendimiento es bastante peor que el que se ha obtenido usando otros enfoques, obteniendo unos resultados por debajo de $0.2$ en las métricas \textit{F1} y \textit{Accuracy}. \\
+\linebreak
+Debido a este mal comportamiento, queda claro que este enfoque no es valido para resolver este problema, ya que únicamente cuando se han tratado las distintas etiquetas de forma separada, se ha observado una caída en el rendimiento de Árboles de Decisión y Random Forest.
+\clearpage
 \subsubsection*{SVM}
+Para terminar de validar nuestra hipótesis de que este enfoque no es correcto para la resolución de este problema, a continuación se van a mostrar los resultados obtenidos usando SVM.\\
+\linebreak
 Los parámetros que mejores resultados dieron para las Máquinas de Soporte de Vectores fueron los siguientes:
 \begin{itemize}
 	\item Grado del polinomio igual a 2.
-	\item Coeficiente de regularización igual 0.5.
+	\item Coeficiente de regularización igual 1.
 \end{itemize}
+A continuación se muestran los resultados obtenidos en los conjuntos de entrenamiento y test usando SVM:
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{src/svc_mlabel_compare.png}
-	\caption{Rendimiento de SVC en multi-etiqueta}
-	\label{fig:svcml_cmp}
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{src/SVC_mlabelcc_train_compare}
+		\caption{Métricas obtenidas en conjunto de entrenamiento}
+	\end{subfigure}
+	\vfill
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{src/SVC_mlabelcc_test_compare}
+		\caption{Métricas obtenidas en conjunto de test}
+	\end{subfigure}
+	\vfill
+\caption{Metricas obtenidas usando SVM}
+\label{fig:svcml_cmp}
 \end{figure}
+Como se puede ver en la Figura \ref{fig:svcml_cmp}, se vuelve a repetir el mal comportamiento usando este enfoque, no superando la barrera del $0.25$  en las métricas \textit{F1} y \textit{Accuracy}
+\clearpage
 \subsubsection*{Conclusiones}
-Como se puede observar, los resultados obtenidos son muy malos, independientemente de los modelos seleccionados.
+Como se puede observar, los resultados obtenidos usando este enfoque han sido muy malos, independientemente de los modelos seleccionados.
 \begin{itemize}
-	\item Se puede observar un \textbf{sobre-aprendizaje}. Los algoritmos tienen un desempeño perfecto en entretenimiento, mientras que en los conjuntos de test y validación desempeñan muy mal.
+	\item Se puede observar como los modelos no han sido capaces de extraer conocimiento tratando por separado las etiquetas, obteniendo malos resultados incluso prediciendo el conjunto de datos con el que han sido entrenados.
 	\item Los modelos que se obtuvieron, no son modelos complejos (árboles de decisión con una profundidad de 2 niveles, SVM usando polinomios de grado 2, Random Forest usando 7 árboles de decisión en el bosque).
 	\item Es independiente del algoritmo usado, ya que todos tuvieron un desempeño similar.
 \end{itemize}
-Observando el rendimiento de los algoritmos usando este enfoque, y comparando con los resultados en secciones anteriores, queda claro que el tratar las variables de manera independiente no es una opción.
+Observando el rendimiento de los algoritmos usando este enfoque, y comparando con los resultados en secciones anteriores, queda claro que el tratar las variables de manera independiente no es una opción.\\
+\linebreak
+La principal hipótesis que se maneja para explicar este mal comportamiento es que para el conjunto de datos con el que se esta trabajando, no basta con intentar predecir por separado cada una de las etiquetas, ya que parece que es la \textbf{relación} entre las distintas variables donde está realmente el conocimiento, y no en los valores individuales de cada una de las etiquetas.\\
+\linebreak
+Viendo estos resultados, se va a descartar este enfoque, ya que como se ha mencionado previamente, no es el enfoque adecuado para resolver este tipo de clasificación usando el conjunto de datos con el que se está trabajando.

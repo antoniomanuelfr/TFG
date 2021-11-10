@@ -6,9 +6,19 @@ Como se ha comentado en la Sección \ref{sec:con}, hemos logrado afirmar que hay
 Por estos motivos, el problema en el que se enfoca este trabajo puede seguir siendo investigado, y a medida que vaya apareciendo nuevos modelos y enfoques para resolver el problema de\textbf{ clasificación multi-etiqueta ordinal}, estos nuevos enfoques podrán ser testeados usando el conjunto de datos con el que se ha estado trabajando.\\
 \linebreak
 A continuación se muestra una serie de trabajos futuros que se pueden realizar en el futuro para resolver este problema usando enfoques distintos.
-\begin{itemize}
-	\item\textbf{Inclusión de más datos recientes y provenientes de otros países:}
-	\item \textbf{Análisis de estos datos mediante técnicas que estudian la monotonía entre variables explicativas y predictoras. Aprendizaje multi-etiqueta monotónico:}
-	\item \textbf{Análisis de la explicabilidad de modelos de Machine Learning y del nivel de sesgo presente en los datos para detectar y evitar decisiones injustas o no apropiadas:}
-	\item \textbf{Diseño de un algoritmo ad-hoc para realizar un modelo más concreto y adaptado a estos datos que incorpore los fundamentos aprendidos en en presente análisis:       }
-\end{itemize}
+\section*{Inclusión de más datos recientes y provenientes de otros países} 
+Como se mencionó en la Sección \ref{sec:problema}, solo se recogieron datos entre 2018 y 2020. El tener datos actualizados es importantes para que los modelos sean capaces de seguir siendo válidos si alguna de las tendencias que se han observado cambia.\\
+\linebreak
+La encuesta solo se realizó a personas de origen español y ecuatoriano, por lo que sería muy interesante el añadir nueva información al conjunto de datos ampliando el número de personas de otras nacionalidades, para así detectar nuevos patrones o variables que puedan influir en la intención emprendedora.
+\section*{Análisis de estos datos mediante técnicas que estudian la monotonía entre variables explicativas y predictoras. Aprendizaje multi-etiqueta monotónico}
+Cuando se plantea el problema de clasificación ordinal, existe una \textbf{restricción de monotonicidad}. Esta restricción obliga a que el orden presente en
+\section*{Diseño de un algoritmo ad-hoc para realizar un modelo más concreto y adaptado a estos datos que incorpore los fundamentos aprendidos en en presente análisis}
+Recordado lo mencionado en la Sección \ref{sec:algoritmos}, el teorema NFL afirma que no hay un modelo adecuado para todos los problemas posibles. Lo correcto seria seleccionar aquellos modelos que se adapten correctamente al problema que se está planteando e intentar mejorar el rendimiento del mismo.\\
+\linebreak
+Añadiendo algunos ejemplos, se podría combinar el uso de un modelo de predicción con metaheurísticas con el objetivo de optimizar los distintos parámetros que tienen los modelos.\\
+El optimizar estos parámetros es clave a la hora de realizar el entrenamiento de un modelo, ya que estos pueden cambiar completamente el comportamiento del modelo, por lo que se podría hacer uso de las técnicas comentadas previamente en trabajos futuros para mejorar los resultados obtenidos en este trabajo.
+\section*{Análisis de la explicabilidad de modelos de Machine Learning y del nivel de sesgo presente en los datos para detectar y evitar decisiones injustas o no apropiadas}
+Analizar la explicabilidad de los modelos usados es una parte importante a la hora de resolver problemas usando este tipo de técnicas. Estas técnicas se centran en aprovechar aquellos modelos de los que se puede obtener información de como están realizando la predicción, realizando los cambios necesarios en el conjunto de datos para evitar que estos modelos  tomen decisiones que perjudiquen a la hora de predecir.\\
+\linebreak
+Un claro ejemplo de estos modelos sería Árboles de Decisión. Se puede usar toda la información que se ha obtenidas al hacer uso de estos modelos y usarla para, por ejemplo, añadir \textbf{pesos} a aquellas variables más importantes para que otros modelos puedan hacer uso de esta información.\\
+También, si se detecta una decisión que es incorrecta, se podría realizar el procesamiento necesario sobre el conjunto de entrenamiento para evitar que no tome esta decisión, mejorando así el rendimiento del modelo.

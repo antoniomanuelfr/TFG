@@ -8,7 +8,6 @@ from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
 from sklearn.utils.multiclass import check_classification_targets
 import numpy as np
 from abc import ABC
-from sklearn.tree import DecisionTreeClassifier
 
 
 class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
@@ -29,7 +28,6 @@ class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
         """
         self.classifiers = {}
         self.classes_ = np.arange(y.shape[1])
-        self.clf_ = DecisionTreeClassifier()
 
         for y_column, label_id in zip(y.transpose(), self.classes_):
             X, y_column = check_X_y(X, y_column)
@@ -57,12 +55,12 @@ class BaseMultipleLabelCC(BaseEstimator, ClassifierMixin, ABC):
         return np.array(labels_prediction).transpose()
 
     def predict_proba(self, X):
-    """Method that will predict the probability of each label of having a given valuew.
-        Args:
-            X (array): Set to predict.
-        Returns:
-            Array with the predicted values.
-    """
+        """Method that will predict the probability of each label of having a given valuew.
+            Args:
+                X (array): Set to predict.
+            Returns:
+                Array with the predicted values.
+        """
         X = check_array(X)
         check_is_fitted(self, ['classes_', 'clf_', 'classifiers'])
         labels_prediction = []

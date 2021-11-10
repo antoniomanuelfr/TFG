@@ -16,14 +16,15 @@ from sklearn.tree import _tree
 from sklearn.feature_selection import SelectFromModel
 import seaborn as sns
 from scipy.sparse import issparse
+import sklearn.exceptions as exceptions
+import warnings
 
 palette = 'Set2'
 plot_color = 'mediumaquamarine'
 seed = 10
 
-import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
-
+warnings.filterwarnings(action='ignore', category=exceptions.ConvergenceWarning)
 
 metric_name_parser = {
         'r2': 'R2',
@@ -508,13 +509,13 @@ def plot_confusion_matrix(y_true: np.array, y_pred: np.array, labels, title='', 
     return matrix
 
 
-def calculate_ml_classification_metrics(y_true, y_pred, proba, decimals=3):
+def calculate_ml_classification_metrics(y_true, y_pred, proba=None, decimals=3):
     """Calculates the classification metrics.
         Args:
             y_true (Numpy array): Array with the true value of the sample.
             y_pred (Numpy array): Array with the predicted value of the sample.
             proba (Numpy array): Array of shape (n_samples, n_classes) of probability estimates provided by the
-                                 predict_proba method
+                                 predict_proba method. If None, the AUC won't be calculated
             decimals (int): Number of decimals to round.
         Returns:
             A dictionary where the key is the name of the metric and the value is the value of the metric.
@@ -526,16 +527,24 @@ def calculate_ml_classification_metrics(y_true, y_pred, proba, decimals=3):
     if issparse(y_pred):
         y_pred_use = y_pred.toarray()
 
-    if issparse(proba):
+    labels = range(y_true.shape[1])
+
+    if proba is not None and issparse(proba):
         proba_use = proba.toarray()
 
-    for y_true_column, y_pred_column, proba_col, label_id in zip(y_true.transpose(), y_pred_use.transpose(),
-                                                                 proba_use.transpose(), range(y_true.shape[1])):
-        res[label_id] = {'f1': round(f1_score(y_true_column, y_pred_column, average='macro'), decimals),
-                         'auc_score': round(roc_auc_score(y_true_column, proba_col, average='macro', multi_class='ovo'),
-                                            decimals),
-                         'accuracy': round(accuracy_score(y_true_column, y_pred_column), decimals)
-                        }
+    if proba is None:
+        for y_true_column, y_pred_column, label_id in zip(y_true.transpose(), y_pred_use.transpose(),labels):
+            res[label_id] = {'f1': round(f1_score(y_true_column, y_pred_column, average='macro'), decimals),
+                            'accuracy':  round(accuracy_score(y_true_column, y_pred_column), decimals)
+                            }
+    else:
+        for y_true_column, y_pred_column, proba_col, label_id in zip(y_true.transpose(), y_pred_use.transpose(),
+                                                                proba_use.transpose(), range(y_true.shape[1])):
+            res[label_id] = {'f1': round(f1_score(y_true_column, y_pred_column, average='macro'), decimals),
+                             'auc_score': round(roc_auc_score(y_true_column, proba_col, average='macro', multi_class='ovo'),
+                                                decimals),
+                            'accuracy': round(accuracy_score(y_true_column, y_pred_column), decimals)
+                    }
     return res
 
 
@@ -568,7 +577,7 @@ def plot_multilabel_class_metrics(metric_dict, plot_values=False, save_figures=N
         test_metrict_dict = metric_dict[label]
         for metric_value_name in test_metrict_dict:
             label_name = label if metric_names is None else metric_names[label]
-            data.append([label_name, metric_value_name, test_metrict_dict[metric_value_name]])
+            data.append([label_name, metric_name_parser[metric_value_name], test_metrict_dict[metric_value_name]])
 
     data = pd.DataFrame(data, columns=['label', 'metric', 'value'])
     ax = sns.barplot(x='metric', y='value', hue='label', data=data, palette=palette)

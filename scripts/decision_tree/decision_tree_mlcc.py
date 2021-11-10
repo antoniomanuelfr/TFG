@@ -66,7 +66,6 @@ if __name__ == '__main__':
     bin = MultiLabelBinarizer()
 
     y_train_prueba = bin.fit_transform(y_train_p)
-    import pdb; pdb.set_trace()
     results = {'name': name_str}
     clf = DTMultipleLabelCC(random_state=utils.seed)
 
@@ -83,11 +82,10 @@ if __name__ == '__main__':
 
     clf.fit(x_train_p, y_train_p)
     y_pred = clf.predict(x_train_p)
-
-    results['train'] = utils.calculate_ml_classification_metrics(y_train_p, y_pred, clf.predict_proba(x_train_p))
-
+    results['train'] = utils.calculate_ml_classification_metrics(y_true=y_train_p, y_pred=y_pred, decimals=3)
     y_pred = clf.predict(x_test_p)
-    results['test'] = utils.calculate_ml_classification_metrics(y_test_p, y_pred, clf.predict_proba(x_test_p))
+    results['test'] = utils.calculate_ml_classification_metrics(y_true=y_test_p, y_pred=y_pred, decimals=3)
 
-    utils.plot_multilabel_class_metrics(results['test'], False, args.save_figures, classification_predictor, name_str)
+    utils.plot_multilabel_class_metrics(results['test'], False, args.save_figures, classification_predictor,
+                                        f'{name_str}_test')
     utils.save_dict_as_json(args.json_output, name_str, results)
