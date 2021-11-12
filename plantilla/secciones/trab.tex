@@ -11,7 +11,10 @@ Como se mencionó en la Sección \ref{sec:problema}, solo se recogieron datos en
 \linebreak
 La encuesta solo se realizó a personas de origen español y ecuatoriano, por lo que sería muy interesante el añadir nueva información al conjunto de datos ampliando el número de personas de otras nacionalidades, para así detectar nuevos patrones o variables que puedan influir en la intención emprendedora.
 \section*{Análisis de estos datos mediante técnicas que estudian la monotonía entre variables explicativas y predictoras. Aprendizaje multi-etiqueta monotónico}
-Cuando se plantea el problema de clasificación ordinal, existe una \textbf{restricción de monotonicidad}. Esta restricción obliga a que el orden presente en
+Cuando nos enfrentamos a un problema de clasificación ordinal, puede darse el caso de que las variables predictoras deban de incrementarse cuando algunas de las variables explicativas es incrementada. Estos problemas tienen el nombre de \textbf{clasificación con restricciones monotónicas}.\\
+\linebreak
+El principal problema de las técnicas de aprendizaje automático no garantizan el cumplimiento de esta restricción, lo que ha provocado un gran número de investigaciones que sean capaces de manejar estas restricciones.\\
+Algunos ejemplos de estos algoritmos son: \textit{Monotonic k-Nearest Neighbors}, \textit{Ordinal Stochastic Dominance Learner (OSDL)}.
 \section*{Diseño de un algoritmo ad-hoc para realizar un modelo más concreto y adaptado a estos datos que incorpore los fundamentos aprendidos en en presente análisis}
 Recordado lo mencionado en la Sección \ref{sec:algoritmos}, el teorema NFL afirma que no hay un modelo adecuado para todos los problemas posibles. Lo correcto seria seleccionar aquellos modelos que se adapten correctamente al problema que se está planteando e intentar mejorar el rendimiento del mismo.\\
 \linebreak
