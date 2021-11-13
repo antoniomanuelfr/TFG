@@ -6,7 +6,6 @@
 from os.path import join
 from pathlib import Path
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer, KNNImputer
@@ -21,14 +20,11 @@ from tfg_utils.manual_preprocessing import get_columns_type, one_hot_encoder, ge
 data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 
-def preprocessing(undersampling_thr=None, bin_thr=5):
+def preprocessing(bin_thr=5):
     """Function to perform the preprocessing for Decision Trees. This function will read the dataset and perform
     the preprocessing steps for decision trees.
     Args:
-        undersampling_thr (float): Threshold to use when performing a undersampling. If None, the undersampling won't
-                                   be applied.
-        feature_selection (str): Model to use for doing a feature selection. If None, the feature selection process
-                                 won't be applied.
+        bin_thr (float): Threshold to use when performing a transformation to binary. Defaults to 5.
     Returns:
         tuple: x_train_transformed, y_train_transformed, x_test_transformed, y_test_transformed
     """
