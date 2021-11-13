@@ -14,14 +14,11 @@ from svr import preprocessing
 data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_feature_selec=False, parse_ranges=True).parse_args()
     name_str = 'svc'
 
     if args.undersampling:
         name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"
-
-    if args.feature_selection:
-        name_str = f'{name_str}_{args.feature_selection}_feature_selection'
 
     if args.ranges:
         assert len(args.ranges) == 2, 'Len of ranges parameters must be 2'
@@ -30,8 +27,7 @@ if __name__ == '__main__':
             c_str = f"{c_str}_{str(i).replace('.0', '').replace('.', '-')}"
         name_str = f'{name_str}{c_str}_7'
 
-    x_train, y_train, x_test, y_test = preprocessing(
-        args.undersampling, args.feature_selection)
+    x_train, y_train, x_test, y_test = preprocessing(undersampling_thr=args.undersampling)
     y_train, y_test = utils.categorize_regression(y_train, y_test, args.ranges)
 
     results = {'name': name_str}

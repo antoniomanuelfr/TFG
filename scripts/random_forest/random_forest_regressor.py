@@ -56,7 +56,7 @@ def preprocessing(undersampling_thr=False, feature_selection=False):
 
 if __name__ == '__main__':
     name_str = 'rf'
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_ranges=False).parse_args()
 
     param_grid = {'n_estimators': [20, 30, 40, 50, 60, 70, 80, 90],
                   'max_features': [None, 1/3]}

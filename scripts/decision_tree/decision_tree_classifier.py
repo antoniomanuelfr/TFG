@@ -18,7 +18,7 @@ data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
     # Parse arguments
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_feature_selec=False, parse_ranges=True).parse_args()
     name_str = 'dtree_classification'
 
     if args.undersampling:

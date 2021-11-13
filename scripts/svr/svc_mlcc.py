@@ -56,7 +56,7 @@ def preprocessing(undersampling_thr=None, feature_selection=None):
 if __name__ == '__main__':
     name_str = 'SVC_mlabelcc'
 
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_ranges=False, parse_feature_selec=False).parse_args()
     param_grid = {'kernel': ['poly'],
                   'degree': [2, 3],
                   'C': [0.5, 0.75, 1],

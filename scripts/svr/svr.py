@@ -58,7 +58,7 @@ def preprocessing(undersampling_thr=None, feature_selection=None):
 
 
 if __name__ == '__main__':
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_ranges=False).parse_args()
     name_str = 'svr'
 
     if args.undersampling:

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.metrics import r2_score, mean_poisson_deviance, mean_squared_error, f1_score, roc_auc_score, \
-                            accuracy_score, confusion_matrix, hamming_loss, multilabel_confusion_matrix
+                            accuracy_score, confusion_matrix, multilabel_confusion_matrix
 from sklearn.model_selection import KFold
 from sklearn.tree import _tree
 from sklearn.feature_selection import SelectFromModel
@@ -36,9 +36,15 @@ metric_name_parser = {
     }
 
 
-def argument_parser():
-    """Argument parser to share between all scripts."""
-
+def argument_parser(parse_undersamp=True, parse_feature_selec=True, parse_ranges=False):
+    """Argument parser to share between all scripts.
+    Args:
+        parse_undersamp (boolean): True if the parse will parse the undersamp argument.
+        parse_feature_selec (boolean): True if the parse will parse the feature selection argument.
+        parse_ranges (boolean): True if the parse will parse the ranges argument.
+    Returns:
+        An argument parser with the specified parameters.
+    """
     class Range(object):
         """This class is restricted to the argument function,
            as it use is only to check if a floating number is in a range of values. This looks complex, but it's the
@@ -82,15 +88,15 @@ def argument_parser():
 
     parser.add_argument('--json_output', type=str, action='store', default=None,
                         help='Save script output to a json file')
-
-    parser.add_argument('--undersampling', type=float, action='store', choices=Range(0.1, 1),
-                        help='Use undersampler with a given threshold.')
-
-    parser.add_argument('--feature_selection', action='store', choices=['SVR', 'DTREE'], default=False,
-                        help='Perform a feature selection using the given model.')
-
-    parser.add_argument('--ranges', action='store', type=float, default=None, nargs='+',
-                        help='Ranges used to categorize the regression. This parameters is ignored in regression')
+    if parse_undersamp:
+        parser.add_argument('--undersampling', type=float, action='store', choices=Range(0.1, 1),
+                            help='Use undersampler with a given threshold.')
+    if parse_feature_selec:
+        parser.add_argument('--feature_selection', action='store', choices=['SVR', 'DTREE'], default=False,
+                            help='Perform a feature selection using the given model.')
+    if parse_ranges:
+        parser.add_argument('--ranges', action='store', type=float, nargs='+', required=True,
+                            help='Ranges used to categorize the regression. This parameters is ignored in regression')
     return parser
 
 

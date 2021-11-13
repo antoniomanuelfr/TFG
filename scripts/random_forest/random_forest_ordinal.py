@@ -16,7 +16,7 @@ data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
     name_str = 'rf_ordinal'
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_feature_selec=False, parse_ranges=True).parse_args()
 
     param_grid = {'n_estimators': [70, 80, 85, 90],
                   'max_features': [None, 1/3],

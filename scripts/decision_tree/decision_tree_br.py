@@ -72,7 +72,7 @@ def preprocessing(undersampling_thr=None, bin_thr=5):
 
 if __name__ == '__main__':
     name_str = 'dt_br'
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_ranges=False, parse_undersamp=False, parse_feature_selec=False).parse_args()
 
     param_grid = {'classifier': [DecisionTreeClassifier(random_state=utils.seed)],
                   'classifier__max_depth': [2, 4, 8, 9, 10, 16],

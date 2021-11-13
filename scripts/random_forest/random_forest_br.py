@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.externals._packaging.version import parse
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.model_selection import GridSearchCV
 import sklearn.metrics as metrics
@@ -72,7 +73,7 @@ def preprocessing(undersampling_thr=None, bin_thr=5):
 
 if __name__ == '__main__':
     name_str = 'rf_br'
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_ranges=False, parse_undersamp=False, parse_feature_selec=False).parse_args()
 
     param_grid = {'classifier': [RandomForestClassifier(random_state=utils.seed)],
                   'classifier__n_estimators': [15, 16, 17, 18, 19, 20],

@@ -72,7 +72,7 @@ def preprocessing(undersampling_thr=None, bin_thr=5):
 
 if __name__ == '__main__':
     name_str = 'svc_br'
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_ranges=False, parse_undersamp=False, parse_feature_selec=False).parse_args()
 
     param_grid = {'classifier': [SVC(probability=True)],
                   'classifier__kernel': ['poly', 'rbf'],

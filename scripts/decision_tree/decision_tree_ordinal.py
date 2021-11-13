@@ -16,7 +16,7 @@ data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
     name_str = 'dt_ordinal'
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_feature_selec=False, parse_ranges=True).parse_args()
 
     param_grid = {'max_depth': [4, 5, 6, 7, 8, 9, 10, 16],
                   'max_leaf_nodes': [16, 17, 18, 19, 20]}

@@ -18,7 +18,7 @@ data_path = join(Path(__file__).parent.parent.parent, 'data')
 
 if __name__ == '__main__':
     name_str = 'rf_class'
-    args = utils.argument_parser().parse_args()
+    args = utils.argument_parser(parse_feature_selec=False, parse_ranges=True).parse_args()
 
     param_grid = {'n_estimators': [15, 16, 17, 18, 19, 20],
                   'max_features': [None, 1/3]}
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     if args.undersampling:
         name_str = f"{name_str}_{str(args.undersampling).replace('.', '_')}_undersamp"
 
-    x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(args.undersampling, args.feature_selection)
+    x_train_p, y_train_p, x_test_p, y_test_p = preprocessing(undersampling_thr=args.undersampling)
     y_train_p, y_test_p = utils.categorize_regression(y_train_p, y_test_p, args.ranges)
 
     results = {'name': name_str}
