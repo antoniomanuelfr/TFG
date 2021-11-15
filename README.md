@@ -25,3 +25,4 @@ TFG
 ├── setup.py ----------> Archivo de configuración del paquete
 └── tfg_utils ----------> Paquete de utilidades para TFG
 ```
+**Nota:** Los datos usados en este trabajo son privados, por los que no se han subido a este repositorio. 
