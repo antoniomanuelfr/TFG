@@ -167,7 +167,8 @@ if __name__ == '__main__':
         # Calculate test metrics dict
         test_dict[alg_name] = json_results['test']
 
-        feature_importance_dict[alg_name] = json_results['feature_importance']
+        if 'feature_importance' in json_results:
+            feature_importance_dict[alg_name] = json_results['feature_importance']
 
     # plot feature importance
     compare_feature_importance(feature_importance_dict, 'Features', 'Importance', 10, arguments.save_figures,
